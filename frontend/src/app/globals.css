@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* Class-based dark mode — must come after @import. Without this, Tailwind v4 uses
+   prefers-color-scheme only, so "light" theme still gets dark: utilities → black-on-black. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- Light theme: high contrast, readable grays ---- */
+:root {
+  --background: 210 20% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 210 40% 94%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 221 83% 53%;
+  --radius: 0.625rem;
+  --sidebar: 210 25% 97%;
+  /* Selected nav: solid lighter surface on the gray rail */
+  --sidebar-active: 0 0% 100%;
+  --sidebar-active-fg: 222 47% 11%;
+}
+
+/* ---- Dark theme: neutral black/gray (hue 0) — blue only on primary/ring ----
+   Previous 224°/213° hues made the whole UI read as tinted blue. */
+.dark {
+  --background: 0 0% 4%;
+  --foreground: 0 0% 96%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 96%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 0 0% 96%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 96%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 64%;
+  --accent: 0 0% 15%;
+  --accent-foreground: 0 0% 96%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 16%;
+  --input: 0 0% 16%;
+  --ring: 217 91% 60%;
+  --sidebar: 0 0% 5%;
+  --sidebar-active: 0 0% 12%;
+  --sidebar-active-fg: 0 0% 98%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

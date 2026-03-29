@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Caches
+.cache/
+.cache/sec/
+
+# Environment
+.env
+
+# Feedback data (keep structure, ignore user data)
+feedback/*.jsonl
+
+# Model artifacts
+*.pkl
+
+# Outputs (regeneratable)
+outputs/
+
+# Node / Next.js
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/.npm-cache/

@@ -1,0 +1,70 @@
+# Trade Surveillance Configuration
+# Override any default threshold by uncommenting and editing.
+# Keys map to bits_hackathon/config.py DEFAULTS (dot-separated).
+# Environment variables also work: CFG_P3_WASH_WINDOW_SEC=120
+
+p3:
+  peg_break:
+    deviation_pct: 0.005
+
+  wash:
+    window_sec: 90
+    notional_rel_tol: 0.02
+
+  ramping:
+    min_streak: 6
+    max_gap_sec: 3600
+
+  aml_structuring:
+    low: 9980
+    high: 10000
+    min_count: 6
+    max_cv: 0.015
+
+  price_bar_violation:
+    min_mid_bps: 35.0
+
+  round_trip:
+    window_sec: 120
+    notional_rel_tol: 0.02
+
+  pump_dump:
+    symbols:
+      - BATUSDT
+      - DOGEUSDT
+    notional_quantile: 0.72
+    max_trades_per_bar: 6
+
+  trim:
+    pump_and_dump: 35
+    spoofing: 80
+    round_trip_wash: 25
+
+  # Gated detectors (set true to enable)
+  enable:
+    cross_pair_divergence: false
+    coordinated_pump: false
+    manager_consolidation: false
+    extreme_mid_deviation: false
+
+p1:
+  obi:
+    z_thr: 3.15
+    min_run: 5
+    min_depth_shares: 50
+    skip_first_minutes: 0
+  cancel:
+    min_cancels: 4
+    max_alerts: 20
+
+p2:
+  drift:
+    vol_z_threshold: 2.5
+    cum_ret_threshold: 0.025
+
+committee:
+  ai_only_conf_default: 0.85
+  ai_only_conf_wash: 0.80
+  ai_only_conf_layering: 0.90
+  rules_only_keep_uncertain: true
+  ml_only_include: false
