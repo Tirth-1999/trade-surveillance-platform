@@ -1,12 +1,40 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
+const STATIC_MAP: Record<string, string> = {
+  "/api/outputs/submission": "/data/submission.json",
+  "/api/outputs/submission_committee": "/data/submission_committee.json",
+  "/api/outputs/submission_ml": "/data/submission_ml.json",
+  "/api/outputs/ground_truth": "/data/ground_truth.json",
+  "/api/outputs/comparison_report": "/data/comparison_report.json",
+  "/api/outputs/p1_alerts": "/data/p1_alerts.json",
+  "/api/outputs/p2_signals": "/data/p2_signals.json",
+  "/api/reports/committee_report": "/data/committee_report.json",
+  "/api/reports/reranker_report": "/data/reranker_report.json",
+  "/api/reports/tuning_report": "/data/tuning_report.json",
+  "/api/status": "/data/status.json",
+  "/api/decisions": "/data/decisions.json",
+};
+
+function staticPath(apiPath: string): string | null {
+  const base = apiPath.split("?")[0];
+  return STATIC_MAP[base] ?? null;
+}
+
 export async function fetchJSON<T = any>(path: string): Promise<T> {
-  const res = await fetch(`${API}${path}`);
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`API ${res.status}: ${body}`);
+  try {
+    const res = await fetch(`${API}${path}`);
+    if (res.ok) return res.json();
+  } catch {
+    /* API unreachable — fall through to static */
   }
-  return res.json();
+
+  const fallback = staticPath(path);
+  if (fallback) {
+    const res = await fetch(fallback);
+    if (res.ok) return res.json();
+  }
+
+  throw new Error(`Data unavailable for ${path}`);
 }
 
 export async function postJSON<T = any>(path: string, body?: any): Promise<T> {

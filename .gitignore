@@ -34,8 +34,8 @@ feedback/*.jsonl
 # Model artifacts
 *.pkl
 
-# Outputs (regeneratable)
-outputs/
+# Outputs — tracked so Vercel static fallback has data
+# outputs/
 
 # Node / Next.js
 node_modules/

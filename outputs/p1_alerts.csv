@@ -1,0 +1,14 @@
+alert_id,sec_id,trade_date,time_window_start,anomaly_type,severity,remarks,time_to_run
+1,36672,2026-02-17,08:59:00,order_book_imbalance,HIGH,"Sustained 6+ minutes where rolling 30m z>3.15: mean OBI=-0.335, max spread_z=5.29, max |obi_z|=5.39 — order book imbalance / spread vs prior baseline.",0.22
+2,34909,2026-02-18,08:59:00,order_book_imbalance,HIGH,"Sustained 5+ minutes where rolling 30m z>3.15: mean OBI=0.227, max spread_z=5.29, max |obi_z|=5.39 — order book imbalance / spread vs prior baseline.",0.22
+3,489240,2026-02-20,08:59:00,order_book_imbalance,HIGH,"Sustained 5+ minutes where rolling 30m z>3.15: mean OBI=-0.531, max spread_z=5.29, max |obi_z|=5.39 — order book imbalance / spread vs prior baseline.",0.22
+4,36672,2026-02-17,12:56:00,order_book_imbalance,HIGH,"Sustained 7+ minutes where rolling 30m z>3.15: mean OBI=-0.847, max spread_z=-2.24, max |obi_z|=5.39 — order book imbalance / spread vs prior baseline.",0.22
+5,4409,2026-02-18,00:56:00,order_book_imbalance,MEDIUM,"Sustained 5+ minutes where rolling 30m z>3.15: mean OBI=-0.108, max spread_z=-1.03, max |obi_z|=5.35 — order book imbalance / spread vs prior baseline.",0.22
+6,3559296,2026-02-20,10:44:00,order_book_imbalance,HIGH,"Sustained 6+ minutes where rolling 30m z>3.15: mean OBI=0.837, max spread_z=-2.22, max |obi_z|=5.34 — order book imbalance / spread vs prior baseline.",0.22
+7,36574,2026-02-20,10:58:00,order_book_imbalance,MEDIUM,"Sustained 6+ minutes where rolling 30m z>3.15: mean OBI=0.174, max spread_z=1.37, max |obi_z|=5.00 — order book imbalance / spread vs prior baseline.",0.22
+8,41966,2026-02-17,13:46:00,order_book_imbalance,MEDIUM,"Sustained 5+ minutes where rolling 30m z>3.15: mean OBI=0.341, max spread_z=n/a, max |obi_z|=4.87 — order book imbalance / spread vs prior baseline.",0.22
+9,489240,2026-02-20,22:05:00,order_book_imbalance,MEDIUM,"Sustained 5+ minutes where rolling 30m z>3.15: mean OBI=-0.452, max spread_z=0.47, max |obi_z|=4.51 — order book imbalance / spread vs prior baseline.",0.22
+10,33382,2026-02-20,10:57:00,order_book_imbalance,HIGH,"Sustained 5+ minutes where rolling 30m z>3.15: mean OBI=0.651, max spread_z=5.39, max |obi_z|=3.23 — order book imbalance / spread vs prior baseline.",0.22
+11,43205,2026-02-19,10:58:41,unusual_cancel_pattern,MEDIUM,5 CANCELLED BUY orders from trader09 within 15 minutes on sec_id 43205 — consistent with layering/spoofing-style quote flicker.,0.22
+12,550091,2026-02-18,10:32:58,unusual_cancel_pattern,MEDIUM,9 CANCELLED BUY orders from trader07 within 15 minutes on sec_id 550091 — consistent with layering/spoofing-style quote flicker.,0.22
+13,4579561,2026-02-17,13:59:10,unusual_cancel_pattern,MEDIUM,7 CANCELLED BUY orders from trader08 within 15 minutes on sec_id 4579561 — consistent with layering/spoofing-style quote flicker.,0.22

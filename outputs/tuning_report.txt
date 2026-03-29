@@ -1,0 +1,86 @@
+======================================================================
+PARAMETER TUNING RECOMMENDATIONS
+======================================================================
+
+1. LIKELY FALSE POSITIVES (rules_only, GT confidence < 0.3): 73
+   By violation type:
+     pump_and_dump                 : 33
+       → BATUSDT: 33 trades
+     round_trip_wash               : 25
+       → BTCUSDT: 16 trades
+       → ETHUSDT: 8 trades
+       → SOLUSDT: 1 trades
+     chain_layering                : 11
+       → LTCUSDT: 4 trades
+       → XRPUSDT: 4 trades
+       → DOGEUSDT: 3 trades
+     spoofing                      : 4
+       → ETHUSDT: 4 trades
+
+   SUGGESTIONS:
+   - Consider raising threshold for 'pump_and_dump' detector
+     especially for symbol BATUSDT
+   - Consider raising threshold for 'round_trip_wash' detector
+     especially for symbol BTCUSDT
+   - Consider raising threshold for 'chain_layering' detector
+     especially for symbol LTCUSDT
+   - Consider raising threshold for 'spoofing' detector
+     especially for symbol ETHUSDT
+
+2. LIKELY MISSED VIOLATIONS (gt_only, GT confidence >= 0.7): 258
+   By violation type:
+     structuring                   : 114
+       → BTCUSDT: 51 trades
+       → ETHUSDT: 33 trades
+       → BATUSDT: 9 trades
+     ramping                       : 48
+       → BTCUSDT: 18 trades
+       → LTCUSDT: 12 trades
+       → ETHUSDT: 8 trades
+     aml_structuring               : 37
+       → SOLUSDT: 15 trades
+       → BTCUSDT: 11 trades
+       → ETHUSDT: 11 trades
+     wash_trading                  : 24
+       → SOLUSDT: 10 trades
+       → DOGEUSDT: 7 trades
+       → BTCUSDT: 6 trades
+     spoofing                      : 15
+       → BTCUSDT: 13 trades
+       → ETHUSDT: 2 trades
+     layering                      : 13
+       → BTCUSDT: 8 trades
+       → BATUSDT: 4 trades
+       → ETHUSDT: 1 trades
+     pump_and_dump                 : 6
+       → SOLUSDT: 3 trades
+       → BTCUSDT: 1 trades
+       → ETHUSDT: 1 trades
+
+   SUGGESTIONS:
+   - Consider lowering threshold for 'structuring' or adding new detector
+   - Consider lowering threshold for 'ramping' or adding new detector
+   - Consider lowering threshold for 'aml_structuring' or adding new detector
+   - Consider lowering threshold for 'wash_trading' or adding new detector
+   - Consider lowering threshold for 'spoofing' or adding new detector
+   - Consider lowering threshold for 'layering' or adding new detector
+   - Consider lowering threshold for 'pump_and_dump' or adding new detector
+
+3. AGREEMENT STATS
+   Both flag (true positives likely): 38
+   Rules only:                       115
+   GT only:                          274
+   Estimated rule precision:         24.84%
+   Estimated recall vs GT:           12.84%
+
+4. PER-SYMBOL PERFORMANCE
+   BATUSDT     : both=  6  rules_only= 36  gt_only= 17
+   BTCUSDT     : both= 10  rules_only= 29  gt_only=112
+   DOGEUSDT    : both=  1  rules_only=  5  gt_only= 19
+   ETHUSDT     : both=  8  rules_only= 22  gt_only= 58
+   LTCUSDT     : both=  5  rules_only=  5  gt_only= 24
+   SOLUSDT     : both=  2  rules_only=  1  gt_only= 30
+   USDCUSDT    : both=  1  rules_only=  2  gt_only=  3
+   XRPUSDT     : both=  5  rules_only= 15  gt_only= 11
+
+======================================================================

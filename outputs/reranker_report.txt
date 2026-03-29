@@ -1,0 +1,32 @@
+============================================================
+ML RE-RANKER REPORT
+============================================================
+
+Model: GradientBoostingClassifier (200 trees, depth=4)
+Train size: 16146, Test size: 3108
+Positive labels: 338 / 19254
+Best threshold: 0.88
+
+Test metrics:
+  Precision: 0.5000
+  Recall:    0.0698
+  F1:        0.1224
+  AUC:       0.9802
+
+Feature importances:
+  notional_zscore               : 0.2770
+  price_vs_mid_bps              : 0.1351
+  notional_vs_threshold         : 0.1120
+  bar_volume_ratio              : 0.0858
+  time_gap_same_wallet          : 0.0822
+  bar_tradecount                : 0.0784
+  price_vs_peg_bps              : 0.0691
+  wallet_total_notional         : 0.0603
+  minute_peer_notional          : 0.0412
+  wallet_trade_count            : 0.0309
+  hour_of_day                   : 0.0258
+  minute_peer_count             : 0.0021
+  is_stablecoin                 : 0.0000
+
+ML-flagged trades: 170
+Total trades:      19254
