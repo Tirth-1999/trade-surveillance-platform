@@ -31,6 +31,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
         </Script>
+        <Script
+          src="https://cloud.umami.is/script.js"
+          data-website-id="59ff508e-19ec-4f67-8078-ac74d1f0a11b"
+          strategy="afterInteractive"
+        />
         <ThemeProvider>
           <div className="flex h-screen min-h-0 overflow-hidden bg-background text-foreground">
             <Sidebar />
