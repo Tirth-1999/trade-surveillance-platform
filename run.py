@@ -14,11 +14,14 @@ Usage:
     python run.py tune            # Parameter tuning recommendations
     python run.py committee       # Three-way committee fusion
     python run.py all             # Run p3 → p1 → p2 sequentially
+    python run.py score-proxy     # P3 score proxy vs ground_truth (5·TP − 2·FP)
+    python run.py export-submission  # Copy final CSV to repo root submission.csv
 """
 
 from __future__ import annotations
 
 import argparse
+import shutil
 import sys
 import time
 
@@ -100,11 +103,16 @@ def cmd_train_ml() -> None:
     from bits_hackathon.core.crypto_load import load_all_markets, load_all_trades
     from bits_hackathon.core.paths import ARTIFACTS_DIR, OUTPUTS_DIR
     from bits_hackathon.pipeline.baseline_audit import write_baseline_report
+    from bits_hackathon.pipeline.compare import load_and_compare
     from bits_hackathon.pipeline.evaluate_ml import run_full_evaluation, write_evaluation_report
     from bits_hackathon.pipeline.ml_stage1 import _artifact_paths
     from bits_hackathon.pipeline.ml_stage1 import train_stage1
     from bits_hackathon.pipeline.ml_stage2 import build_ml_submission_staged, infer_stage2, train_stage2
     from bits_hackathon.pipeline.ml_stage1 import infer_stage1
+
+    comp = load_and_compare()
+    comp.to_csv(OUTPUTS_DIR / "comparison_report.csv", index=False)
+    print(f"Refreshed comparison_report.csv ({len(comp)} rows) for ML weak labels.\n")
 
     write_baseline_report()
     _, _, jpath = _artifact_paths()
@@ -208,6 +216,54 @@ def cmd_all() -> None:
         fn()
 
 
+def cmd_score_proxy(args: argparse.Namespace) -> None:
+    from bits_hackathon.core.paths import OUTPUTS_DIR
+    from bits_hackathon.pipeline.score_proxy import evaluate_submission_vs_gt, format_report
+
+    sub_path = args.submission or str(OUTPUTS_DIR / "submission.csv")
+    gt_path = args.ground_truth or str(OUTPUTS_DIR / "ground_truth.csv")
+    ev = evaluate_submission_vs_gt(sub_path, gt_path, type_bonus=not args.no_type_bonus)
+    if args.json:
+        import json
+
+        slim = {k: v for k, v in ev.items() if k != "rows"}
+        print(json.dumps(slim, indent=2))
+    else:
+        print(format_report(ev))
+
+
+def cmd_export_submission(args: argparse.Namespace) -> None:
+    from bits_hackathon.core.paths import OUTPUTS_DIR, ROOT
+
+    name_map = {
+        "committee": "submission_committee.csv",
+        "rules": "submission.csv",
+        "ml": "submission_ml.csv",
+    }
+    src = OUTPUTS_DIR / name_map[args.source]
+    if not src.exists():
+        print(f"Error: missing {src}", file=sys.stderr)
+        sys.exit(1)
+    dst = ROOT / "submission.csv"
+    shutil.copyfile(src, dst)
+    print(f"Copied {src} -> {dst}")
+
+    if getattr(args, "also_p1", False):
+        p1s = OUTPUTS_DIR / "p1_alerts.csv"
+        if p1s.exists():
+            shutil.copyfile(p1s, ROOT / "p1_alerts.csv")
+            print(f"Copied {p1s.name} -> {ROOT / 'p1_alerts.csv'}")
+        else:
+            print(f"Warning: {p1s} not found", file=sys.stderr)
+    if getattr(args, "also_p2", False):
+        p2s = OUTPUTS_DIR / "p2_signals.csv"
+        if p2s.exists():
+            shutil.copyfile(p2s, ROOT / "p2_signals.csv")
+            print(f"Copied {p2s.name} -> {ROOT / 'p2_signals.csv'}")
+        else:
+            print(f"Warning: {p2s} not found", file=sys.stderr)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="BITS Hackathon — Trade Surveillance Pipelines",
@@ -227,6 +283,33 @@ def main() -> None:
     sub.add_parser("tune", help="Parameter tuning recommendations")
     sub.add_parser("committee", help="Three-way committee fusion submission")
     sub.add_parser("all", help="Run p3 → p1 → p2 sequentially")
+
+    sp = sub.add_parser("score-proxy", help="Score proxy vs ground_truth (5·TP − 2·FP + type bonus)")
+    sp.add_argument("--submission", default=None, help="Defaults to outputs/submission.csv")
+    sp.add_argument("--ground-truth", default=None, help="Defaults to outputs/ground_truth.csv")
+    sp.add_argument("--no-type-bonus", action="store_true")
+    sp.add_argument("--json", action="store_true")
+
+    ex = sub.add_parser(
+        "export-submission",
+        help="Copy outputs/*.csv to repo-root submission.csv for judges",
+    )
+    ex.add_argument(
+        "--source",
+        choices=["committee", "rules", "ml"],
+        default="committee",
+        help="Which pipeline output to publish as root submission.csv",
+    )
+    ex.add_argument(
+        "--also-p1",
+        action="store_true",
+        help="Also copy outputs/p1_alerts.csv to repo root",
+    )
+    ex.add_argument(
+        "--also-p2",
+        action="store_true",
+        help="Also copy outputs/p2_signals.csv to repo root",
+    )
 
     args = parser.parse_args()
 
@@ -249,7 +332,12 @@ def main() -> None:
         parser.print_help()
         sys.exit(1)
 
-    commands[args.command]()
+    if args.command == "score-proxy":
+        cmd_score_proxy(args)
+    elif args.command == "export-submission":
+        cmd_export_submission(args)
+    else:
+        commands[args.command]()
 
 
 if __name__ == "__main__":

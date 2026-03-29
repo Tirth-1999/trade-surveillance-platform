@@ -1,154 +1,137 @@
 symbol,date,trade_id,violation_type,remarks
-BATUSDT,2026-01-05,BATUSDT_00000011,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-27,BATUSDT_00000012,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-09,BATUSDT_00000013,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-15,BATUSDT_00000020,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-13,BATUSDT_00000023,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-30,BATUSDT_00000035,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-13,BATUSDT_00000043,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-17,BATUSDT_00000100,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-13,BATUSDT_00000106,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-31,BATUSDT_00000108,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-26,BATUSDT_00000109,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-05,BATUSDT_00000174,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-12,BATUSDT_00000188,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-30,BATUSDT_00000194,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-20,BATUSDT_00000206,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-18,BATUSDT_00000228,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-07,BATUSDT_00000249,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-19,BATUSDT_00000303,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-04,BATUSDT_00000343,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-21,BATUSDT_00000359,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-20,BATUSDT_00000384,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-19,BATUSDT_00000386,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-31,BATUSDT_00000395,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-17,BATUSDT_00000422,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-21,BATUSDT_00000426,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-01,BATUSDT_00000448,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-03,BATUSDT_00000450,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-20,BATUSDT_00000471,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-13,BATUSDT_00000473,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-19,BATUSDT_00000478,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-13,BATUSDT_00000479,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-12,BATUSDT_00000486,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-18,BATUSDT_00000493,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-01-21,BATUSDT_00000503,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BATUSDT,2026-01-21,BATUSDT_00000505,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BATUSDT,2026-01-21,BATUSDT_00000507,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BATUSDT,2026-01-21,BATUSDT_00000508,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BATUSDT,2026-01-21,BATUSDT_00000509,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BATUSDT,2026-02-09,BATUSDT_00000520,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-09,BATUSDT_00000525,pump_and_dump,BATUSDT trade in hour with aggregate bar volume >5.0× median hourly — investigate pump/liquidity event.
-BATUSDT,2026-02-16,BATUSDT_00000526,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BATUSDT,2026-02-16,BATUSDT_00000527,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-14,BTCUSDT_00000882,round_trip_wash,Wallets wallet_BTC0072 / wallet_BTC0078 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-01-11,BTCUSDT_00001398,round_trip_wash,Wallets wallet_BTC0019 / wallet_BTC0009 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-05,BTCUSDT_00001534,round_trip_wash,Wallets wallet_BTC0052 / wallet_BTC0087 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-23,BTCUSDT_00001868,round_trip_wash,Wallets wallet_BTC0105 / wallet_BTC0094 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-05,BTCUSDT_00001977,round_trip_wash,Wallets wallet_BTC0024 / wallet_BTC0121 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-05,BTCUSDT_00002290,round_trip_wash,Wallets wallet_BTC0024 / wallet_BTC0121 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-16,BTCUSDT_00002431,round_trip_wash,Wallets wallet_BTC0101 / wallet_BTC0185 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-05,BTCUSDT_00002782,round_trip_wash,Wallets wallet_BTC0052 / wallet_BTC0087 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-22,BTCUSDT_00002902,round_trip_wash,Wallets wallet_BTC0010 / wallet_BTC0095 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-16,BTCUSDT_00002949,round_trip_wash,Wallets wallet_BTC0101 / wallet_BTC0185 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-01,BTCUSDT_00003310,round_trip_wash,Wallets wallet_BTC0093 / wallet_BTC0014 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-01-11,BTCUSDT_00003449,round_trip_wash,Wallets wallet_BTC0019 / wallet_BTC0009 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-14,BTCUSDT_00003790,round_trip_wash,Wallets wallet_BTC0072 / wallet_BTC0078 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-23,BTCUSDT_00003996,round_trip_wash,Wallets wallet_BTC0105 / wallet_BTC0094 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-01,BTCUSDT_00004475,round_trip_wash,Wallets wallet_BTC0093 / wallet_BTC0014 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-02-22,BTCUSDT_00004616,round_trip_wash,Wallets wallet_BTC0010 / wallet_BTC0095 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-BTCUSDT,2026-01-08,BTCUSDT_00005001,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-01-08,BTCUSDT_00005002,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-01-15,BTCUSDT_00005003,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-01-22,BTCUSDT_00005014,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005026,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005027,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005028,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005030,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005031,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005032,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005033,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005034,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005035,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005036,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-05,BTCUSDT_00005037,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-12,BTCUSDT_00005038,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-12,BTCUSDT_00005039,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-12,BTCUSDT_00005040,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-12,BTCUSDT_00005041,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-12,BTCUSDT_00005042,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-12,BTCUSDT_00005043,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-12,BTCUSDT_00005044,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-BTCUSDT,2026-02-19,BTCUSDT_00005045,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
+BATUSDT,2026-01-05,BATUSDT_00000011,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-27,BATUSDT_00000012,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-09,BATUSDT_00000013,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-15,BATUSDT_00000020,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-13,BATUSDT_00000023,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-30,BATUSDT_00000035,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-13,BATUSDT_00000043,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-17,BATUSDT_00000100,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-13,BATUSDT_00000106,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-31,BATUSDT_00000108,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-26,BATUSDT_00000109,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-05,BATUSDT_00000174,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-12,BATUSDT_00000188,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-30,BATUSDT_00000194,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-20,BATUSDT_00000206,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-18,BATUSDT_00000228,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-07,BATUSDT_00000249,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-19,BATUSDT_00000303,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-04,BATUSDT_00000343,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-21,BATUSDT_00000359,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-20,BATUSDT_00000384,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-19,BATUSDT_00000386,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-31,BATUSDT_00000395,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-17,BATUSDT_00000422,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-21,BATUSDT_00000426,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-01,BATUSDT_00000448,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-03,BATUSDT_00000450,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-20,BATUSDT_00000471,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-13,BATUSDT_00000473,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-19,BATUSDT_00000478,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-13,BATUSDT_00000479,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-12,BATUSDT_00000486,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-18,BATUSDT_00000493,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-01-21,BATUSDT_00000503,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BATUSDT,2026-01-21,BATUSDT_00000507,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BATUSDT,2026-01-21,BATUSDT_00000508,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BATUSDT,2026-01-21,BATUSDT_00000509,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BATUSDT,2026-02-09,BATUSDT_00000520,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BATUSDT,2026-02-09,BATUSDT_00000525,pump_and_dump,BATUSDT hour volume >5.0× median hourly AND hour tradecount ≥92 — liquidity/pump context.
+BTCUSDT,2026-01-11,BTCUSDT_00001398,round_trip_wash,"Wallets wallet_BTC0019 / wallet_BTC0009 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-05,BTCUSDT_00001534,round_trip_wash,"Wallets wallet_BTC0052 / wallet_BTC0087 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-06,BTCUSDT_00002038,round_trip_wash,"Wallets wallet_BTC0075 / wallet_BTC0010 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-06,BTCUSDT_00002264,round_trip_wash,"Wallets wallet_BTC0075 / wallet_BTC0010 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-16,BTCUSDT_00002431,round_trip_wash,"Wallets wallet_BTC0101 / wallet_BTC0185 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-05,BTCUSDT_00002782,round_trip_wash,"Wallets wallet_BTC0052 / wallet_BTC0087 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-22,BTCUSDT_00002902,round_trip_wash,"Wallets wallet_BTC0010 / wallet_BTC0095 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-16,BTCUSDT_00002949,round_trip_wash,"Wallets wallet_BTC0101 / wallet_BTC0185 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-01-11,BTCUSDT_00003449,round_trip_wash,"Wallets wallet_BTC0019 / wallet_BTC0009 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-02-22,BTCUSDT_00004616,round_trip_wash,"Wallets wallet_BTC0010 / wallet_BTC0095 BUY→SELL within 120s notionals within 2%, min 1500 USDT — round-trip wash."
+BTCUSDT,2026-01-08,BTCUSDT_00005001,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-01-08,BTCUSDT_00005002,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-01-15,BTCUSDT_00005003,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-01-22,BTCUSDT_00005014,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005026,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005027,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005028,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005030,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005031,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005032,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005033,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005034,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005035,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005036,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-05,BTCUSDT_00005037,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-12,BTCUSDT_00005038,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-12,BTCUSDT_00005039,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-12,BTCUSDT_00005040,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-12,BTCUSDT_00005041,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-12,BTCUSDT_00005042,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-12,BTCUSDT_00005043,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-12,BTCUSDT_00005044,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+BTCUSDT,2026-02-19,BTCUSDT_00005045,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 DOGEUSDT,2026-02-02,DOGEUSDT_00000076,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 DOGEUSDT,2026-02-02,DOGEUSDT_00000668,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 DOGEUSDT,2026-02-02,DOGEUSDT_00001361,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
-DOGEUSDT,2026-01-11,DOGEUSDT_00002001,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-DOGEUSDT,2026-02-14,DOGEUSDT_00002021,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-DOGEUSDT,2026-02-14,DOGEUSDT_00002022,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-06,ETHUSDT_00000190,round_trip_wash,Wallets wallet_ETH0124 / wallet_ETH0013 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-01-09,ETHUSDT_00000725,round_trip_wash,Wallets wallet_ETH0165 / wallet_ETH0166 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-02-06,ETHUSDT_00001029,round_trip_wash,Wallets wallet_ETH0124 / wallet_ETH0013 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-02-05,ETHUSDT_00001907,round_trip_wash,Wallets wallet_ETH0138 / wallet_ETH0087 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-02-05,ETHUSDT_00002063,round_trip_wash,Wallets wallet_ETH0138 / wallet_ETH0087 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-01-09,ETHUSDT_00002384,round_trip_wash,Wallets wallet_ETH0165 / wallet_ETH0166 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-01-09,ETHUSDT_00003738,round_trip_wash,Wallets wallet_ETH0019 / wallet_ETH0091 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-01-09,ETHUSDT_00003788,round_trip_wash,Wallets wallet_ETH0019 / wallet_ETH0091 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-ETHUSDT,2026-01-07,ETHUSDT_00004001,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-07,ETHUSDT_00004002,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-07,ETHUSDT_00004003,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-07,ETHUSDT_00004004,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-16,ETHUSDT_00004005,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-23,ETHUSDT_00004008,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-23,ETHUSDT_00004009,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-23,ETHUSDT_00004010,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-23,ETHUSDT_00004011,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-23,ETHUSDT_00004012,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-01-23,ETHUSDT_00004013,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-03,ETHUSDT_00004015,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-03,ETHUSDT_00004019,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-10,ETHUSDT_00004021,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-10,ETHUSDT_00004022,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-17,ETHUSDT_00004025,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-17,ETHUSDT_00004026,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-17,ETHUSDT_00004027,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-17,ETHUSDT_00004028,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-17,ETHUSDT_00004029,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-17,ETHUSDT_00004030,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-ETHUSDT,2026-02-17,ETHUSDT_00004031,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-LTCUSDT,2026-01-18,LTCUSDT_00000072,wash_trading,"Same wallet wallet_LTC0011 BUY/SELL within 90s, notionals within 2% — indicative wash."
+DOGEUSDT,2026-01-11,DOGEUSDT_00002001,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+DOGEUSDT,2026-02-14,DOGEUSDT_00002021,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+DOGEUSDT,2026-02-14,DOGEUSDT_00002022,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+DOGEUSDT,2026-02-14,DOGEUSDT_00002024,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+DOGEUSDT,2026-02-14,DOGEUSDT_00002025,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+DOGEUSDT,2026-02-14,DOGEUSDT_00002026,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-07,ETHUSDT_00004001,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-07,ETHUSDT_00004002,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-07,ETHUSDT_00004003,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-07,ETHUSDT_00004004,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-16,ETHUSDT_00004005,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-23,ETHUSDT_00004008,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-23,ETHUSDT_00004009,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-23,ETHUSDT_00004010,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-23,ETHUSDT_00004011,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-23,ETHUSDT_00004012,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-01-23,ETHUSDT_00004013,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-03,ETHUSDT_00004015,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-03,ETHUSDT_00004019,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-10,ETHUSDT_00004021,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-10,ETHUSDT_00004022,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-17,ETHUSDT_00004025,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-17,ETHUSDT_00004026,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-17,ETHUSDT_00004027,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-17,ETHUSDT_00004028,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-17,ETHUSDT_00004029,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-17,ETHUSDT_00004030,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+ETHUSDT,2026-02-17,ETHUSDT_00004031,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 LTCUSDT,2026-02-06,LTCUSDT_00000186,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 LTCUSDT,2026-02-06,LTCUSDT_00000848,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
-LTCUSDT,2026-01-18,LTCUSDT_00000887,wash_trading,"Same wallet wallet_LTC0011 BUY/SELL within 90s, notionals within 2% — indicative wash."
 LTCUSDT,2026-02-06,LTCUSDT_00001101,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 LTCUSDT,2026-02-06,LTCUSDT_00001184,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
-LTCUSDT,2026-01-20,LTCUSDT_00001504,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-LTCUSDT,2026-01-20,LTCUSDT_00001505,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-LTCUSDT,2026-01-20,LTCUSDT_00001506,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-LTCUSDT,2026-01-27,LTCUSDT_00001507,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-SOLUSDT,2026-01-21,SOLUSDT_00001880,round_trip_wash,Wallets wallet_SOL0014 / wallet_SOL0042 crossed BUY/SELL within 120s with matched notionals (within 2%) — round-trip wash between accounts.
-SOLUSDT,2026-02-11,SOLUSDT_00002518,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-SOLUSDT,2026-02-11,SOLUSDT_00002519,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-USDCUSDT,2026-01-14,USDCUSDT_00001001,peg_break,USDCUSDT stablecoin trade with |price-1|/1 > 0.5% (0.5697% from peg).
-USDCUSDT,2026-02-02,USDCUSDT_00001010,peg_break,USDCUSDT stablecoin trade with |price-1|/1 > 0.5% (0.6696% from peg).
-USDCUSDT,2026-02-09,USDCUSDT_00001011,peg_break,USDCUSDT stablecoin trade with |price-1|/1 > 0.5% (1.2164% from peg).
+LTCUSDT,2026-01-20,LTCUSDT_00001504,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+LTCUSDT,2026-01-20,LTCUSDT_00001505,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+LTCUSDT,2026-01-20,LTCUSDT_00001506,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+LTCUSDT,2026-01-27,LTCUSDT_00001507,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+SOLUSDT,2026-02-11,SOLUSDT_00002518,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+SOLUSDT,2026-02-11,SOLUSDT_00002519,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+USDCUSDT,2026-01-14,USDCUSDT_00001001,peg_break,USDCUSDT |price-1| > 0.5%; trade notional ≥ 100.0 USDT and bar volume ≥ 50.0 — peg break with context.
+USDCUSDT,2026-02-02,USDCUSDT_00001010,peg_break,USDCUSDT |price-1| > 0.5%; trade notional ≥ 100.0 USDT and bar volume ≥ 50.0 — peg break with context.
+USDCUSDT,2026-02-09,USDCUSDT_00001011,peg_break,USDCUSDT |price-1| > 0.5%; trade notional ≥ 100.0 USDT and bar volume ≥ 50.0 — peg break with context.
 XRPUSDT,2026-01-31,XRPUSDT_00000570,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 XRPUSDT,2026-01-31,XRPUSDT_00001075,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 XRPUSDT,2026-01-31,XRPUSDT_00001591,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 XRPUSDT,2026-01-31,XRPUSDT_00002383,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
-XRPUSDT,2026-01-10,XRPUSDT_00002505,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-01-18,XRPUSDT_00002509,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-01-25,XRPUSDT_00002518,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-01-30,XRPUSDT_00002519,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-01-30,XRPUSDT_00002520,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-01-30,XRPUSDT_00002521,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-01-30,XRPUSDT_00002522,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002525,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002526,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002527,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002528,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002529,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002530,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002531,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-06,XRPUSDT_00002532,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
-XRPUSDT,2026-02-20,XRPUSDT_00002535,spoofing,Trade price outside 1m bar range; deviation from bar mid exceeds 35 bps — inconsistent with bar OHLC.
+XRPUSDT,2026-01-10,XRPUSDT_00002505,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-01-18,XRPUSDT_00002509,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-01-25,XRPUSDT_00002518,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-01-30,XRPUSDT_00002519,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-01-30,XRPUSDT_00002520,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-01-30,XRPUSDT_00002521,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-01-30,XRPUSDT_00002522,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002525,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002526,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002527,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002528,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002529,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002530,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002531,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-06,XRPUSDT_00002532,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
+XRPUSDT,2026-02-20,XRPUSDT_00002535,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.

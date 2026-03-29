@@ -6,14 +6,23 @@
 p3:
   peg_break:
     deviation_pct: 0.005
+    min_trade_notional_usdt: 100
+    min_bar_volume_usdt: 50
+
+  liquid_pair_symbols:
+    - BTCUSDT
+    - ETHUSDT
+  min_notional_liquid_pair_usdt: 1500
 
   wash:
     window_sec: 90
     notional_rel_tol: 0.02
+    min_notional_usdt: 400
 
   ramping:
     min_streak: 6
-    max_gap_sec: 3600
+    max_gap_sec: 300
+    max_median_gap_sec: 120
 
   aml_structuring:
     low: 9980
@@ -21,12 +30,24 @@ p3:
     min_count: 6
     max_cv: 0.015
 
+  layering_echo:
+    max_notional_imbalance: 0.35
+
+  coordinated_structuring:
+    max_wallet_mean_cv: 0.08
+
+  bat_volume_spike:
+    min_hour_tradecount: 8
+
   price_bar_violation:
     min_mid_bps: 35.0
+    min_mid_bps_low_liquidity: 55.0
+    low_liquidity_tradecount: 6
 
   round_trip:
     window_sec: 120
     notional_rel_tol: 0.02
+    min_notional_usdt: 500
 
   pump_dump:
     symbols:
@@ -67,8 +88,13 @@ committee:
   ai_only_conf_wash: 0.80
   ai_only_conf_layering: 0.90
   rules_only_keep_uncertain: true
+  rules_only_min_gt_confidence: 0.45
   ml_only_include: false
   use_staged_ml_types: true
+  # Must be ≤ typical ml_p on submission_ml (see artifacts/stage1_meta.json threshold)
+  tier1_min_ml_probability: 0.30
+  tier1_rules_ai_min_ai_confidence: 0.5
+  tier1_require_gates: true
 
 # Staged ML (see bits_hackathon/pipeline/ml_stage1.py, ml_stage2.py)
 ml:
@@ -79,6 +105,8 @@ ml:
   stage1:
     train_fraction_by_date: 0.8
     calibration_method: isotonic
+    threshold_metric: f05
+    min_precision_floor: 0.35
     max_depth: 6
     learning_rate: 0.08
     max_iter: 400

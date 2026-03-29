@@ -16,6 +16,7 @@ from sklearn.metrics import (
     average_precision_score,
     brier_score_loss,
     f1_score,
+    fbeta_score,
     precision_score,
     recall_score,
     roc_auc_score,
@@ -113,18 +114,33 @@ def train_stage1(
     probs_test = calibrated.predict_proba(X_test_s)[:, 1]
     probs_all = calibrated.predict_proba(X_all_s)[:, 1]
 
-    best_thr = 0.5
-    best_score = -1.0
+    metric = str(cfg("ml.stage1.threshold_metric")).lower().strip()
+    prec_floor = float(cfg("ml.stage1.min_precision_floor"))
+    best_any_score = -1.0
+    best_any_thr = 0.5
+    best_floor_score = -1.0
+    best_floor_thr: float | None = None
     for thr in np.arange(0.05, 0.95, 0.02):
         preds = (probs_test >= thr).astype(int)
         if preds.sum() == 0 or y_test.sum() == 0:
             continue
         prec = precision_score(y_test, preds, zero_division=0)
         rec = recall_score(y_test, preds, zero_division=0)
-        score = prec * 2.0 + rec
-        if score > best_score:
-            best_score = score
-            best_thr = float(thr)
+        if metric in ("f05", "f_beta_half", "fbeta_half"):
+            score = float(fbeta_score(y_test, preds, beta=0.5, zero_division=0))
+        elif metric in ("hackathon_proxy", "hackathon"):
+            tp = int(np.logical_and(y_test == 1, preds == 1).sum())
+            fp = int(np.logical_and(y_test == 0, preds == 1).sum())
+            score = float(5 * tp - 2 * fp)
+        else:
+            score = prec * 2.0 + rec
+        if score > best_any_score:
+            best_any_score = score
+            best_any_thr = float(thr)
+        if prec >= prec_floor and score > best_floor_score:
+            best_floor_score = score
+            best_floor_thr = float(thr)
+    best_thr = best_floor_thr if best_floor_thr is not None else best_any_thr
 
     merged["p_suspicious"] = probs_all
     merged["ml_flag"] = (merged["p_suspicious"] >= best_thr).astype(int)
@@ -142,6 +158,8 @@ def train_stage1(
         "calibration_method": cal_method,
         "feature_cols": feature_cols,
         "threshold": best_thr,
+        "threshold_metric": metric,
+        "threshold_precision_floor": prec_floor,
         "train_rows": int(train_mask.sum()),
         "test_rows": int(test_mask.sum()),
         "positive_rate_train": float(y_train.mean()),

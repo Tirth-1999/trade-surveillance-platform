@@ -3,20 +3,39 @@ STAGE-1 ML REPORT (binary triage)
 ============================================================
 Calibration: isotonic
 Train / test rows: 15865 / 3389
-Best threshold: 0.690
-Test Brier: 0.0097  PR-AUC: 0.5667
-Test precision / recall / F1: 1.0000 / 0.0400 / 0.0769
-Precision: 1.0000
-Recall:    0.0400
-F1:        0.0769
-AUC:       0.9888
-ML-flagged (all data): 14 / 19254
+Best threshold: 0.290
+Test Brier: 0.0101  PR-AUC: 0.5510
+Test precision / recall / F1: 0.5781 / 0.7400 / 0.6491
+Precision: 0.5781
+Recall:    0.7400
+F1:        0.6491
+AUC:       0.9879
+ML-flagged (all data): 384 / 19254
 Artifacts: /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage1_model.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage1_scaler.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage1_meta.json
 
 ============================================================
 STAGE-2 ML REPORT (violation type)
 ============================================================
 Classes (7): ['aml_structuring', 'layering', 'other', 'ramping', 'spoofing', 'structuring', 'wash_trading']...
-Train / test: 288 / 50
-Test macro-F1: 0.2973  log-loss: 4.8839
+Train / test: 289 / 50
+Test macro-F1: 0.2243  log-loss: 5.0343
 Artifacts: /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage2_model.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage2_encoder.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage2_scaler.joblib
+
+============================================================
+ML EVALUATION / PROMOTION GATE
+============================================================
+
+New stage-1 test metrics:
+  test_precision: 0.5781
+  test_recall: 0.7400
+  test_f1: 0.6491
+  pr_auc_test: 0.5510
+  brier_test: 0.0101
+
+vs prior snapshot:
+  precision 1.0000 -> 0.5781
+  recall    0.0400 -> 0.7400
+
+Promotion decision: NO
+Reasons: precision did not improve enough vs prior
+============================================================

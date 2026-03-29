@@ -126,7 +126,42 @@ def build_committee_submission(
     ai_only = ai_ids - rule_ids - ml_ids
     ml_only = ml_ids - rule_ids - ai_ids
 
-    tier1_ids = all_three | rules_ai | rules_ml | ai_ml
+    tier1_raw = all_three | rules_ai | rules_ml | ai_ml
+    require_gates = bool(cfg("committee.tier1_require_gates"))
+    min_ml_p = float(cfg("committee.tier1_min_ml_probability"))
+    min_ai_ra = float(cfg("committee.tier1_rules_ai_min_ai_confidence"))
+    rules_only_min_gt = float(cfg("committee.rules_only_min_gt_confidence"))
+
+    def _ml_prob(tid: str) -> float:
+        ml_row = ml_lookup.get(tid, {})
+        p = ml_row.get("ml_p_suspicious", 0)
+        try:
+            return float(p) if pd.notna(p) else 0.0
+        except (TypeError, ValueError):
+            return 0.0
+
+    def _ai_conf(tid: str) -> float:
+        ai_row = ai_lookup.get(tid, {})
+        c = ai_row.get("confidence", 0)
+        try:
+            return float(c) if pd.notna(c) else 0.0
+        except (TypeError, ValueError):
+            return 0.0
+
+    tier1_ids: set[str] = set()
+    for tid in tier1_raw:
+        if not require_gates:
+            tier1_ids.add(tid)
+            continue
+        ok = True
+        if tid in rules_ml or tid in ai_ml or tid in all_three:
+            if min_ml_p > 0 and _ml_prob(tid) < min_ml_p:
+                ok = False
+        if tid in rules_ai or tid in all_three:
+            if min_ai_ra > 0 and _ai_conf(tid) < min_ai_ra:
+                ok = False
+        if ok:
+            tier1_ids.add(tid)
 
     # --- Tier 2: Rules-only triage ---
     rules_only_keep: set[str] = set()
@@ -143,7 +178,9 @@ def build_committee_submission(
             gt_row = gt_all_lookup.get(tid, {})
             gt_conf = gt_row.get("confidence", 0.0)
             gt_verdict = gt_row.get("verdict", "benign")
-            if gt_verdict == "uncertain" or (isinstance(gt_conf, (int, float)) and gt_conf >= 0.3):
+            if gt_verdict == "uncertain" or (
+                isinstance(gt_conf, (int, float)) and not pd.isna(gt_conf) and gt_conf >= rules_only_min_gt
+            ):
                 rules_only_keep.add(tid)
             else:
                 rules_only_drop.add(tid)
@@ -259,7 +296,8 @@ def build_committee_submission(
         f"  ML only:         {len(ml_only)}  (kept {len(ml_only_keep)}, dropped {len(ml_only - ml_only_keep)})",
         "",
         "Tier summary:",
-        f"  Tier 1 (2+ agree):        {len(tier1_ids)}",
+        f"  Tier 1 (2+ agree, raw):   {len(tier1_raw)}",
+        f"  Tier 1 (after ML/AI gates): {len(tier1_ids)}",
         f"  Tier 2 rules-only kept:   {len(rules_only_keep)}",
         f"  Tier 2 AI-only kept:      {len(ai_only_keep)}",
         f"  Tier 2 ML-only kept:      {len(ml_only_keep)}",

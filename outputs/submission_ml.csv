@@ -1,15 +1,385 @@
 symbol,date,trade_id,violation_type,remarks,ml_p_suspicious,ml_stage2_confidence
-DOGEUSDT,2026-02-07,DOGEUSDT_00002014,ramping,Potential ramping activity; monitor for further accumulative buys at similar price levels.,0.7292590402995369,0.9999971353593499
-DOGEUSDT,2026-02-07,DOGEUSDT_00002015,ramping,Indicates possible ramping; consider reviewing subsequent trades for continuation of the pattern.,0.7292590402995369,0.9999947424862107
-DOGEUSDT,2026-02-07,DOGEUSDT_00002016,ramping,Continued ramping behavior observed; further monitoring recommended.,0.7292590402995369,0.9999948167725242
-DOGEUSDT,2026-02-07,DOGEUSDT_00002017,ramping,Significant ramping signal; escalate surveillance focus.,0.7292590402995369,0.9999938022212488
-DOGEUSDT,2026-02-07,DOGEUSDT_00002018,ramping,Maintains ramping pattern; watch for further accumulative activity.,0.7292590402995369,0.9999970308919959
-DOGEUSDT,2026-02-07,DOGEUSDT_00002019,ramping,Ongoing ramping activity; consider additional risk mitigation steps.,0.7292590402995369,0.999972628044165
-DOGEUSDT,2026-02-07,DOGEUSDT_00002020,ramping,Further evidence of ramping; monitor for additional large buys.,0.7292590402995369,0.9999965816612537
-BTCUSDT,2026-02-23,BTCUSDT_00001223,wash_trading,High‑ratio order may reflect layering; additional surveillance of subsequent trades is advised.,0.7292590402995369,0.9064658568065074
-BTCUSDT,2026-02-06,BTCUSDT_00002787,layering,"The transaction shows signs of order structuring that could be intended to create a misleading market depth, necessitating closer scrutiny.",0.7292590402995369,0.9999384568932835
-BTCUSDT,2026-01-31,BTCUSDT_00002448,ramping,Potential ramping activity; monitor price movement and subsequent trades.,0.7292590402995369,0.9999884221905126
-BTCUSDT,2026-01-21,BTCUSDT_00003984,ramping,Strong indication of ramping; escalate investigation for potential market manipulation.,0.7292590402995369,0.9999746245446504
-BTCUSDT,2026-02-16,BTCUSDT_00000275,ramping,Potential ramping activity; flagged for further investigation.,0.7292590402995369,0.9998959624216207
-BTCUSDT,2026-01-09,BTCUSDT_00000061,structuring,Possible structuring; further analysis required.,0.7292590402995369,0.9999890665737935
-BTCUSDT,2026-02-28,BTCUSDT_00001033,wash_trading,Large sell with unusually high normalized ratio suggests possible structuring; monitor for manipulative intent.,0.6938393396928874,0.9711486228660026
+BTCUSDT,2026-01-29,BTCUSDT_00005016,structuring,Potential structuring activity; monitor for further coordinated small orders.,0.46762612499224776,0.9999839074791167
+BTCUSDT,2026-02-16,BTCUSDT_00003374,aml_structuring,ML staged (p=0.468),0.46762612499224776,0.9024067920841199
+BTCUSDT,2026-01-20,BTCUSDT_00003482,spoofing,Potential spoofing activity observed; further monitoring of order book depth is recommended.,0.4531777382673435,0.9999629225180701
+BTCUSDT,2026-02-15,BTCUSDT_00003859,layering,Potential layering activity; subject to enhanced surveillance.,0.4531777382673435,0.9999712947758461
+BTCUSDT,2026-01-04,BTCUSDT_00002494,structuring,Potential structuring; monitor for further fragmentation of notional amounts.,0.4531777382673435,0.9999951052260677
+BTCUSDT,2026-01-31,BTCUSDT_00002448,ramping,Potential ramping activity; monitor price movement and subsequent trades.,0.4531777382673435,0.9999914469935933
+BTCUSDT,2026-02-05,BTCUSDT_00004608,wash_trading,Potential wash trading activity detected; further monitoring recommended.,0.4531777382673435,0.9999514369099509
+BTCUSDT,2026-02-06,BTCUSDT_00002787,layering,"The transaction shows signs of order structuring that could be intended to create a misleading market depth, necessitating closer scrutiny.",0.4531777382673435,0.9999468394326587
+BTCUSDT,2026-02-25,BTCUSDT_00004396,spoofing,ML staged (p=0.453),0.4531777382673435,0.9959095557936483
+BTCUSDT,2026-01-07,BTCUSDT_00003652,structuring,Order splitting evident; potential structuring requires further analysis.,0.4531777382673435,0.999954817448987
+BTCUSDT,2026-01-15,BTCUSDT_00004649,ramping,Potential ramping activity warrants closer monitoring for market manipulation.,0.4531777382673435,0.9999453172243944
+BTCUSDT,2026-02-03,BTCUSDT_00002860,structuring,Identified as potential structuring; further analysis for AML concerns is advised.,0.4531777382673435,0.9999674426943331
+BTCUSDT,2026-02-05,BTCUSDT_00000752,wash_trading,Potential wash trading; watch for circular behavior.,0.4531777382673435,0.9999634023946214
+BTCUSDT,2026-01-25,BTCUSDT_00002939,ramping,Potential ramping activity; consider escalation to surveillance for coordinated price manipulation.,0.4531777382673435,0.9999491781980282
+BTCUSDT,2026-02-24,BTCUSDT_00000585,wash_trading,ML staged (p=0.453),0.4531777382673435,0.9993436004390551
+BTCUSDT,2026-02-16,BTCUSDT_00000275,ramping,Potential ramping activity; flagged for further investigation.,0.4531777382673435,0.9998893950970545
+BTCUSDT,2026-02-05,BTCUSDT_00004343,wash_trading,Suspicious coordinated buying; consider wash trading.,0.4531777382673435,0.999942554098014
+BTCUSDT,2026-01-16,BTCUSDT_00001116,ramping,Potential ramping behavior identified; subject to further review.,0.4531777382673435,0.9999908133456905
+BTCUSDT,2026-01-29,BTCUSDT_00005020,structuring,Potential structuring; continue monitoring.,0.4531777382673435,0.999998809328521
+BTCUSDT,2026-01-29,BTCUSDT_00005019,structuring,Structuring pattern observed; monitor subsequent trades.,0.4531777382673435,0.9999891528692263
+BTCUSDT,2026-01-29,BTCUSDT_00005018,structuring,Indicates structuring; keep under review.,0.4531777382673435,0.9999981210606551
+BTCUSDT,2026-02-05,BTCUSDT_00003099,wash_trading,Potential wash trading; monitor for repetitive patterns.,0.4531777382673435,0.9999737674793864
+BTCUSDT,2026-02-12,BTCUSDT_00004671,aml_structuring,Large sell execution may require further review for potential structuring or AML concerns.,0.4531777382673435,0.9999022644567342
+BTCUSDT,2026-02-01,BTCUSDT_00000419,layering,ML staged (p=0.453),0.4531777382673435,0.81130285229202
+BTCUSDT,2026-02-23,BTCUSDT_00001223,wash_trading,High‑ratio order may reflect layering; additional surveillance of subsequent trades is advised.,0.4531777382673435,0.9742571485139059
+BTCUSDT,2026-01-05,BTCUSDT_00003148,structuring,Potential structuring; keep surveillance active.,0.4531777382673435,0.9999399846309887
+BTCUSDT,2026-02-06,BTCUSDT_00000474,wash_trading,Unusually large trade — possible market manipulation.,0.4531777382673435,0.7037025062722473
+BTCUSDT,2026-01-28,BTCUSDT_00003929,spoofing,ML staged (p=0.453),0.4531777382673435,0.9999722764887135
+BTCUSDT,2026-02-07,BTCUSDT_00004125,layering,The pattern suggests possible layering activity that could be used to manipulate market perception.,0.45095267696801056,0.99998228848113
+BTCUSDT,2026-02-05,BTCUSDT_00000007,aml_structuring,Potential structuring activity; further review of the wallet's transaction history is recommended.,0.45095267696801056,0.9999501270321627
+DOGEUSDT,2026-02-07,DOGEUSDT_00002018,ramping,Maintains ramping pattern; watch for further accumulative activity.,0.44906201560373216,0.9999957123559016
+XRPUSDT,2026-01-30,XRPUSDT_00002522,structuring,Subsequent sell at slightly higher price consistent with structuring behavior.,0.44906201560373216,0.9999793405196494
+DOGEUSDT,2026-02-14,DOGEUSDT_00002026,wash_trading,Indicates possible wash trading given tiny notional and low market engagement metrics.,0.44906201560373216,0.9999536780280266
+BATUSDT,2026-02-23,BATUSDT_00000528,ramping,Consider this trade as part of a structuring pattern; escalate monitoring of price impact.,0.44906201560373216,0.5808380671768507
+BATUSDT,2026-02-23,BATUSDT_00000529,ramping,Mark as potentially structured; continue tracking for escalation.,0.44906201560373216,0.9204014414286379
+BATUSDT,2026-02-23,BATUSDT_00000530,ramping,Consider as part of a structuring pattern; keep ongoing surveillance.,0.44906201560373216,0.9204014414286379
+BATUSDT,2026-02-23,BATUSDT_00000531,ramping,Flag for potential structuring; continue monitoring wallet activity.,0.44906201560373216,0.9001758086808602
+XRPUSDT,2026-01-30,XRPUSDT_00002524,structuring,Final sell in the cluster exhibits characteristics consistent with structuring.,0.44906201560373216,0.9999987037024773
+DOGEUSDT,2026-02-07,DOGEUSDT_00002019,ramping,Ongoing ramping activity; consider additional risk mitigation steps.,0.44906201560373216,0.9999658329250208
+BATUSDT,2026-02-23,BATUSDT_00000533,ramping,Flag for possible structuring; maintain watch over wallet's trade cadence.,0.44906201560373216,0.9986006505090517
+BTCUSDT,2026-01-04,BTCUSDT_00003820,structuring,Structuring pattern detected; continue surveillance.,0.44906201560373216,0.9999705666108343
+DOGEUSDT,2026-02-07,DOGEUSDT_00002014,ramping,Potential ramping activity; monitor for further accumulative buys at similar price levels.,0.44906201560373216,0.9999968723821308
+BATUSDT,2026-02-09,BATUSDT_00000521,ramping,Indicates possible coordinated buying; further observation required.,0.44906201560373216,0.6515346949485199
+DOGEUSDT,2026-02-07,DOGEUSDT_00002015,ramping,Indicates possible ramping; consider reviewing subsequent trades for continuation of the pattern.,0.44906201560373216,0.9999971343864408
+DOGEUSDT,2026-02-07,DOGEUSDT_00002016,ramping,Continued ramping behavior observed; further monitoring recommended.,0.44906201560373216,0.9999936278558524
+BTCUSDT,2026-01-09,BTCUSDT_00003993,structuring,Potential ramping; watch for subsequent offsetting trades.,0.44906201560373216,0.9971684032653044
+DOGEUSDT,2026-02-14,DOGEUSDT_00002024,spoofing,ML staged (p=0.449),0.44906201560373216,0.9999739983341495
+DOGEUSDT,2026-02-14,DOGEUSDT_00002022,spoofing,ML staged (p=0.449),0.44906201560373216,0.9999538821388768
+BTCUSDT,2026-02-02,BTCUSDT_00000750,ramping,Monitor for further directional trades that may confirm a ramping pattern.,0.44906201560373216,0.9999061660659417
+BTCUSDT,2026-01-09,BTCUSDT_00000061,structuring,Possible structuring; further analysis required.,0.44906201560373216,0.9999924216788711
+BTCUSDT,2026-02-24,BTCUSDT_00002772,wash_trading,ML staged (p=0.449),0.44906201560373216,0.4792345856681773
+BTCUSDT,2026-01-29,BTCUSDT_00005022,structuring,Structuring activity detected; maintain surveillance.,0.44906201560373216,0.9999944230816058
+BTCUSDT,2026-02-04,BTCUSDT_00002021,structuring,Trade shows signs of possible market manipulation; escalate review and consider additional regulatory scrutiny.,0.44906201560373216,0.9999414524268475
+BTCUSDT,2026-01-15,BTCUSDT_00005005,ramping,"Continued small buy at higher price; consistent with ramping, keep under review.",0.44906201560373216,0.9999688674796516
+BTCUSDT,2026-01-31,BTCUSDT_00002520,spoofing,Consider this a possible spoofing event; monitor subsequent orders for pattern.,0.44906201560373216,0.9999426410709413
+BTCUSDT,2026-01-21,BTCUSDT_00003984,ramping,Strong indication of ramping; escalate investigation for potential market manipulation.,0.44906201560373216,0.9999689241584897
+BTCUSDT,2026-01-31,BTCUSDT_00001181,ramping,Unusually large trade — possible market manipulation.,0.44906201560373216,0.9671035321449337
+BTCUSDT,2026-02-24,BTCUSDT_00004176,wash_trading,ML staged (p=0.449),0.44906201560373216,0.999363781692965
+BTCUSDT,2026-01-05,BTCUSDT_00004164,structuring,Potential structuring; maintain watch for additional similar trades.,0.44906201560373216,0.9999943595564302
+BTCUSDT,2026-02-25,BTCUSDT_00002825,layering,ML staged (p=0.444),0.44425816436661353,0.9990787130749732
+BATUSDT,2026-01-21,BATUSDT_00000509,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999779518741073
+XRPUSDT,2026-02-06,XRPUSDT_00002526,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999879251554549
+XRPUSDT,2026-01-30,XRPUSDT_00002519,structuring,Potential structuring activity detected; small notional purchase amid similar trades warrants further review.,0.4442220889855569,0.9999949787260852
+XRPUSDT,2026-01-30,XRPUSDT_00002521,structuring,Repeated near‑price buys suggest possible structuring of transaction volume.,0.4442220889855569,0.9999843009607201
+XRPUSDT,2026-01-30,XRPUSDT_00002523,structuring,Additional purchase at similar price reinforces suspicion of structuring.,0.4442220889855569,0.9999994517446614
+XRPUSDT,2026-02-06,XRPUSDT_00002525,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999987170476168
+XRPUSDT,2026-02-06,XRPUSDT_00002528,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999751758389056
+XRPUSDT,2026-02-06,XRPUSDT_00002527,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999986315904412
+BATUSDT,2026-01-28,BATUSDT_00000515,layering,A sell after a ladder of tiny buys may indicate a coordinated layering strategy.,0.4442220889855569,0.999935681463254
+BATUSDT,2026-01-21,BATUSDT_00000508,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999629490265108
+BATUSDT,2026-01-21,BATUSDT_00000507,spoofing,ML staged (p=0.444),0.4442220889855569,0.999968993016452
+LTCUSDT,2026-02-08,LTCUSDT_00001512,ramping,High mid_bps with minimal volume at the highest price confirms ramping suspicion; requires escalated monitoring.,0.4442220889855569,0.9999789991537662
+LTCUSDT,2026-02-15,LTCUSDT_00001515,ramping,Moderate mid_bps but still elevated; consistent with ramping pattern.,0.4442220889855569,0.9999937762058608
+BATUSDT,2026-01-21,BATUSDT_00000505,structuring,Continuation of fragmented buying reinforces concerns of structuring activity.,0.4442220889855569,0.9999522953681413
+BATUSDT,2026-01-28,BATUSDT_00000514,layering,Continued incremental buys at rising prices support layering suspicion.,0.4442220889855569,0.999989519827892
+BATUSDT,2026-01-21,BATUSDT_00000503,structuring,"Pattern of fragmented purchases aligns with structuring behavior, raising suspicion of attempts to avoid detection thresholds.",0.4442220889855569,0.9999876289532525
+XRPUSDT,2026-01-18,XRPUSDT_00002509,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999393820452087
+XRPUSDT,2026-01-18,XRPUSDT_00002506,structuring,Trade exhibits structuring behavior; recommend detailed examination.,0.4442220889855569,0.9999186675022385
+XRPUSDT,2026-01-10,XRPUSDT_00002505,structuring,Trade displays structuring traits; flag for further analysis.,0.4442220889855569,0.9999876570669475
+BATUSDT,2026-01-21,BATUSDT_00000504,structuring,Repeated small orders with uniform characteristics support a structuring hypothesis.,0.4442220889855569,0.9999815877262798
+XRPUSDT,2026-01-10,XRPUSDT_00002504,structuring,Trade suggests structuring; escalate for compliance review.,0.4442220889855569,0.9999998190407323
+DOGEUSDT,2026-02-21,DOGEUSDT_00002029,ramping,Shows signs of wash trading due to negligible notional and low market engagement.,0.4442220889855569,0.757964264906157
+DOGEUSDT,2026-02-21,DOGEUSDT_00002028,ramping,Potential wash trading activity identified from minimal trade size and low market depth.,0.4442220889855569,0.9584596037836516
+LTCUSDT,2026-02-15,LTCUSDT_00001520,ramping,ML staged (p=0.444),0.4442220889855569,0.999917836206798
+LTCUSDT,2026-02-15,LTCUSDT_00001519,ramping,Elevated mid_bps persists; indicative of price manipulation attempts.,0.4442220889855569,0.9999949632421206
+LTCUSDT,2026-02-15,LTCUSDT_00001518,ramping,Elevated mid_bps continues; indicative of price manipulation attempts.,0.4442220889855569,0.9999980297346487
+LTCUSDT,2026-02-15,LTCUSDT_00001517,ramping,"High mid_bps and low n_ratio persist, indicating ongoing ramping; further observation needed.",0.4442220889855569,0.9999946583635576
+SOLUSDT,2026-02-11,SOLUSDT_00002519,aml_structuring,Exhibits characteristics consistent with structuring; should be flagged for additional review.,0.4442220889855569,0.9999466743736294
+LTCUSDT,2026-02-08,LTCUSDT_00001510,ramping,Continuation of upward pressure through small sell order; potential ramping behavior.,0.4442220889855569,0.9999626974981594
+LTCUSDT,2026-02-08,LTCUSDT_00001509,ramping,Incremental purchase at elevated price suggests possible ramping; warrants closer inspection.,0.4442220889855569,0.9999987079980036
+BTCUSDT,2026-02-19,BTCUSDT_00005045,structuring,ML staged (p=0.444),0.4442220889855569,0.737743995975133
+LTCUSDT,2026-02-22,LTCUSDT_00001525,ramping,ML staged (p=0.444),0.4442220889855569,0.9998238825837279
+BATUSDT,2026-02-16,BATUSDT_00000526,structuring,Flag this trade for potential structuring; monitor subsequent activity for escalation.,0.4442220889855569,0.9999845140016438
+BATUSDT,2026-02-09,BATUSDT_00000525,ramping,Series of buys indicates ramping; monitor for market effect.,0.4442220889855569,0.9999846934968164
+LTCUSDT,2026-01-31,LTCUSDT_00001083,structuring,Potential structuring; the trade size and timing merit further review.,0.4442220889855569,0.9999595996966751
+BTCUSDT,2026-02-07,BTCUSDT_00003894,spoofing,"This transaction exhibits strong indicators of spoofing, warranting immediate review.",0.4442220889855569,0.9999783684014665
+BTCUSDT,2026-01-05,BTCUSDT_00002911,structuring,Small‑scale structuring fragment; monitor for escalation.,0.4442220889855569,0.999995820188204
+BTCUSDT,2026-01-09,BTCUSDT_00003178,structuring,Potential ramping activity detected; monitor for further directional moves.,0.4442220889855569,0.9993406988895641
+BATUSDT,2026-02-23,BATUSDT_00000535,ramping,Mark as suspicious for structuring; maintain vigilance over subsequent trades.,0.4442220889855569,0.9981921974096335
+BATUSDT,2026-02-23,BATUSDT_00000534,ramping,Suspect structuring; monitor for further coordinated buys.,0.4442220889855569,0.9998827741359773
+BATUSDT,2026-02-23,BATUSDT_00000532,ramping,Elevated suspicion for structuring; review subsequent trades for coordinated buildup.,0.4442220889855569,0.9999428156834066
+LTCUSDT,2026-02-22,LTCUSDT_00001527,ramping,ML staged (p=0.444),0.4442220889855569,0.999998487704449
+LTCUSDT,2026-02-22,LTCUSDT_00001526,ramping,ML staged (p=0.444),0.4442220889855569,0.9999904230835255
+LTCUSDT,2026-02-15,LTCUSDT_00001513,ramping,Potential ramping activity detected; small buy orders with elevated price deviation merit further monitoring.,0.4442220889855569,0.9999954735513771
+LTCUSDT,2026-02-22,LTCUSDT_00001523,ramping,ML staged (p=0.444),0.4442220889855569,0.9999722783717746
+LTCUSDT,2026-02-22,LTCUSDT_00001521,ramping,ML staged (p=0.444),0.4442220889855569,0.9999905082082875
+BATUSDT,2026-02-16,BATUSDT_00000527,structuring,Mark as potentially structured; continue surveillance of wallet-wide trade frequency.,0.4442220889855569,0.9998822399489461
+BATUSDT,2026-02-09,BATUSDT_00000524,ramping,Continued ramping behavior; keep tracking.,0.4442220889855569,0.9997799714116805
+XRPUSDT,2026-01-10,XRPUSDT_00002502,structuring,Trade exhibits potential structuring; flag for further review.,0.4442220889855569,0.9999996282820512
+BATUSDT,2026-02-09,BATUSDT_00000523,ramping,Pattern of buys suggests ramping; continue surveillance.,0.4442220889855569,0.9999851095104122
+BATUSDT,2026-02-09,BATUSDT_00000522,ramping,Repeated buys point to possible ramping; watch for price movement.,0.4442220889855569,0.999226556768135
+BATUSDT,2026-02-09,BATUSDT_00000520,ramping,Potential ramping activity; monitor for further coordinated buys.,0.4442220889855569,0.9999755461223245
+XRPUSDT,2026-02-06,XRPUSDT_00002532,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999889701060855
+XRPUSDT,2026-02-06,XRPUSDT_00002531,spoofing,ML staged (p=0.444),0.4442220889855569,0.999986026943439
+XRPUSDT,2026-02-06,XRPUSDT_00002530,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999915523734281
+XRPUSDT,2026-02-06,XRPUSDT_00002529,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999944692788862
+XRPUSDT,2026-01-30,XRPUSDT_00002520,structuring,Offsetting sell after a similar buy may indicate structuring to evade detection.,0.4442220889855569,0.9999965158499845
+XRPUSDT,2026-01-25,XRPUSDT_00002518,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999630454547679
+XRPUSDT,2026-01-25,XRPUSDT_00002517,ramping,ML staged (p=0.444),0.4442220889855569,0.9016396166707012
+XRPUSDT,2026-01-25,XRPUSDT_00002516,ramping,Strong ramping behavior observed; flag for further investigation.,0.4442220889855569,0.9999231023864876
+XRPUSDT,2026-01-25,XRPUSDT_00002514,ramping,Indicates possible ramping; watch for subsequent price movements.,0.4442220889855569,0.5508901045715731
+XRPUSDT,2026-02-20,XRPUSDT_00002535,structuring,ML staged (p=0.444),0.4442220889855569,0.9892670024905719
+LTCUSDT,2026-02-15,LTCUSDT_00001514,ramping,Another small buy with extreme mid_bps suggests continued price manipulation attempts; flagged for ramping.,0.4442220889855569,0.9999982886882606
+XRPUSDT,2026-01-10,XRPUSDT_00002503,structuring,Trade shows structuring indicators; recommend investigation.,0.4442220889855569,0.9999879722953791
+BTCUSDT,2026-01-22,BTCUSDT_00005012,aml_structuring,Potential structuring activity; recommend further investigation.,0.4442220889855569,0.9999875448819837
+ETHUSDT,2026-01-23,ETHUSDT_00004008,ramping,Potential ramping activity; monitor for further directional buys.,0.4442220889855569,0.9999712881539836
+ETHUSDT,2026-01-23,ETHUSDT_00004010,ramping,Potential ramping activity; monitor for further directional buys.,0.4442220889855569,0.9999799141712433
+ETHUSDT,2026-01-23,ETHUSDT_00004011,ramping,Potential ramping activity; monitor for further directional buys.,0.4442220889855569,0.9999810161988965
+ETHUSDT,2026-01-23,ETHUSDT_00004012,ramping,Potential ramping activity; monitor for further directional buys.,0.4442220889855569,0.9999927301849212
+DOGEUSDT,2026-01-11,DOGEUSDT_00002002,spoofing,ML staged (p=0.444),0.4442220889855569,0.6014445797984733
+DOGEUSDT,2026-02-07,DOGEUSDT_00002020,ramping,Further evidence of ramping; monitor for additional large buys.,0.4442220889855569,0.9999957674590946
+ETHUSDT,2026-01-23,ETHUSDT_00004013,ramping,Potential ramping activity; monitor for further directional buys.,0.4442220889855569,0.9999833891302664
+DOGEUSDT,2026-02-07,DOGEUSDT_00002017,ramping,Significant ramping signal; escalate surveillance focus.,0.4442220889855569,0.9999949802975393
+BTCUSDT,2026-02-05,BTCUSDT_00005037,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999846222406551
+BTCUSDT,2026-02-05,BTCUSDT_00005036,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999945561160026
+BTCUSDT,2026-01-08,BTCUSDT_00005001,structuring,Potential structuring; monitor for offsetting sells or coordinated price impact.,0.4442220889855569,0.9999802172777073
+ETHUSDT,2026-02-03,ETHUSDT_00004014,structuring,Potential structuring activity: multiple small ETHUSDT buys at similar price levels.,0.4442220889855569,0.9999967567150319
+ETHUSDT,2026-02-03,ETHUSDT_00004016,structuring,Additional small ETHUSDT buy consistent with structuring behavior.,0.4442220889855569,0.9999966135806623
+ETHUSDT,2026-02-03,ETHUSDT_00004018,structuring,Series of tiny ETHUSDT buys at similar price suggests structuring.,0.4442220889855569,0.9999895166770272
+BTCUSDT,2026-02-05,BTCUSDT_00005035,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999763674006873
+USDCUSDT,2026-02-09,USDCUSDT_00001011,other,ML staged (p=0.444),0.4442220889855569,0.9999827162914869
+ETHUSDT,2026-02-10,ETHUSDT_00004023,structuring,ML staged (p=0.444),0.4442220889855569,0.9893805601410043
+BTCUSDT,2026-02-05,BTCUSDT_00005034,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999904622952932
+ETHUSDT,2026-01-23,ETHUSDT_00004009,ramping,Potential ramping activity; monitor for further directional buys.,0.4442220889855569,0.9999955506799997
+LTCUSDT,2026-01-20,LTCUSDT_00001506,layering,Layering pattern persists; flagged for surveillance.,0.4442220889855569,0.99996471262438
+LTCUSDT,2026-01-20,LTCUSDT_00001505,layering,Indicates possible layering; monitor for further orders.,0.4442220889855569,0.9999781794873268
+ETHUSDT,2026-02-17,ETHUSDT_00004031,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999894246895443
+ETHUSDT,2026-02-10,ETHUSDT_00004021,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999799786898742
+ETHUSDT,2026-02-10,ETHUSDT_00004022,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999961746329588
+BTCUSDT,2026-02-12,BTCUSDT_00005038,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999769505092662
+BTCUSDT,2026-02-12,BTCUSDT_00005039,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999930264083876
+BTCUSDT,2026-02-12,BTCUSDT_00005040,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999997433571465
+BTCUSDT,2026-02-12,BTCUSDT_00005041,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999991810585932
+BTCUSDT,2026-02-12,BTCUSDT_00005042,spoofing,ML staged (p=0.444),0.4442220889855569,0.999999841934979
+BTCUSDT,2026-02-12,BTCUSDT_00005043,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999928132775631
+BTCUSDT,2026-02-12,BTCUSDT_00005044,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999996533166219
+ETHUSDT,2026-02-17,ETHUSDT_00004025,spoofing,Potential structuring activity requiring AML scrutiny due to anomalously high mid-bps on a tiny order.,0.4442220889855569,0.9916510333750043
+ETHUSDT,2026-02-17,ETHUSDT_00004026,spoofing,ML staged (p=0.444),0.4442220889855569,0.9995785023097383
+ETHUSDT,2026-01-16,ETHUSDT_00004005,spoofing,ML staged (p=0.444),0.4442220889855569,0.999984171575807
+ETHUSDT,2026-02-17,ETHUSDT_00004027,spoofing,ML staged (p=0.444),0.4442220889855569,0.9998336082156978
+LTCUSDT,2026-01-12,LTCUSDT_00001502,ramping,ML staged (p=0.444),0.4442220889855569,0.9682697858041794
+ETHUSDT,2026-02-17,ETHUSDT_00004028,spoofing,ML staged (p=0.444),0.4442220889855569,0.5016571345036339
+ETHUSDT,2026-02-17,ETHUSDT_00004029,spoofing,ML staged (p=0.444),0.4442220889855569,0.6944088672265261
+ETHUSDT,2026-02-17,ETHUSDT_00004030,spoofing,ML staged (p=0.444),0.4442220889855569,0.9980230715559987
+BTCUSDT,2026-01-22,BTCUSDT_00005015,aml_structuring,Indicators suggest structuring; further review recommended.,0.4442220889855569,0.9999674264596361
+BTCUSDT,2026-01-22,BTCUSDT_00005014,aml_structuring,Potential structuring activity; escalation for deeper analysis is warranted.,0.4442220889855569,0.9999908341140785
+LTCUSDT,2026-01-27,LTCUSDT_00001507,spoofing,ML staged (p=0.444),0.4442220889855569,0.9998946187134666
+SOLUSDT,2026-02-04,SOLUSDT_00002514,aml_structuring,Potential structuring activity detected; requires further investigation for possible AML evasion.,0.4442220889855569,0.9999911891473813
+DOGEUSDT,2026-02-14,DOGEUSDT_00002025,wash_trading,Potential wash trading activity detected due to minimal notional size and anomalously low n_ratio.,0.4442220889855569,0.999943041608272
+BTCUSDT,2026-01-15,BTCUSDT_00005004,ramping,Incremental buy supporting upward price pressure; monitor for continuation of ramping pattern.,0.4442220889855569,0.9999746186054761
+SOLUSDT,2026-01-09,SOLUSDT_00002501,aml_structuring,Potential structuring activity; warrants closer scrutiny.,0.4442220889855569,0.9999818521658879
+SOLUSDT,2026-01-09,SOLUSDT_00002502,aml_structuring,Possible structuring; requires further investigation.,0.4442220889855569,0.9999957420725457
+BTCUSDT,2026-01-15,BTCUSDT_00005003,ramping,Series of small buys at rising prices indicative of potential ramping; flag for further observation.,0.4442220889855569,0.9999793771549981
+SOLUSDT,2026-02-04,SOLUSDT_00002511,aml_structuring,Potential structuring activity detected; requires further investigation for possible AML evasion.,0.4442220889855569,0.9999913885054621
+SOLUSDT,2026-02-04,SOLUSDT_00002512,aml_structuring,Potential structuring activity detected; requires further investigation for possible AML evasion.,0.4442220889855569,0.9999880661551102
+BTCUSDT,2026-02-05,BTCUSDT_00005028,structuring,Potential structuring observed; further monitoring of subsequent trades is recommended.,0.4442220889855569,0.9999985299126979
+BTCUSDT,2026-02-05,BTCUSDT_00005027,structuring,Potential structuring observed; further monitoring of subsequent trades is recommended.,0.4442220889855569,0.9999553791665313
+BTCUSDT,2026-01-22,BTCUSDT_00005013,aml_structuring,Observed structuring‑like behavior; flag for continued monitoring.,0.4442220889855569,0.9999743550509733
+SOLUSDT,2026-02-04,SOLUSDT_00002515,aml_structuring,Potential structuring activity detected; requires further investigation for possible AML evasion.,0.4442220889855569,0.9999908448419595
+SOLUSDT,2026-02-04,SOLUSDT_00002516,aml_structuring,Potential structuring activity detected; requires further investigation for possible AML evasion.,0.4442220889855569,0.9999917228516292
+SOLUSDT,2026-02-04,SOLUSDT_00002517,aml_structuring,Potential structuring activity detected; requires further investigation for possible AML evasion.,0.4442220889855569,0.9999744580234866
+BTCUSDT,2026-02-05,BTCUSDT_00005026,structuring,Potential structuring observed; further monitoring of subsequent trades is recommended.,0.4442220889855569,0.9999862383162534
+BTCUSDT,2026-01-29,BTCUSDT_00005021,structuring,Possible structuring exit; watch for further activity.,0.4442220889855569,0.9999845196428225
+BTCUSDT,2026-01-29,BTCUSDT_00005017,structuring,Possible structuring; further observation needed.,0.4442220889855569,0.999990747280583
+BTCUSDT,2026-01-08,BTCUSDT_00005002,structuring,"Possible structuring behavior; watch for repetitive low‑volume, high‑spread trades.",0.4442220889855569,0.9999826578297135
+USDCUSDT,2026-01-14,USDCUSDT_00001001,other,ML staged (p=0.444),0.4442220889855569,0.9999746994789853
+BTCUSDT,2026-01-15,BTCUSDT_00005006,ramping,Final incremental buy extending upward pressure; ramping pattern emerging.,0.4442220889855569,0.9999515359129123
+DOGEUSDT,2026-01-19,DOGEUSDT_00002004,structuring,Consider this part of a structuring pattern; review aggregate activity for potential AML concerns.,0.4442220889855569,0.9999877356700058
+DOGEUSDT,2026-01-19,DOGEUSDT_00002005,structuring,Mark as structuring; aggregate with similar trades for further AML scrutiny.,0.4442220889855569,0.9999914477436729
+DOGEUSDT,2026-01-19,DOGEUSDT_00002006,structuring,Record as structuring; monitor for repetitive micro‑trades in the same wallet.,0.4442220889855569,0.9999809283436196
+DOGEUSDT,2026-01-11,DOGEUSDT_00002001,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999471664432996
+ETHUSDT,2026-02-03,ETHUSDT_00004015,structuring,Follow‑up sell of ETHUSDT at similar price; possible structuring.,0.4442220889855569,0.9999606679755667
+ETHUSDT,2026-02-03,ETHUSDT_00004017,structuring,Sell order at similar price continues structuring pattern.,0.4442220889855569,0.999983934744448
+ETHUSDT,2026-02-03,ETHUSDT_00004019,spoofing,ML staged (p=0.444),0.4442220889855569,0.9999426941959624
+BTCUSDT,2026-01-22,BTCUSDT_00005011,aml_structuring,Suspicious structuring pattern detected; additional scrutiny required.,0.4442220889855569,0.9999941034838862
+BTCUSDT,2026-01-22,BTCUSDT_00005010,aml_structuring,Indicators point to possible structuring; escalation for further review is advised.,0.4442220889855569,0.9999886883823095
+BTCUSDT,2026-01-22,BTCUSDT_00005009,aml_structuring,Potential structuring behavior observed; further monitoring is recommended.,0.4442220889855569,0.9999807797057433
+LTCUSDT,2026-02-08,LTCUSDT_00001508,ramping,Potential ramping activity identified; further monitoring recommended.,0.4442220889855569,0.999978233462936
+USDCUSDT,2026-02-02,USDCUSDT_00001010,other,Potential peg manipulation; further monitoring of similar deviations is recommended.,0.4442220889855569,0.9999446092568932
+BTCUSDT,2026-02-05,BTCUSDT_00005033,spoofing,ML staged (p=0.444),0.4442220889855569,0.999959873358544
+DOGEUSDT,2026-02-14,DOGEUSDT_00002021,ramping,High‑risk ramping indication; immediate supervisory review warranted.,0.4442220889855569,0.9999331130806335
+BTCUSDT,2026-02-05,BTCUSDT_00005032,structuring,Potential structuring observed; further monitoring of subsequent trades is recommended.,0.4442220889855569,0.9999510639150531
+BTCUSDT,2026-02-05,BTCUSDT_00005031,structuring,Potential structuring observed; further monitoring of subsequent trades is recommended.,0.4442220889855569,0.9999684913803574
+BTCUSDT,2026-02-05,BTCUSDT_00005030,structuring,Potential structuring observed; further monitoring of subsequent trades is recommended.,0.4442220889855569,0.9999857836217712
+LTCUSDT,2026-01-20,LTCUSDT_00001504,layering,Potential layering activity; flagged for further review.,0.4442220889855569,0.9999796516368575
+DOGEUSDT,2026-01-19,DOGEUSDT_00002008,structuring,Treat as structuring; continue monitoring for patterned micro‑trades.,0.4442220889855569,0.9999853144159819
+DOGEUSDT,2026-01-19,DOGEUSDT_00002007,structuring,Flag as structuring; consider grouping with similar micro‑trades.,0.4442220889855569,0.9999817312515176
+DOGEUSDT,2026-01-26,DOGEUSDT_00002012,ramping,ML staged (p=0.442),0.44155739997834087,0.9075556760367476
+SOLUSDT,2026-02-11,SOLUSDT_00002518,aml_structuring,Potential structuring activity; further monitoring of similar small‑notional trades is recommended.,0.4413457347511081,0.9999921021258561
+BTCUSDT,2026-02-09,BTCUSDT_00004618,other,Possible pump‑and‑dump dynamics; monitor for further coordinated sells.,0.4409208054863932,0.9999638567122343
+BTCUSDT,2026-02-17,BTCUSDT_00002612,structuring,ML staged (p=0.437),0.4368050828227819,0.6486444380159166
+BTCUSDT,2026-01-05,BTCUSDT_00003351,structuring,Unusual pricing combined with structuring; flag for deeper analysis.,0.4365042902431064,0.9999965634925527
+BTCUSDT,2026-01-31,BTCUSDT_00004411,spoofing,Flag for possible spoofing; review order book for artificial depth.,0.4365042902431064,0.9999575820968272
+BTCUSDT,2026-01-05,BTCUSDT_00003115,structuring,Large fragmented sell may reflect structuring; flag for compliance review.,0.4365042902431064,0.9999660339500547
+BTCUSDT,2026-02-08,BTCUSDT_00000850,spoofing,Potential spoofing activity; flag for further investigation.,0.4365042902431064,0.9999705809192853
+BTCUSDT,2026-01-14,BTCUSDT_00003600,structuring,ML staged (p=0.437),0.4365042902431064,0.906152945580527
+BTCUSDT,2026-01-25,BTCUSDT_00002025,structuring,Small‑size sell order may be part of structuring; monitor for repeat fragmented trades.,0.432388567579495,0.9999846303646468
+BTCUSDT,2026-01-20,BTCUSDT_00001821,ramping,Possible ramping behavior; watch for subsequent sell pressure that may confirm manipulation.,0.432388567579495,0.9999476732992466
+BTCUSDT,2026-01-07,BTCUSDT_00001794,structuring,Fragmented sell with high n_ratio suggests structuring; flag for review.,0.432388567579495,0.9999772217109466
+BTCUSDT,2026-01-28,BTCUSDT_00004960,layering,Flag for potential layering; consider deeper order book analysis.,0.432388567579495,0.9999059099997426
+BTCUSDT,2026-02-03,BTCUSDT_00004162,structuring,ML staged (p=0.432),0.432388567579495,0.9490479728393183
+BTCUSDT,2026-02-03,BTCUSDT_00000560,structuring,Flagged for possible structuring; consider AML review for potential threshold avoidance.,0.4275486409613198,0.9999853388740158
+ETHUSDT,2026-01-07,ETHUSDT_00004004,spoofing,ML staged (p=0.423),0.42282500316310867,0.6469368626227973
+SOLUSDT,2026-02-04,SOLUSDT_00002513,aml_structuring,ML staged (p=0.423),0.4225133430373605,0.9999469834029822
+BTCUSDT,2026-01-02,BTCUSDT_00000984,spoofing,ML staged (p=0.419),0.4192214661466868,0.9843158622610795
+USDCUSDT,2026-01-21,USDCUSDT_00001002,structuring,ML staged (p=0.419),0.41888017602238437,0.9999640484655993
+BTCUSDT,2026-02-04,BTCUSDT_00001829,structuring,Pattern consistent with order splitting to evade reporting; initiate detailed investigation.,0.41667838124396894,0.9999373571612944
+BTCUSDT,2026-01-29,BTCUSDT_00005025,structuring,ML staged (p=0.417),0.41655219681320216,0.9999830849692879
+BTCUSDT,2026-02-02,BTCUSDT_00001637,ramping,Consider further review of subsequent trades for coordinated price manipulation.,0.4125626585803577,0.9999528938518999
+USDCUSDT,2026-01-21,USDCUSDT_00001003,structuring,ML staged (p=0.410),0.4097136233900999,0.9995012082295613
+BTCUSDT,2026-01-31,BTCUSDT_00003605,spoofing,Mark as potentially spoofing; investigate order timing and price impact.,0.4077227319621824,0.9999697958790916
+BATUSDT,2026-01-28,BATUSDT_00000512,layering,Series of micro‑buy orders at rising prices suggests possible layering to manipulate market depth.,0.4077227319621824,0.9999853364332201
+BATUSDT,2026-01-28,BATUSDT_00000513,layering,Increasing micro‑order volume at successive price levels indicates potential layering activity.,0.4077227319621824,0.9999905311096298
+BTCUSDT,2026-02-23,BTCUSDT_00004090,structuring,Indicates possible ramping; watch for follow‑up trades.,0.40476812084034314,0.6136757362061379
+BTCUSDT,2026-02-24,BTCUSDT_00000982,wash_trading,ML staged (p=0.394),0.39404166166899895,0.9988552622700416
+BTCUSDT,2026-01-25,BTCUSDT_00004559,spoofing,ML staged (p=0.393),0.3933698589645996,0.6420891029250277
+LTCUSDT,2026-02-15,LTCUSDT_00001516,ramping,ML staged (p=0.389),0.3889795696781017,0.9999797346610727
+BTCUSDT,2026-02-04,BTCUSDT_00002219,structuring,Potential structuring activity detected; further forensic analysis is recommended.,0.38805101998421204,0.9999638501259531
+SOLUSDT,2026-01-17,SOLUSDT_00002506,aml_structuring,ML staged (p=0.383),0.3830580931101548,0.9994108432499875
+BTCUSDT,2026-01-04,BTCUSDT_00002136,structuring,Potential structuring; consider enhanced monitoring of wallet activity.,0.3807139701514015,0.9999704344356034
+BTCUSDT,2026-01-28,BTCUSDT_00002303,ramping,ML staged (p=0.381),0.3807139701514015,0.9997063461306106
+BTCUSDT,2026-01-14,BTCUSDT_00000669,ramping,ML staged (p=0.381),0.3807139701514015,0.750192942484737
+BTCUSDT,2026-02-15,BTCUSDT_00001337,structuring,"Given the atypical order size and neighborhood ratio, further investigation into potential structuring is warranted.",0.3807139701514015,0.9999127035931588
+BTCUSDT,2026-01-08,BTCUSDT_00002371,ramping,ML staged (p=0.381),0.3807139701514015,0.9891582866466594
+XRPUSDT,2026-01-25,XRPUSDT_00002515,structuring,Ramping signals present; consider additional surveillance for coordinated price moves.,0.3783569537240326,0.9996891680791467
+DOGEUSDT,2026-02-21,DOGEUSDT_00002030,ramping,Potential wash trading indicated by tiny notional and anomalously low market metrics.,0.37813792900339865,0.4682732821153373
+BTCUSDT,2026-01-05,BTCUSDT_00003011,structuring,Structuring activity observed; further monitoring recommended.,0.3765982474877902,0.9999805246748021
+SOLUSDT,2026-01-17,SOLUSDT_00002507,ramping,ML staged (p=0.372),0.37175832086961486,0.9180923099400551
+BTCUSDT,2026-01-29,BTCUSDT_00005024,structuring,ML staged (p=0.372),0.37175832086961486,0.9997148085203361
+LTCUSDT,2026-02-22,LTCUSDT_00001524,ramping,ML staged (p=0.372),0.37175832086961486,0.9998815197025688
+XRPUSDT,2026-01-18,XRPUSDT_00002510,structuring,ML staged (p=0.372),0.37175832086961486,0.9732987397139226
+XRPUSDT,2026-01-18,XRPUSDT_00002508,structuring,ML staged (p=0.372),0.37175832086961486,0.9998076857906624
+DOGEUSDT,2026-02-14,DOGEUSDT_00002023,wash_trading,ML staged (p=0.372),0.37175832086961486,0.5121616911166709
+ETHUSDT,2026-01-07,ETHUSDT_00004002,ramping,ML staged (p=0.372),0.37175832086961486,0.6502683794018339
+LTCUSDT,2026-01-15,LTCUSDT_00000181,wash_trading,ML staged (p=0.372),0.37175832086961486,0.5767094744155521
+SOLUSDT,2026-02-18,SOLUSDT_00002522,aml_structuring,Indicates possible structuring; further surveillance of the wallet is advised.,0.37175832086961486,0.8679079629195601
+BTCUSDT,2026-01-15,BTCUSDT_00005007,structuring,ML staged (p=0.372),0.37175832086961486,0.9708923921901733
+LTCUSDT,2026-01-15,LTCUSDT_00001133,wash_trading,ML staged (p=0.372),0.37175832086961486,0.9991873966373259
+SOLUSDT,2026-02-18,SOLUSDT_00002529,ramping,ML staged (p=0.372),0.37175832086961486,0.8802536149063175
+BATUSDT,2026-01-21,BATUSDT_00000506,spoofing,ML staged (p=0.372),0.37175832086961486,0.6983118842009967
+LTCUSDT,2026-01-20,LTCUSDT_00001503,layering,ML staged (p=0.372),0.3716396749912832,0.9893229608058897
+BTCUSDT,2026-02-06,BTCUSDT_00003681,wash_trading,Likely manipulative sell; flag for wash trading.,0.37024447504952146,0.9999629611580024
+BTCUSDT,2026-01-06,BTCUSDT_00000270,structuring,Potential layering/structuring; monitor for coordinated price impact.,0.3690060758087253,0.9999769241797134
+BTCUSDT,2026-01-05,BTCUSDT_00000603,structuring,Structuring pattern persists; maintain heightened monitoring.,0.3690060758087253,0.9999827997165754
+BTCUSDT,2026-02-13,BTCUSDT_00004260,layering,ML staged (p=0.369),0.3690060758087253,0.9672202956258588
+BTCUSDT,2026-02-05,BTCUSDT_00001674,aml_structuring,Potential structuring; consider linking to other trades for holistic assessment.,0.366875012892712,0.9999770921669056
+BTCUSDT,2026-01-31,BTCUSDT_00001464,spoofing,Flag this transaction for possible spoofing; further monitoring of order book depth is recommended.,0.366875012892712,0.999937380202501
+BTCUSDT,2026-02-05,BTCUSDT_00001079,aml_structuring,Raises structuring flags; further investigation of the wallet's activity is warranted.,0.3661287523859101,0.9999601294206318
+BTCUSDT,2026-02-09,BTCUSDT_00002526,structuring,Potential structuring activity requires additional review.,0.36489035314511403,0.9999656656190868
+BTCUSDT,2026-02-13,BTCUSDT_00002465,structuring,Significant sell pressure observed; subject to further scrutiny for potential structuring behavior.,0.36489035314511403,0.9999817932567618
+BTCUSDT,2026-02-06,BTCUSDT_00003628,wash_trading,Elevated price deviation; possible manipulative intent.,0.36489035314511403,0.9999643821203696
+BTCUSDT,2026-02-06,BTCUSDT_00000464,spoofing,This trade exhibits characteristics that warrant further investigation for potential price manipulation.,0.36489035314511403,0.9999745686875691
+BTCUSDT,2026-02-02,BTCUSDT_00004293,structuring,Potential structuring behavior warrants additional investigation.,0.36489035314511403,0.9999727697936921
+BTCUSDT,2026-01-26,BTCUSDT_00001199,structuring,Small sell order aligns with structuring pattern; monitor for similar trades.,0.36489035314511403,0.9999731392495239
+BTCUSDT,2026-01-31,BTCUSDT_00001052,spoofing,Potential spoofing detected; further analysis of timing and order flow recommended.,0.3643413147068399,0.9999580619289209
+LTCUSDT,2026-02-08,LTCUSDT_00001511,ramping,Buy at peak price sustains price increase; indicative of possible ramping.,0.36338820105098507,0.9999869171037732
+BATUSDT,2026-01-28,BATUSDT_00000516,layering,ML staged (p=0.362),0.361523188137608,0.999981408413448
+BTCUSDT,2026-02-03,BTCUSDT_00001370,structuring,Marked as structuring; recommend AML scrutiny for potential reporting circumvention.,0.3600504265269387,0.9999999472988336
+BTCUSDT,2026-01-26,BTCUSDT_00003427,structuring,Potential structuring activity; warrants closer inspection.,0.3600504265269387,0.9999888819331219
+BTCUSDT,2026-02-03,BTCUSDT_00002867,structuring,Marked as structuring; recommend AML review for potential reporting circumvention.,0.3600504265269387,0.999984640065665
+XRPUSDT,2026-02-13,XRPUSDT_00002534,wash_trading,Potential wash trade – circular buy‑sell of minimal size.,0.3600504265269387,0.9999350672384597
+BTCUSDT,2026-02-20,BTCUSDT_00000393,structuring,ML staged (p=0.360),0.35992479946355305,0.9852443539817342
+ETHUSDT,2026-01-07,ETHUSDT_00004001,spoofing,ML staged (p=0.360),0.3595013880886646,0.9980165122501085
+BTCUSDT,2026-02-05,BTCUSDT_00001758,spoofing,ML staged (p=0.360),0.3595013880886646,0.9959437978595977
+BTCUSDT,2026-02-01,BTCUSDT_00001505,structuring,ML staged (p=0.359),0.35937082619563016,0.9869371730334913
+XRPUSDT,2026-01-25,XRPUSDT_00002513,structuring,Potential ramping activity detected; further monitoring of subsequent trades is recommended.,0.3550848728453777,0.9999017044035804
+BTCUSDT,2026-02-23,BTCUSDT_00004368,layering,Potential layering behavior observed; further monitoring of order book patterns is recommended.,0.35352282844108246,0.5355200594487782
+BTCUSDT,2026-01-15,BTCUSDT_00005008,structuring,ML staged (p=0.353),0.3527743638625324,0.8445579887532526
+BTCUSDT,2026-01-31,BTCUSDT_00000085,ramping,ML staged (p=0.352),0.35173432034520635,0.4155529974211097
+XRPUSDT,2026-01-10,XRPUSDT_00002501,structuring,ML staged (p=0.346),0.34611377478018573,0.9999995809207467
+DOGEUSDT,2026-02-21,DOGEUSDT_00002033,ramping,ML staged (p=0.345),0.34547571452143516,0.85473507326742
+BTCUSDT,2026-02-26,BTCUSDT_00001652,layering,"Large sell order shows atypical order metrics, potentially indicative of structuring behavior; further monitoring recommended.",0.3451884613469797,0.9962995291487476
+BTCUSDT,2026-02-26,BTCUSDT_00003541,spoofing,High n_ratio and notable notional suggest possible layering; watch for coordinated price impact.,0.33991644273702376,0.832310145703513
+DOGEUSDT,2026-01-26,DOGEUSDT_00002011,layering,ML staged (p=0.333),0.3330277084385277,0.607619619842414
+XRPUSDT,2026-02-13,XRPUSDT_00002533,wash_trading,ML staged (p=0.328),0.3283303748080032,0.9990621570737853
+DOGEUSDT,2026-01-19,DOGEUSDT_00002009,structuring,ML staged (p=0.325),0.32533512718266955,0.9110299857716856
+BTCUSDT,2026-01-19,BTCUSDT_00002855,structuring,ML staged (p=0.319),0.3192242985082295,0.9999997306657741
+BTCUSDT,2026-01-03,BTCUSDT_00004151,ramping,ML staged (p=0.319),0.3192242985082295,0.7206158034632251
+BTCUSDT,2026-01-08,BTCUSDT_00004216,spoofing,ML staged (p=0.319),0.3192242985082295,0.8509276877436267
+BTCUSDT,2026-01-22,BTCUSDT_00000853,spoofing,Potential spoofing activity; monitor for subsequent offsetting orders.,0.30477591178332525,0.9999555446499817
+BTCUSDT,2026-02-24,BTCUSDT_00001741,spoofing,ML staged (p=0.305),0.30477591178332525,0.8578724304298777
+BTCUSDT,2026-01-26,BTCUSDT_00003445,layering,ML staged (p=0.305),0.30477591178332525,0.35182751899994474
+BTCUSDT,2026-01-20,BTCUSDT_00003756,spoofing,ML staged (p=0.305),0.30477591178332525,0.9983412850944903
+BTCUSDT,2026-01-29,BTCUSDT_00005023,structuring,ML staged (p=0.305),0.30477591178332525,0.9999988946549224
+BTCUSDT,2026-01-06,BTCUSDT_00001445,structuring,Fragmented sell order suggests structuring; requires closer inspection.,0.30477591178332525,0.9999847619269066
+BTCUSDT,2026-02-28,BTCUSDT_00001033,wash_trading,Large sell with unusually high normalized ratio suggests possible structuring; monitor for manipulative intent.,0.30477591178332525,0.9278020408699044
+BTCUSDT,2026-02-26,BTCUSDT_00004191,layering,ML staged (p=0.305),0.30477591178332525,0.999067639177771
+BTCUSDT,2026-02-23,BTCUSDT_00002629,layering,ML staged (p=0.305),0.30477591178332525,0.9673383900085861
+BTCUSDT,2026-02-10,BTCUSDT_00003991,layering,ML staged (p=0.305),0.30477591178332525,0.8776421510934966
+BTCUSDT,2026-02-23,BTCUSDT_00001997,layering,ML staged (p=0.305),0.30477591178332525,0.7386390417888519
+BTCUSDT,2026-02-18,BTCUSDT_00003369,layering,Potential structuring activity; monitor for further fragmented trades.,0.30477591178332525,0.6578213659768709
+BTCUSDT,2026-02-06,BTCUSDT_00000647,wash_trading,ML staged (p=0.305),0.30477591178332525,0.9801916270125761
+BTCUSDT,2026-02-08,BTCUSDT_00001615,spoofing,Suspicious order pattern; requires detailed review.,0.302011136334215,0.9999407503135901
+BTCUSDT,2026-02-20,BTCUSDT_00003054,aml_structuring,Potential ramping activity; subject to further review for market manipulation.,0.3006601891197139,0.9749122119427299
+BTCUSDT,2026-02-08,BTCUSDT_00004903,structuring,ML staged (p=0.301),0.3006601891197139,0.547143529063335
+BTCUSDT,2026-02-16,BTCUSDT_00002510,structuring,ML staged (p=0.301),0.3006601891197139,0.7158272446953721
+BTCUSDT,2026-01-23,BTCUSDT_00005000,spoofing,ML staged (p=0.301),0.3006601891197139,0.9753747602910019
+BTCUSDT,2026-02-03,BTCUSDT_00003494,structuring,Flagged for structuring; consider AML investigation for possible threshold evasion.,0.3006601891197139,0.9999883137342188
+BTCUSDT,2026-02-03,BTCUSDT_00004366,structuring,ML staged (p=0.301),0.3006601891197139,0.9999598845470824
+BTCUSDT,2026-02-21,BTCUSDT_00002636,layering,ML staged (p=0.301),0.3006601891197139,0.9463028341790115
+BTCUSDT,2026-02-07,BTCUSDT_00000941,aml_structuring,ML staged (p=0.301),0.3006601891197139,0.7276229079776239
+BTCUSDT,2026-01-14,BTCUSDT_00003686,ramping,ML staged (p=0.301),0.3006601891197139,0.9773845781955575
+BTCUSDT,2026-01-20,BTCUSDT_00004852,spoofing,Potential spoofing detected; recommend detailed investigation.,0.3006601891197139,0.9999720342466181
+BTCUSDT,2026-02-11,BTCUSDT_00000718,spoofing,ML staged (p=0.301),0.3006601891197139,0.7854817320342958
+BTCUSDT,2026-02-09,BTCUSDT_00002954,ramping,Potential ramping behavior warrants further monitoring.,0.3006601891197139,0.9998866273694123
+BTCUSDT,2026-01-17,BTCUSDT_00002584,structuring,ML staged (p=0.301),0.3006601891197139,0.9999856124577734
+BTCUSDT,2026-02-17,BTCUSDT_00002432,structuring,ML staged (p=0.301),0.3006601891197139,0.6391275952648319
+BTCUSDT,2026-02-11,BTCUSDT_00003246,structuring,ML staged (p=0.301),0.3006601891197139,0.9740494431398203
+BTCUSDT,2026-02-01,BTCUSDT_00004214,structuring,ML staged (p=0.301),0.3006601891197139,0.9890590164366342
+BTCUSDT,2026-02-08,BTCUSDT_00000877,structuring,ML staged (p=0.301),0.3006601891197139,0.9970441144929286
+BTCUSDT,2026-01-09,BTCUSDT_00003330,structuring,ML staged (p=0.301),0.3006601891197139,0.5139648362500445
+BTCUSDT,2026-01-25,BTCUSDT_00000234,spoofing,ML staged (p=0.301),0.3006601891197139,0.9998064649297765
+BTCUSDT,2026-02-10,BTCUSDT_00001628,structuring,ML staged (p=0.301),0.3006601891197139,0.49944386429057086
+BTCUSDT,2026-02-23,BTCUSDT_00001979,structuring,Potential ramping activity; monitor for subsequent sell pressure.,0.3006601891197139,0.6527691352862401
+BTCUSDT,2026-02-20,BTCUSDT_00001966,layering,Potential ramping activity; requires deeper analysis and possible escalation.,0.3006601891197139,0.9366141073687007
+BTCUSDT,2026-01-25,BTCUSDT_00000229,spoofing,ML staged (p=0.301),0.3006601891197139,0.9995939125309186
+BTCUSDT,2026-01-30,BTCUSDT_00002410,spoofing,ML staged (p=0.299),0.29852696744038126,0.988048241234596
+LTCUSDT,2026-02-05,LTCUSDT_00001352,wash_trading,ML staged (p=0.296),0.29582026250153864,0.8503346597800333
+SOLUSDT,2026-02-20,SOLUSDT_00000675,wash_trading,ML staged (p=0.296),0.29582026250153864,0.9891548551755367
+LTCUSDT,2026-02-06,LTCUSDT_00001093,structuring,ML staged (p=0.296),0.29582026250153864,0.9206717792862394
+SOLUSDT,2026-02-01,SOLUSDT_00001436,wash_trading,Potential wash trading; flag for further analysis.,0.29582026250153864,0.9999821665372006
+LTCUSDT,2026-01-14,LTCUSDT_00000019,wash_trading,ML staged (p=0.296),0.29582026250153864,0.9834150690552833
+ETHUSDT,2026-02-05,ETHUSDT_00000695,wash_trading,ML staged (p=0.296),0.29582026250153864,0.4869429621559895
+SOLUSDT,2026-01-30,SOLUSDT_00002279,wash_trading,ML staged (p=0.296),0.29582026250153864,0.7898219468457595
+ETHUSDT,2026-02-06,ETHUSDT_00001950,structuring,ML staged (p=0.296),0.29582026250153864,0.9815720419779945
+LTCUSDT,2026-01-30,LTCUSDT_00000299,ramping,ML staged (p=0.296),0.29582026250153864,0.9992016679578968
+LTCUSDT,2026-02-03,LTCUSDT_00000933,structuring,ML staged (p=0.296),0.29582026250153864,0.8889521618066029
+ETHUSDT,2026-01-31,ETHUSDT_00000079,aml_structuring,ML staged (p=0.296),0.29582026250153864,0.84428596693531
+SOLUSDT,2026-02-28,SOLUSDT_00000765,spoofing,ML staged (p=0.296),0.29582026250153864,0.8937842874815932
+LTCUSDT,2026-01-30,LTCUSDT_00000945,other,This trade exhibits strong manipulative signals and requires immediate further investigation.,0.29582026250153864,0.9999546605720524
+LTCUSDT,2026-02-04,LTCUSDT_00001075,wash_trading,ML staged (p=0.296),0.29582026250153864,0.6033531265266281
+LTCUSDT,2026-02-06,LTCUSDT_00000313,ramping,ML staged (p=0.296),0.29582026250153864,0.9950320361308562
+LTCUSDT,2026-02-06,LTCUSDT_00000321,ramping,ML staged (p=0.296),0.29582026250153864,0.9980338890860682
+ETHUSDT,2026-01-30,ETHUSDT_00000755,ramping,Large sell at deviated price may constitute market ramping; further surveillance required.,0.29582026250153864,0.9999612771897624
+ETHUSDT,2026-02-07,ETHUSDT_00002807,wash_trading,ML staged (p=0.296),0.29582026250153864,0.6200306975403757
+ETHUSDT,2026-01-31,ETHUSDT_00001415,aml_structuring,ML staged (p=0.296),0.29582026250153864,0.9119028756746396
+ETHUSDT,2026-02-02,ETHUSDT_00003921,structuring,ML staged (p=0.296),0.29582026250153864,0.6426152851004673
+USDCUSDT,2026-01-21,USDCUSDT_00001009,structuring,ML staged (p=0.296),0.29582026250153864,0.9844430002925005
+ETHUSDT,2026-02-10,ETHUSDT_00004020,structuring,ML staged (p=0.296),0.29582026250153864,0.5339845611513692
+DOGEUSDT,2026-02-21,DOGEUSDT_00002027,ramping,Raises suspicion of wash trading due to extremely small notional and low market interaction.,0.29582026250153864,0.9417757872325347
+SOLUSDT,2026-01-17,SOLUSDT_00002504,aml_structuring,ML staged (p=0.296),0.29582026250153864,0.6653309987846107
+SOLUSDT,2026-01-17,SOLUSDT_00002505,aml_structuring,ML staged (p=0.296),0.29582026250153864,0.9999723507576949
+BATUSDT,2026-01-13,BATUSDT_00000501,aml_structuring,ML staged (p=0.296),0.29582026250153864,0.45466167799462714
+USDCUSDT,2026-02-16,USDCUSDT_00001017,structuring,Indicates possible ramping; watch for further directional trades.,0.29582026250153864,0.9988747338532038
+SOLUSDT,2026-02-18,SOLUSDT_00002523,aml_structuring,Suggests structuring; monitor for additional low‑value trades from this source.,0.29582026250153864,0.9831034197503181
+SOLUSDT,2026-02-18,SOLUSDT_00002524,ramping,Potential structuring pattern; recommend heightened observation of this wallet.,0.29582026250153864,0.7733750144482803
+SOLUSDT,2026-02-18,SOLUSDT_00002525,ramping,Shows signs of structuring; further tracking of this wallet is warranted.,0.29582026250153864,0.5066122046179016
+SOLUSDT,2026-02-18,SOLUSDT_00002526,ramping,Potential structuring activity; monitor for continued low‑volume trades.,0.29582026250153864,0.8944871832079889
+SOLUSDT,2026-02-18,SOLUSDT_00002527,ramping,Indicates possible structuring; recommend continued monitoring of this wallet.,0.29582026250153864,0.5519628500160026
+SOLUSDT,2026-02-18,SOLUSDT_00002528,ramping,ML staged (p=0.296),0.29582026250153864,0.7923036444508565
+SOLUSDT,2026-01-31,SOLUSDT_00002234,wash_trading,Highly suspicious wash trade; immediate review recommended.,0.29582026250153864,0.9999626697707221
+DOGEUSDT,2026-02-21,DOGEUSDT_00002032,ramping,ML staged (p=0.296),0.29582026250153864,0.9796147999117923
+XRPUSDT,2026-01-18,XRPUSDT_00002507,structuring,ML staged (p=0.296),0.29582026250153864,0.9999883953022927
+DOGEUSDT,2026-01-26,DOGEUSDT_00002013,ramping,ML staged (p=0.296),0.29582026250153864,0.9881779069782458
+DOGEUSDT,2026-01-26,DOGEUSDT_00002010,layering,ML staged (p=0.296),0.29582026250153864,0.5298323376578404
+LTCUSDT,2026-01-12,LTCUSDT_00001501,layering,ML staged (p=0.296),0.29582026250153864,0.5792703052326666
+LTCUSDT,2026-02-22,LTCUSDT_00001522,ramping,ML staged (p=0.296),0.29582026250153864,0.9999472326750272
+ETHUSDT,2026-01-07,ETHUSDT_00004003,spoofing,ML staged (p=0.296),0.29582026250153864,0.9988674042149547
+USDCUSDT,2026-01-21,USDCUSDT_00001006,structuring,ML staged (p=0.296),0.29582026250153864,0.9957645389282459
+USDCUSDT,2026-01-21,USDCUSDT_00001004,structuring,ML staged (p=0.296),0.29582026250153864,0.9997623417299196
+LTCUSDT,2026-01-31,LTCUSDT_00001285,wash_trading,ML staged (p=0.293),0.2929439082670899,0.9330282019297702
+BTCUSDT,2026-01-19,BTCUSDT_00002012,ramping,ML staged (p=0.293),0.29251897900237495,0.8238891115398486
+BTCUSDT,2026-01-13,BTCUSDT_00000220,structuring,ML staged (p=0.293),0.29251897900237495,0.9657593043548056
+BTCUSDT,2026-02-03,BTCUSDT_00004134,spoofing,ML staged (p=0.292),0.292426585029172,0.9974284260701909

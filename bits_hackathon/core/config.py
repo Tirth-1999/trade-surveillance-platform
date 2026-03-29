@@ -16,12 +16,19 @@ _CONFIG_PATH = ROOT / "config.yaml"
 DEFAULTS: dict[str, Any] = {
     # ---- P3 crypto detectors ----
     "p3.peg_break.deviation_pct": 0.005,
+    "p3.peg_break.min_trade_notional_usdt": 100.0,
+    "p3.peg_break.min_bar_volume_usdt": 50.0,
+
+    "p3.liquid_pair_symbols": ["BTCUSDT", "ETHUSDT"],
+    "p3.min_notional_liquid_pair_usdt": 1500.0,
 
     "p3.wash.window_sec": 90,
     "p3.wash.notional_rel_tol": 0.02,
+    "p3.wash.min_notional_usdt": 400.0,
 
     "p3.ramping.min_streak": 6,
-    "p3.ramping.max_gap_sec": 3600,
+    "p3.ramping.max_gap_sec": 300,
+    "p3.ramping.max_median_gap_sec": 120.0,
 
     "p3.aml_structuring.low": 9980,
     "p3.aml_structuring.high": 10000,
@@ -33,17 +40,23 @@ DEFAULTS: dict[str, Any] = {
 
     "p3.layering_echo.window_sec": 600,
     "p3.layering_echo.min_burst": 3,
+    "p3.layering_echo.max_notional_imbalance": 0.35,
 
     "p3.coordinated_structuring.low": 9950,
     "p3.coordinated_structuring.high": 10000,
     "p3.coordinated_structuring.min_wallets": 4,
+    "p3.coordinated_structuring.max_wallet_mean_cv": 0.08,
 
     "p3.bat_volume_spike.multiplier": 5.0,
+    "p3.bat_volume_spike.min_hour_tradecount": 8,
 
     "p3.price_bar_violation.min_mid_bps": 35.0,
+    "p3.price_bar_violation.min_mid_bps_low_liquidity": 55.0,
+    "p3.price_bar_violation.low_liquidity_tradecount": 6,
 
     "p3.round_trip.window_sec": 120,
     "p3.round_trip.notional_rel_tol": 0.02,
+    "p3.round_trip.min_notional_usdt": 500.0,
 
     "p3.chain_layering.window_sec": 300,
     "p3.chain_layering.notional_tol": 0.1,
@@ -102,8 +115,13 @@ DEFAULTS: dict[str, Any] = {
     "committee.ai_only_conf_wash": 0.80,
     "committee.ai_only_conf_layering": 0.90,
     "committee.rules_only_keep_uncertain": True,
+    "committee.rules_only_min_gt_confidence": 0.45,
     "committee.ml_only_include": False,
     "committee.use_staged_ml_types": True,
+    # Keep at/below typical stage-1 operating threshold (~0.29–0.45); higher values drop all tier-1 ML rows.
+    "committee.tier1_min_ml_probability": 0.30,
+    "committee.tier1_rules_ai_min_ai_confidence": 0.5,
+    "committee.tier1_require_gates": True,
 
     # ---- P3 ML (staged) ----
     "ml.labels.high_conf_positive": 0.7,
@@ -117,7 +135,8 @@ DEFAULTS: dict[str, Any] = {
     "ml.labels.drop_uncertain_training": False,
     "ml.stage1.train_fraction_by_date": 0.8,
     "ml.stage1.calibration_method": "isotonic",
-    "ml.stage1.threshold_metric": "precision_recall",
+    "ml.stage1.threshold_metric": "f05",
+    "ml.stage1.min_precision_floor": 0.35,
     "ml.stage1.min_samples_leaf": 40,
     "ml.stage1.max_depth": 6,
     "ml.stage1.learning_rate": 0.08,
