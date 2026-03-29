@@ -98,7 +98,7 @@ flowchart TD
 | Infer ML only | `python3 run.py infer-ml` (requires trained artifacts) |
 | Committee final | `python3 run.py committee` → `outputs/submission_committee.csv` |
 | **Judge: root CSV** | `python3 run.py export-submission --source committee` → copies chosen file to **`submission.csv` at repo root** (add `--also-p1` / `--also-p2` for bonus artifacts) |
-| Refresh dashboard static JSON | `python3 scripts/sync_frontend_data.py` (after train-ml / committee; updates `frontend/public/data/` including `ml_health.json`) |
+| Refresh dashboard static JSON | `python3 scripts/sync_frontend_data.py` (after train-ml / committee; updates `frontend/public/data/` including `ml_health.json` and **committee_report** — required for correct zone counts when the UI falls back to static files) |
 | API | `uvicorn api.main:app --reload --port 8000` |
 | UI | `cd frontend && npm install && npm run dev` → [http://localhost:3000](http://localhost:3000) |
 

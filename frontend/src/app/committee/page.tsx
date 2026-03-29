@@ -84,7 +84,9 @@ function parseZoneBreakdown(text: string): ZoneCard[] {
       continue;
     }
     if (!inZone) continue;
-    if (!line.trim()) break;
+    // Report has a blank line after "Zone breakdown:" — do not stop there.
+    if (line.includes("Tier summary:")) break;
+    if (!line.trim()) continue;
 
     const m = line.match(/^\s{2,}(.+?):\s+(\d+)/);
     if (!m) continue;
@@ -232,7 +234,14 @@ export default function CommitteePage() {
         </h1>
         <p className="text-sm text-muted-foreground">
           Three-way committee zones, violation mix, ML re-ranker metrics, and
-          tuning notes from the pipeline outputs.
+          tuning notes from the pipeline outputs. Zone counts are the raw Venn
+          intersections (rules vs AI-suspicious vs ML-flagged trade IDs) before
+          tier-1 confidence gates; see &quot;Tier summary&quot; in the raw report for
+          post-gate totals. After pipeline changes, run{" "}
+          <code className="rounded bg-muted px-1 text-xs">
+            python3 scripts/sync_frontend_data.py
+          </code>{" "}
+          so static JSON matches <code className="rounded bg-muted px-1 text-xs">outputs/</code>.
         </p>
       </div>
 
