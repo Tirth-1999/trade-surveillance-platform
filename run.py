@@ -16,7 +16,7 @@ Usage:
     python run.py all             # Run p3 → p1 → p2 sequentially
     python run.py full-pipeline   # All steps + ML + committee (stub GT by default; add --with-llm for LLM)
     python run.py score-proxy     # P3 score proxy vs ground_truth (5·TP − 2·FP)
-    python run.py export-submission  # Copy to repo-root submission.csv + submissions.csv
+    python run.py export-submission  # Copy to repo-root submission.csv
 """
 
 from __future__ import annotations
@@ -278,12 +278,9 @@ def cmd_export_submission(args: argparse.Namespace) -> None:
     if not src.exists():
         print(f"Error: missing {src}", file=sys.stderr)
         sys.exit(1)
-    dst_primary = ROOT / "submission.csv"
-    dst_mirror = ROOT / "submissions.csv"
-    shutil.copyfile(src, dst_primary)
-    shutil.copyfile(src, dst_mirror)
-    print(f"Copied {src} -> {dst_primary}")
-    print(f"Copied {src} -> {dst_mirror} (duplicate for version control)")
+    dst = ROOT / "submission.csv"
+    shutil.copyfile(src, dst)
+    print(f"Copied {src} -> {dst}")
 
     if getattr(args, "also_p1", False):
         p1s = OUTPUTS_DIR / "p1_alerts.csv"
@@ -350,7 +347,7 @@ def main() -> None:
 
     ex = sub.add_parser(
         "export-submission",
-        help="Copy outputs/*.csv to repo-root submission.csv and submissions.csv",
+        help="Copy outputs/*.csv to repo-root submission.csv",
     )
     ex.add_argument(
         "--source",

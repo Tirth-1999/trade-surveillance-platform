@@ -9,7 +9,6 @@
 | Deliverable | Where it comes from |
 |-------------|---------------------|
 | **`submission.csv`** (repo root) | Run `python3 run.py export-submission` after generating outputs (see below). |
-| **Mirror copy** | Same content is written to **`submissions.csv`** at repo root (duplicate for convenience). |
 | **Default export** | **`--source rules`** → `outputs/submission.csv` from **`python3 run.py p3`** (precision-first). Use **`--source committee`** or **`--source ml`** only if you validate net score on your side. |
 | **Bonus** | `p1_alerts.csv`, `p2_signals.csv` — use `export-submission --also-p1 --also-p2` to copy them to repo root. |
 
@@ -151,7 +150,7 @@ python3 run.py              # print help (lists all subcommands)
 | `score-proxy --ground-truth PATH` | Custom GT CSV | |
 | `score-proxy --no-type-bonus` | Base score only | |
 | `score-proxy --json` | Machine-readable summary | |
-| `export-submission` | Copy pipeline output to **repo root** `submission.csv` **and** `submissions.csv` | root CSVs |
+| `export-submission` | Copy pipeline output to **repo root** `submission.csv` | root `submission.csv` |
 | `export-submission --source rules` | Source: `outputs/submission.csv` (default) | |
 | `export-submission --source committee` | Source: `outputs/submission_committee.csv` | |
 | `export-submission --source ml` | Source: `outputs/submission_ml.csv` | |
