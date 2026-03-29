@@ -77,7 +77,7 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     description:
       "A large language model independently evaluates every trade. Uses a two-pass strategy: fast stub analysis first to identify borderline cases, then deep LLM evaluation on the suspicious subset. Returns verdicts (suspicious/benign/uncertain), confidence scores, and reasoning.",
     inputs: ["Raw trade data", "OpenRouter API key", "Bar context per trade"],
-    outputs: ["ground_truth.csv (312 suspicious out of 19,256)"],
+    outputs: ["ground_truth.csv (LLM verdicts per trade)"],
     tech: ["OpenRouter API", "nvidia/nemotron", "ThreadPoolExecutor", "retry logic"],
     keyInsight: "The AI often catches structuring and ramping patterns that rules miss — complementary perspective vs fixed thresholds.",
   },
@@ -101,7 +101,8 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     inputs: ["comparison_report.csv", "ground_truth.csv", "Engineered trade+bar features (ml_features.py)"],
     outputs: ["artifacts/stage1_*.joblib", "stage1_meta.json", "training_snapshot.csv"],
     tech: ["scikit-learn", "HistGradientBoostingClassifier", "CalibratedClassifierCV", "StandardScaler"],
-    keyInsight: "CLI: python run.py train-ml or infer-ml. Threshold is chosen on a time-based holdout to balance precision vs recall.",
+    keyInsight:
+      "Training loads the same trade + bar tables as rules (no separate line on the diagram). CLI: python run.py train-ml or infer-ml. Threshold uses a time-based holdout.",
   },
   ml2: {
     title: "ML Stage 2 — Violation type",
@@ -161,8 +162,11 @@ const STEP_DETAILS: Record<string, StepDetail> = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Custom node component                                             */
+/*  Custom node component — multi-handle layout to avoid edge spaghetti */
 /* ------------------------------------------------------------------ */
+
+const handleClass =
+  "!border-2 !border-background !bg-muted-foreground !w-2.5 !h-2.5";
 
 function PipelineNode({ data }: { data: { label: string; nodeId: string; tier: string; emoji: string } }) {
   const tierColors: Record<string, string> = {
@@ -177,19 +181,77 @@ function PipelineNode({ data }: { data: { label: string; nodeId: string; tier: s
     ui: "border-orange-400/60 bg-orange-50 dark:bg-orange-950/40",
   };
 
+  const id = data.nodeId;
+
   return (
     <>
-      <Handle type="target" position={Position.Top} className="!bg-muted-foreground !w-2 !h-2" />
+      {/* ---- Targets (top / left) ---- */}
+      {id === "rules" && (
+        <>
+          <Handle id="in-input" type="target" position={Position.Top} style={{ left: "38%" }} className={handleClass} />
+          <Handle id="in-tune" type="target" position={Position.Top} style={{ left: "62%" }} className={handleClass} />
+        </>
+      )}
+      {id === "ai" && <Handle id="in-input" type="target" position={Position.Top} className={handleClass} />}
+      {id === "compare" && (
+        <Handle id="in-merge" type="target" position={Position.Top} className={handleClass} />
+      )}
+      {id === "committee" && (
+        <>
+          <Handle id="in-rules" type="target" position={Position.Top} style={{ left: "18%" }} className={handleClass} />
+          <Handle id="in-ml" type="target" position={Position.Top} style={{ left: "50%" }} className={handleClass} />
+          <Handle id="in-ai" type="target" position={Position.Top} style={{ left: "82%" }} className={handleClass} />
+        </>
+      )}
+      {(id === "ml1" || id === "ml2" || id === "outputs" || id === "dashboard") && (
+        <Handle id="in-main" type="target" position={Position.Top} className={handleClass} />
+      )}
+      {id === "tuning" && (
+        <Handle id="in-compare" type="target" position={Position.Left} className={handleClass} />
+      )}
+
       <div
         className={cn(
-          "rounded-xl border-2 px-5 py-3 shadow-md transition-shadow hover:shadow-lg cursor-pointer min-w-[160px] text-center",
+          "rounded-xl border-2 px-5 py-3 shadow-md transition-shadow hover:shadow-lg cursor-pointer min-w-[160px] max-w-[200px] text-center",
           tierColors[data.tier] ?? "border-border bg-card"
         )}
       >
         <div className="text-lg mb-0.5">{data.emoji}</div>
-        <div className="text-sm font-semibold leading-tight">{data.label}</div>
+        <div className="text-sm font-semibold leading-tight whitespace-pre-line">{data.label}</div>
       </div>
-      <Handle type="source" position={Position.Bottom} className="!bg-muted-foreground !w-2 !h-2" />
+
+      {/* ---- Sources (bottom / right) ---- */}
+      {id === "input" && (
+        <>
+          <Handle id="out-rules" type="source" position={Position.Bottom} style={{ left: "32%" }} className={handleClass} />
+          <Handle id="out-ai" type="source" position={Position.Bottom} style={{ left: "68%" }} className={handleClass} />
+        </>
+      )}
+      {id === "rules" && (
+        <>
+          <Handle id="out-compare" type="source" position={Position.Bottom} style={{ left: "35%" }} className={handleClass} />
+          <Handle id="out-committee" type="source" position={Position.Bottom} style={{ left: "65%" }} className={handleClass} />
+        </>
+      )}
+      {id === "ai" && (
+        <>
+          <Handle id="out-compare" type="source" position={Position.Bottom} style={{ left: "35%" }} className={handleClass} />
+          <Handle id="out-committee" type="source" position={Position.Bottom} style={{ left: "65%" }} className={handleClass} />
+        </>
+      )}
+      {id === "compare" && (
+        <>
+          <Handle id="out-ml1" type="source" position={Position.Bottom} className={handleClass} />
+          <Handle id="out-tuning" type="source" position={Position.Right} className={handleClass} />
+        </>
+      )}
+      {id === "ml1" && <Handle id="out" type="source" position={Position.Bottom} className={handleClass} />}
+      {id === "ml2" && <Handle id="out" type="source" position={Position.Bottom} className={handleClass} />}
+      {id === "committee" && <Handle id="out" type="source" position={Position.Bottom} className={handleClass} />}
+      {id === "outputs" && <Handle id="out" type="source" position={Position.Bottom} className={handleClass} />}
+      {id === "tuning" && (
+        <Handle id="out-rules" type="source" position={Position.Bottom} className={handleClass} />
+      )}
     </>
   );
 }
@@ -202,46 +264,183 @@ const nodeTypes: NodeTypes = {
 /*  Graph definition                                                  */
 /* ------------------------------------------------------------------ */
 
+/* Center spine x ≈ 420; detectors on wings; orthogonal step edges + handle IDs reduce crossings. */
 const initialNodes: Node[] = [
-  { id: "input", type: "pipeline", position: { x: 400, y: 0 }, data: { label: "Input Data", nodeId: "input", tier: "input", emoji: "📊" } },
+  { id: "input", type: "pipeline", position: { x: 380, y: 0 }, data: { label: "Input Data", nodeId: "input", tier: "input", emoji: "📊" } },
 
-  { id: "rules", type: "pipeline", position: { x: 120, y: 130 }, data: { label: "Rule-Based\nDetectors", nodeId: "rules", tier: "detection", emoji: "🔍" } },
-  { id: "ai", type: "pipeline", position: { x: 680, y: 130 }, data: { label: "AI Ground\nTruth (LLM)", nodeId: "ai", tier: "ai", emoji: "🧠" } },
+  { id: "rules", type: "pipeline", position: { x: 40, y: 160 }, data: { label: "Rule-Based\nDetectors", nodeId: "rules", tier: "detection", emoji: "🔍" } },
+  { id: "ai", type: "pipeline", position: { x: 760, y: 160 }, data: { label: "AI Ground\nTruth (LLM)", nodeId: "ai", tier: "ai", emoji: "🧠" } },
 
-  { id: "compare", type: "pipeline", position: { x: 400, y: 270 }, data: { label: "Comparison\nEngine", nodeId: "compare", tier: "analysis", emoji: "⚖️" } },
+  { id: "compare", type: "pipeline", position: { x: 380, y: 320 }, data: { label: "Comparison\nEngine", nodeId: "compare", tier: "analysis", emoji: "⚖️" } },
 
-  { id: "ml1", type: "pipeline", position: { x: 220, y: 400 }, data: { label: "ML Stage 1\n(Binary triage)", nodeId: "ml1", tier: "ml", emoji: "🤖" } },
-  { id: "ml2", type: "pipeline", position: { x: 400, y: 400 }, data: { label: "ML Stage 2\n(Violation type)", nodeId: "ml2", tier: "ml", emoji: "🎯" } },
-  { id: "tuning", type: "pipeline", position: { x: 680, y: 400 }, data: { label: "Parameter\nTuning", nodeId: "tuning", tier: "tuning", emoji: "🎛️" } },
+  { id: "ml1", type: "pipeline", position: { x: 380, y: 500 }, data: { label: "ML Stage 1\n(Binary triage)", nodeId: "ml1", tier: "ml", emoji: "🤖" } },
+  { id: "ml2", type: "pipeline", position: { x: 380, y: 660 }, data: { label: "ML Stage 2\n(Violation type)", nodeId: "ml2", tier: "ml", emoji: "🎯" } },
 
-  { id: "committee", type: "pipeline", position: { x: 400, y: 560 }, data: { label: "Committee\nFusion", nodeId: "committee", tier: "fusion", emoji: "🗳️" } },
+  { id: "tuning", type: "pipeline", position: { x: 700, y: 300 }, data: { label: "Parameter\nTuning", nodeId: "tuning", tier: "tuning", emoji: "🎛️" } },
 
-  { id: "outputs", type: "pipeline", position: { x: 400, y: 700 }, data: { label: "Output\nArtifacts", nodeId: "outputs", tier: "output", emoji: "📁" } },
+  { id: "committee", type: "pipeline", position: { x: 380, y: 820 }, data: { label: "Committee\nFusion", nodeId: "committee", tier: "fusion", emoji: "🗳️" } },
 
-  { id: "dashboard", type: "pipeline", position: { x: 400, y: 840 }, data: { label: "Dashboard", nodeId: "dashboard", tier: "ui", emoji: "🖥️" } },
+  { id: "outputs", type: "pipeline", position: { x: 380, y: 980 }, data: { label: "Output\nArtifacts", nodeId: "outputs", tier: "output", emoji: "📁" } },
+
+  { id: "dashboard", type: "pipeline", position: { x: 380, y: 1140 }, data: { label: "Dashboard", nodeId: "dashboard", tier: "ui", emoji: "🖥️" } },
 ];
 
-const edgeDefaults = {
-  animated: true,
-  style: { strokeWidth: 2 },
-  markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16 },
+const markerEnd = { type: MarkerType.ArrowClosed, width: 18, height: 18 };
+
+const edgeStep = {
+  type: "step" as const,
+  pathOptions: { borderRadius: 14 },
+  markerEnd,
 };
 
+const strokeMain = "hsl(var(--primary))";
+const strokeSide = "hsl(var(--muted-foreground) / 0.55)";
+const strokeFeedback = "hsl(var(--muted-foreground) / 0.45)";
+
 const initialEdges: Edge[] = [
-  { id: "e-input-rules", source: "input", target: "rules", label: "trades + bars", ...edgeDefaults },
-  { id: "e-input-ai", source: "input", target: "ai", label: "trades + context", ...edgeDefaults },
-  { id: "e-input-ml1", source: "input", target: "ml1", label: "features", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "5 3" } },
-  { id: "e-rules-compare", source: "rules", target: "compare", label: "rule flags", ...edgeDefaults },
-  { id: "e-ai-compare", source: "ai", target: "compare", label: "AI verdicts", ...edgeDefaults },
-  { id: "e-compare-ml1", source: "compare", target: "ml1", label: "weak labels", ...edgeDefaults },
-  { id: "e-ml1-ml2", source: "ml1", target: "ml2", label: "p_suspicious", ...edgeDefaults },
-  { id: "e-compare-tuning", source: "compare", target: "tuning", label: "agreement stats", ...edgeDefaults },
-  { id: "e-rules-committee", source: "rules", target: "committee", label: "rule flags", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "6 3" } },
-  { id: "e-ai-committee", source: "ai", target: "committee", label: "AI flags", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "6 3" } },
-  { id: "e-ml2-committee", source: "ml2", target: "committee", label: "submission_ml", ...edgeDefaults },
-  { id: "e-committee-outputs", source: "committee", target: "outputs", label: "final flags", ...edgeDefaults },
-  { id: "e-outputs-dashboard", source: "outputs", target: "dashboard", label: "CSV / JSON / ml/health", ...edgeDefaults },
-  { id: "e-tuning-rules", source: "tuning", target: "rules", label: "threshold updates", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "4 4" }, animated: true },
+  {
+    id: "e-input-rules",
+    source: "input",
+    target: "rules",
+    sourceHandle: "out-rules",
+    targetHandle: "in-input",
+    label: "trades + bars",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide },
+  },
+  {
+    id: "e-input-ai",
+    source: "input",
+    target: "ai",
+    sourceHandle: "out-ai",
+    targetHandle: "in-input",
+    label: "trades + context",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide },
+  },
+  {
+    id: "e-rules-compare",
+    source: "rules",
+    target: "compare",
+    sourceHandle: "out-compare",
+    targetHandle: "in-merge",
+    label: "rule flags",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide },
+  },
+  {
+    id: "e-ai-compare",
+    source: "ai",
+    target: "compare",
+    sourceHandle: "out-compare",
+    targetHandle: "in-merge",
+    label: "AI verdicts",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide },
+  },
+  {
+    id: "e-compare-ml1",
+    source: "compare",
+    target: "ml1",
+    sourceHandle: "out-ml1",
+    targetHandle: "in-main",
+    label: "weak labels",
+    ...edgeStep,
+    animated: true,
+    style: { strokeWidth: 2.5, stroke: strokeMain },
+  },
+  {
+    id: "e-ml1-ml2",
+    source: "ml1",
+    target: "ml2",
+    sourceHandle: "out",
+    targetHandle: "in-main",
+    label: "scores",
+    ...edgeStep,
+    animated: true,
+    style: { strokeWidth: 2.5, stroke: strokeMain },
+  },
+  {
+    id: "e-ml2-committee",
+    source: "ml2",
+    target: "committee",
+    sourceHandle: "out",
+    targetHandle: "in-ml",
+    label: "submission_ml",
+    ...edgeStep,
+    animated: true,
+    style: { strokeWidth: 2.5, stroke: strokeMain },
+  },
+  {
+    id: "e-rules-committee",
+    source: "rules",
+    target: "committee",
+    sourceHandle: "out-committee",
+    targetHandle: "in-rules",
+    label: "submission.csv",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide, strokeDasharray: "8 5" },
+  },
+  {
+    id: "e-ai-committee",
+    source: "ai",
+    target: "committee",
+    sourceHandle: "out-committee",
+    targetHandle: "in-ai",
+    label: "GT suspicious",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide, strokeDasharray: "8 5" },
+  },
+  {
+    id: "e-committee-outputs",
+    source: "committee",
+    target: "outputs",
+    sourceHandle: "out",
+    targetHandle: "in-main",
+    label: "final flags",
+    ...edgeStep,
+    animated: true,
+    style: { strokeWidth: 2.5, stroke: strokeMain },
+  },
+  {
+    id: "e-outputs-dashboard",
+    source: "outputs",
+    target: "dashboard",
+    sourceHandle: "out",
+    targetHandle: "in-main",
+    label: "CSV / JSON",
+    ...edgeStep,
+    animated: true,
+    style: { strokeWidth: 2.5, stroke: strokeMain },
+  },
+  {
+    id: "e-compare-tuning",
+    source: "compare",
+    target: "tuning",
+    sourceHandle: "out-tuning",
+    targetHandle: "in-compare",
+    label: "agreement",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide },
+  },
+  {
+    id: "e-tuning-rules",
+    source: "tuning",
+    target: "rules",
+    sourceHandle: "out-rules",
+    targetHandle: "in-tune",
+    label: "config hints",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeFeedback, strokeDasharray: "6 6" },
+  },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -343,13 +542,35 @@ export default function WorkflowPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-3rem)]">
-      <div className="mb-4">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Pipeline Workflow
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Interactive mind map of the trade surveillance pipeline. Click any node for details. Drag to rearrange, scroll to zoom.
-        </p>
+      <div className="mb-4 space-y-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Pipeline Workflow
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Click a node for details. Drag nodes to rearrange; scroll to zoom. The{" "}
+            <span className="text-primary font-medium">green primary path</span> is
+            the main spine (compare → ML → committee → outputs). Wing links and dashed
+            lines are supporting feeds and feedback.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground border rounded-lg bg-muted/20 px-3 py-2">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-0.5 w-6 rounded-full bg-primary" aria-hidden />
+            Main spine
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-0.5 w-6 rounded-full bg-muted-foreground/50" aria-hidden />
+            Side inputs
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span
+              className="h-0.5 w-6 rounded-full border border-dashed border-muted-foreground/50 bg-transparent"
+              aria-hidden
+            />
+            Direct feed / feedback
+          </span>
+        </div>
       </div>
 
       <div className="relative flex-1 rounded-lg border bg-card overflow-hidden">
@@ -362,10 +583,11 @@ export default function WorkflowPage() {
           onPaneClick={onPaneClick}
           nodeTypes={nodeTypes}
           fitView
-          fitViewOptions={{ padding: 0.3 }}
-          minZoom={0.3}
-          maxZoom={2}
+          fitViewOptions={{ padding: 0.15, maxZoom: 1.25 }}
+          minZoom={0.22}
+          maxZoom={1.65}
           proOptions={{ hideAttribution: true }}
+          defaultEdgeOptions={{ type: "step" }}
         >
           <Background gap={20} size={1} />
           <Controls showInteractive={false} />
