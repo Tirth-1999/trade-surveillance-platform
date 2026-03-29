@@ -25,9 +25,13 @@ def _base_cols(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def detect_peg_break_usdc(trades: pd.DataFrame, markets: pd.DataFrame) -> pd.DataFrame:
+def detect_peg_break_usdc(
+    trades: pd.DataFrame,
+    markets: pd.DataFrame,
+    deviation_pct: float | None = None,
+) -> pd.DataFrame:
     """USDCUSDT: price deviates >0.5% from $1 peg; require material trade + bar volume context."""
-    dev_pct = float(cfg("p3.peg_break.deviation_pct"))
+    dev_pct = float(deviation_pct if deviation_pct is not None else cfg("p3.peg_break.deviation_pct"))
     min_trade_n = float(cfg("p3.peg_break.min_trade_notional_usdt"))
     min_bar_vol = float(cfg("p3.peg_break.min_bar_volume_usdt"))
     d = trades[trades["symbol"] == "USDCUSDT"].copy()
@@ -416,12 +420,19 @@ def detect_bat_volume_spike_trades(
 
 
 def detect_price_bar_violation(
-    trades: pd.DataFrame, markets: pd.DataFrame, min_mid_bps: float | None = None
+    trades: pd.DataFrame,
+    markets: pd.DataFrame,
+    min_mid_bps: float | None = None,
+    min_mid_bps_low_liquidity: float | None = None,
 ) -> pd.DataFrame:
     """Trades outside bar H/L; stricter mid-bps when bar tradecount is low (likely stale bar)."""
     min_bps = float(min_mid_bps if min_mid_bps is not None else cfg("p3.price_bar_violation.min_mid_bps"))
     low_tc_thr = int(cfg("p3.price_bar_violation.low_liquidity_tradecount"))
-    strict_bps = float(cfg("p3.price_bar_violation.min_mid_bps_low_liquidity"))
+    strict_bps = float(
+        min_mid_bps_low_liquidity
+        if min_mid_bps_low_liquidity is not None
+        else cfg("p3.price_bar_violation.min_mid_bps_low_liquidity")
+    )
     m = markets[["symbol", "minute", "High", "Low", "tradecount"]].copy()
     t = trades.merge(m, on=["symbol", "minute"], how="left")
     bad = (t["price"] < t["Low"]) | (t["price"] > t["High"])
@@ -741,4 +752,11 @@ def build_submission(trades: pd.DataFrame, markets: pd.DataFrame) -> pd.DataFram
     out["violation_type"] = out["violation_type"].map(
         lambda x: normalize_violation_type(str(x)) if pd.notna(x) else ""
     )
+    if bool(cfg("p3.pass2.enabled")):
+        from bits_hackathon.detectors.p3_pass2 import confirm_pass2, write_pass2_audit
+
+        confirmed, audit = confirm_pass2(out, trades, markets)
+        if bool(cfg("p3.pass2.write_audit")):
+            write_pass2_audit(audit)
+        out = confirmed
     return out

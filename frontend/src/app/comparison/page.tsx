@@ -271,6 +271,46 @@ export default function ComparisonPage() {
         </p>
       </div>
 
+      <Card className="border-sky-500/30 bg-sky-500/[0.06] dark:bg-sky-950/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Files &amp; API paths (repo root)</CardTitle>
+          <CardDescription>
+            The <strong className="font-medium text-foreground">rules</strong> side of
+            this comparison reflects{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/submission.csv</code>{" "}
+            after <strong className="font-medium text-foreground">P3 Pass 2</strong>{" "}
+            confirmation when you run <code className="rounded bg-muted px-1 py-0.5 text-xs">run.py p3</code>{" "}
+            with <code className="rounded bg-muted px-1 py-0.5 text-xs">p3.pass2.enabled</code>.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li>
+              <span className="font-medium text-foreground">Comparison report: </span>
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/comparison_report.csv</code> ·{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/comparison_report</code> ·{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">frontend/public/data/comparison_report.json</code>
+            </li>
+            <li>
+              <span className="font-medium text-foreground">Rules submission (Pass 2–filtered): </span>
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/submission.csv</code> ·{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/submission</code>
+            </li>
+            <li>
+              <span className="font-medium text-foreground">Pass 2 audit (kept/dropped): </span>
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/p3_second_pass_audit.csv</code> ·{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/p3_pass2_audit</code> ·{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">frontend/public/data/p3_pass2_audit.json</code>
+            </li>
+            <li>
+              <span className="font-medium text-foreground">Ground truth (AI): </span>
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/ground_truth.csv</code> ·{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/ground_truth</code>
+            </li>
+          </ul>
+        </CardContent>
+      </Card>
+
       {error ? (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}

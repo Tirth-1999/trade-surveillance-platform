@@ -61,6 +61,13 @@ p3:
     spoofing: 55
     round_trip_wash: 25
 
+  # Pass 2: confirm each row against detector outputs (stricter peg/spoof thresholds; audit file optional)
+  pass2:
+    enabled: true
+    write_audit: true
+    spoofing_bps_multiplier: 1.05
+    peg_deviation_multiplier: 1.0
+
   # Gated detectors (set true to enable)
   enable:
     cross_pair_divergence: false

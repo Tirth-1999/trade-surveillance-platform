@@ -70,7 +70,6 @@ BTCUSDT,2026-02-19,BTCUSDT_00005045,spoofing,Price outside 1m bar H/L with large
 DOGEUSDT,2026-02-02,DOGEUSDT_00000076,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 DOGEUSDT,2026-02-02,DOGEUSDT_00000668,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 DOGEUSDT,2026-02-02,DOGEUSDT_00001361,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
-ETHUSDT,2026-01-07,ETHUSDT_00004001,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 ETHUSDT,2026-01-07,ETHUSDT_00004003,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 ETHUSDT,2026-01-07,ETHUSDT_00004004,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 ETHUSDT,2026-01-16,ETHUSDT_00004005,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
@@ -101,7 +100,6 @@ XRPUSDT,2026-01-31,XRPUSDT_00000570,chain_layering,Three-wallet sequential SELL 
 XRPUSDT,2026-01-31,XRPUSDT_00001075,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 XRPUSDT,2026-01-31,XRPUSDT_00001591,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
 XRPUSDT,2026-01-31,XRPUSDT_00002383,chain_layering,Three-wallet sequential SELL chain with matched notionals within 300s.
-XRPUSDT,2026-01-18,XRPUSDT_00002509,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 XRPUSDT,2026-01-25,XRPUSDT_00002518,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 XRPUSDT,2026-01-30,XRPUSDT_00002519,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.
 XRPUSDT,2026-01-30,XRPUSDT_00002520,spoofing,Price outside 1m bar H/L with large mid deviation; low-tradecount bars use stricter bps — possible spoof/print vs bar mismatch.

@@ -3,7 +3,7 @@
   "stage1": {
     "version": 1,
     "data_validation_issues": [],
-    "trained_at": "2026-03-29T07:58:51.818361+00:00",
+    "trained_at": "2026-03-29T11:49:02.608427+00:00",
     "model": "HistGradientBoostingClassifier + CalibratedClassifierCV",
     "calibration_method": "isotonic",
     "feature_cols": [
@@ -21,32 +21,32 @@
       "hour_of_day",
       "notional_vs_threshold"
     ],
-    "threshold": 0.29000000000000004,
+    "threshold": 0.3500000000000001,
     "threshold_metric": "f05",
     "threshold_precision_floor": 0.35,
     "train_rows": 15865,
     "test_rows": 3389,
-    "positive_rate_train": 0.01922470847778128,
-    "positive_rate_test": 0.014753614635585718,
-    "brier_test": 0.01006662169146251,
-    "pr_auc_test": 0.5509750065553667,
+    "positive_rate_train": 0.018909549322407817,
+    "positive_rate_test": 0.020064915904396578,
+    "brier_test": 0.011981283825917906,
+    "pr_auc_test": 0.6410722077496092,
     "data_fingerprint": "ea168616fe1636c4",
-    "test_precision": 0.578125,
-    "test_recall": 0.74,
-    "test_f1": 0.6491228070175439,
-    "test_roc_auc": 0.9878885893980234
+    "test_precision": 0.75,
+    "test_recall": 0.6176470588235294,
+    "test_f1": 0.6774193548387096,
+    "test_roc_auc": 0.9849597924083816
   },
   "stage2": {
     "version": 1,
-    "trained_at": "2026-03-29T07:58:57.631561+00:00",
+    "trained_at": "2026-03-29T11:49:06.163428+00:00",
     "skipped": false,
     "classes": [
       "aml_structuring",
-      "layering",
+      "coordinated_structuring",
+      "layering_echo",
       "other",
       "ramping",
       "spoofing",
-      "structuring",
       "wash_trading"
     ],
     "feature_cols": [
@@ -64,15 +64,15 @@
       "hour_of_day",
       "notional_vs_threshold"
     ],
-    "train_rows": 289,
-    "test_rows": 50,
-    "test_macro_f1": 0.2243097238895558,
-    "test_log_loss": 5.034302461843257
+    "train_rows": 257,
+    "test_rows": 71,
+    "test_macro_f1": 0.21159554730983302,
+    "test_log_loss": 5.310189942186706
   },
   "stage1_previous": {
     "version": 1,
     "data_validation_issues": [],
-    "trained_at": "2026-03-29T07:21:25.162508+00:00",
+    "trained_at": "2026-03-29T11:42:20.704347+00:00",
     "model": "HistGradientBoostingClassifier + CalibratedClassifierCV",
     "calibration_method": "isotonic",
     "feature_cols": [
@@ -90,20 +90,22 @@
       "hour_of_day",
       "notional_vs_threshold"
     ],
-    "threshold": 0.6900000000000002,
+    "threshold": 0.3500000000000001,
+    "threshold_metric": "f05",
+    "threshold_precision_floor": 0.35,
     "train_rows": 15865,
     "test_rows": 3389,
-    "positive_rate_train": 0.019161676646706587,
-    "positive_rate_test": 0.014753614635585718,
-    "brier_test": 0.009717359063586083,
-    "pr_auc_test": 0.5666577960314384,
+    "positive_rate_train": 0.021872045382918374,
+    "positive_rate_test": 0.020655060489820007,
+    "brier_test": 0.015258981345289937,
+    "pr_auc_test": 0.6221805326239495,
     "data_fingerprint": "ea168616fe1636c4",
-    "test_precision": 1.0,
-    "test_recall": 0.04,
-    "test_f1": 0.07692307692307693,
-    "test_roc_auc": 0.9887990416292303
+    "test_precision": 0.5866666666666667,
+    "test_recall": 0.6285714285714286,
+    "test_f1": 0.6068965517241379,
+    "test_roc_auc": 0.9825033357723927
   },
-  "evaluation_report_preview": "============================================================\nML EVALUATION / PROMOTION GATE\n============================================================\n\nNew stage-1 test metrics:\n  test_precision: 0.5781\n  test_recall: 0.7400\n  test_f1: 0.6491\n  pr_auc_test: 0.5510\n  brier_test: 0.0101\n\nvs prior snapshot:\n  precision 1.0000 -> 0.5781\n  recall    0.0400 -> 0.7400\n\nPromotion decision: NO\nReasons: precision did not improve enough vs prior\n============================================================",
+  "evaluation_report_preview": "============================================================\nML EVALUATION / PROMOTION GATE\n============================================================\n\nNew stage-1 test metrics:\n  test_precision: 0.7500\n  test_recall: 0.6176\n  test_f1: 0.6774\n  pr_auc_test: 0.6411\n  brier_test: 0.0120\n\nvs prior snapshot:\n  precision 0.5867 -> 0.7500\n  recall    0.6286 -> 0.6176\n\nPromotion decision: YES\n============================================================",
   "artifacts_present": {
     "stage1": true,
     "stage2": true

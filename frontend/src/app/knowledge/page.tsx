@@ -426,19 +426,69 @@ export default function KnowledgeBasePage() {
         <TabsContent value="pipeline" className="space-y-6 pt-4">
           <p className="text-sm text-muted-foreground">
             Our detection system uses a multi-layered approach: no single method
-            is trusted alone. Instead, three independent approaches vote on each
-            trade.
+            is trusted alone. For crypto P3, rule hits are merged, then{" "}
+            <strong className="font-medium text-foreground">Pass 2</strong> confirms
+            each row against detector logic (and optional stricter peg/spoof checks)
+            before <code className="rounded bg-muted px-1 py-0.5 text-xs">submission.csv</code>{" "}
+            is written. Downstream, three independent approaches (rules, AI, ML)
+            feed the committee.
           </p>
+
+          <Card className="border-sky-500/30 bg-sky-500/[0.06] dark:bg-sky-950/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Artifact &amp; API paths</CardTitle>
+              <CardDescription>
+                Repo-root paths and FastAPI routes used by the dashboard. Configure
+                Pass 2 under <code className="rounded bg-muted px-1 py-0.5 text-xs">p3.pass2</code> in{" "}
+                <code className="rounded bg-muted px-1 py-0.5 text-xs">config.yaml</code>.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <span className="font-medium text-foreground">P3 rules output: </span>
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/submission.csv</code> ·{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/submission</code>
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Pass 2 audit: </span>
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/p3_second_pass_audit.csv</code> ·{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/p3_pass2_audit</code> ·{" "}
+                  UI table on the P3 page (Rules tab)
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Comparison: </span>
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/comparison_report.csv</code> ·{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/comparison_report</code>
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Committee: </span>
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/submission_committee.csv</code> ·{" "}
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">GET /api/outputs/submission_committee</code>
+                </li>
+                <li>
+                  <span className="font-medium text-foreground">Static bundle: </span>
+                  <code className="rounded bg-muted px-1 py-0.5 text-xs">frontend/public/data/*.json</code>{" "}
+                  (run <code className="rounded bg-muted px-1 py-0.5 text-xs">scripts/sync_frontend_data.py</code>)
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
 
           <div className="space-y-4">
             {[
               {
                 step: 1,
-                title: "Rule-Based Detection",
+                title: "Rule-Based Detection (+ P3 Pass 2)",
                 color: "bg-amber-500",
-                desc: "Hand-crafted heuristics scan every trade record using statistical thresholds. Fast, interpretable, and deterministic. Detects 8 violation types across crypto and equity markets.",
-                strengths: ["Fast execution", "Fully interpretable", "No API dependency"],
-                weaknesses: ["Fixed thresholds miss evolving patterns", "Some rules over-flag (e.g., pump-and-dump has ~90% false positive rate)"],
+                desc: "Hand-crafted heuristics scan every trade record using statistical thresholds. For crypto P3, merged candidates pass through Pass 2 (bits_hackathon/detectors/p3_pass2.py): each trade_id must appear in the detector output for its violation_type; peg_break/spoofing may use stricter multipliers. Only then does the row enter submission.csv. P1/P2 rules write their own CSVs.",
+                strengths: [
+                  "Fast execution",
+                  "Fully interpretable",
+                  "Pass 2 aligns CSV rows with detector truth",
+                  "No API dependency for rules",
+                ],
+                weaknesses: ["Fixed thresholds miss evolving patterns", "Some rules over-flag (e.g., pump-and-dump can be noisy before tuning)"],
               },
               {
                 step: 2,

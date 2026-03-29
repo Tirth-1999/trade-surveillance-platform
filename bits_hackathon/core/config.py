@@ -81,6 +81,12 @@ DEFAULTS: dict[str, Any] = {
     "p3.trim.spoofing": 80,
     "p3.trim.round_trip_wash": 25,
 
+    # Pass 2: re-verify rows vs detector logic (CSV columns unchanged)
+    "p3.pass2.enabled": True,
+    "p3.pass2.write_audit": True,
+    "p3.pass2.spoofing_bps_multiplier": 1.05,
+    "p3.pass2.peg_deviation_multiplier": 1.0,
+
     # Feature flags for gated detectors
     "p3.enable.cross_pair_divergence": False,
     "p3.enable.coordinated_pump": False,

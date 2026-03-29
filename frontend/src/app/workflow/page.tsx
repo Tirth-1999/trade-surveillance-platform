@@ -30,6 +30,7 @@ import {
   FileOutput,
   Monitor,
   X,
+  ShieldCheck,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -64,11 +65,36 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     icon: <Search className="h-5 w-5" />,
     color: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
     description:
-      "Hand-crafted heuristics scan every trade for known manipulation patterns. Three problem tracks: P3 (crypto trade surveillance), P1 (equity order book anomalies), P2 (SEC 8-K pre-announcement drift). Rules are fast and fully interpretable.",
+      "Hand-crafted heuristics scan every trade for known manipulation patterns: P3 (crypto), P1 (equity order book), P2 (SEC / drift). For P3 crypto, detectors merge with priority and trim caps; the next canvas node (Pass 2) confirms candidates before anything is written to submission.csv.",
     inputs: ["Raw trade/market DataFrames", "config.yaml thresholds"],
-    outputs: ["submission.csv (P3 flags)", "p1_alerts.csv", "p2_signals.csv"],
+    outputs: [
+      "P3: merged candidate rows (trim + priority dedupe)",
+      "P1: outputs/p1_alerts.csv",
+      "P2: outputs/p2_signals.csv",
+    ],
     tech: ["numpy", "pandas", "rolling z-scores", "merge_asof"],
-    keyInsight: "Detects 8 violation types: wash trading, spoofing, layering, pump-and-dump, ramping, AML structuring, peg manipulation, bar-range anomalies.",
+    keyInsight:
+      "P3 crypto emits many violation types (wash, spoofing, layering_echo, pump_and_dump, …). Only Pass 2–confirmed P3 rows become submission.csv.",
+  },
+  pass2: {
+    title: "P3 Pass 2 — Detector confirmation",
+    icon: <ShieldCheck className="h-5 w-5" />,
+    color: "bg-sky-500/15 text-sky-800 dark:text-sky-300",
+    description:
+      "Runs immediately after P3 rule merge in code (bits_hackathon/detectors/p3_pass2.py). Each row must appear in the detector output for its violation_type; peg_break and spoofing optionally use stricter thresholds (p3.pass2 in config.yaml). Dropped rows never reach submission.csv.",
+    inputs: [
+      "Merged P3 candidate rows from p3_crypto.run_all_detectors",
+      "config.yaml → p3.pass2.enabled, write_audit, spoofing_bps_multiplier, peg_deviation_multiplier",
+    ],
+    outputs: [
+      "outputs/submission.csv (judge CSV; Pass 2–filtered)",
+      "outputs/p3_second_pass_audit.csv (trade_id, violation_type, decision, reason)",
+      "GET /api/outputs/p3_pass2_audit (JSON)",
+      "frontend/public/data/p3_pass2_audit.json (after sync_frontend_data.py)",
+    ],
+    tech: ["pandas", "same detectors re-run for membership + stricter peg/spoof"],
+    keyInsight:
+      "This is separate from the AI “two-pass” LLM review. Pass 2 is deterministic rules verification aligned to the competition schema.",
   },
   ai: {
     title: "AI Ground Truth",
@@ -87,8 +113,11 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     color: "bg-green-500/15 text-green-700 dark:text-green-300",
     description:
       "Aligns rule-based flags against AI verdicts to measure agreement. For every trade, marks whether rules flagged it, AI flagged it, or both. Calculates per-symbol and per-violation-type agreement rates. This comparison is the training signal for the ML re-ranker.",
-    inputs: ["submission.csv", "ground_truth.csv"],
-    outputs: ["comparison_report.csv"],
+    inputs: [
+      "outputs/submission.csv (Pass 2–confirmed P3 rules)",
+      "outputs/ground_truth.csv",
+    ],
+    outputs: ["outputs/comparison_report.csv", "GET /api/outputs/comparison_report"],
     tech: ["pandas merge", "set operations"],
     keyInsight: "Agreement rate reveals which rule detectors are accurate (wash trade rules agree ~80% with AI) vs noisy (pump-and-dump rules disagree ~90%).",
   },
@@ -121,7 +150,11 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     color: "bg-indigo-500/15 text-indigo-700 dark:text-indigo-300",
     description:
       "Three-way voting system combining Rules, AI, and ML. Tier 1 (2+ sources agree) is auto-included. Tier 2 (single source) is selectively triaged: AI-only flags kept if confidence ≥ threshold, most rule-only flags dropped (noisy heuristics), ML-only flags dropped (insufficient corroboration).",
-    inputs: ["submission.csv", "ground_truth.csv", "submission_ml.csv"],
+    inputs: [
+      "outputs/submission.csv",
+      "outputs/ground_truth.csv",
+      "outputs/submission_ml.csv",
+    ],
     outputs: ["submission_committee.csv", "committee_report.txt"],
     tech: ["set intersection/difference", "confidence thresholds per violation type"],
     keyInsight: "Tier 1 = two or more of {rules, AI, ML} agree; Tier 2 triages single-source rows using confidence and violation-type rules. Zone counts vary per run.",
@@ -144,7 +177,16 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     description:
       "All pipeline stages write their results to the outputs/ directory. CSV files contain the flagged trades with violation types and remarks. Text reports contain human-readable summaries of metrics and recommendations.",
     inputs: ["All pipeline stages"],
-    outputs: ["submission*.csv", "ground_truth.csv", "comparison_report.csv", "training_snapshot.csv", "ml_baseline_report.txt", "ml_evaluation_report.txt", "*.txt reports"],
+    outputs: [
+      "submission*.csv",
+      "p3_second_pass_audit.csv",
+      "ground_truth.csv",
+      "comparison_report.csv",
+      "training_snapshot.csv",
+      "ml_baseline_report.txt",
+      "ml_evaluation_report.txt",
+      "*.txt reports",
+    ],
     tech: ["CSV format", "JSONL for audit log"],
     keyInsight: "The committee submission is the final, highest-confidence output — it represents the combined intelligence of rules, AI, and ML.",
   },
@@ -154,10 +196,16 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     color: "bg-orange-500/15 text-orange-700 dark:text-orange-300",
     description:
       "Next.js + shadcn/ui frontend with FastAPI backend. Seven analytical pages plus this workflow view. Analysts can browse flagged trades, drill into committee zones, compare approaches, trigger pipeline runs, upload new data, and record HITL decisions.",
-    inputs: ["FastAPI endpoints", "outputs/*.csv", "outputs/*.txt", "/api/ml/health"],
+    inputs: [
+      "FastAPI /api/outputs/*",
+      "outputs/*.csv (incl. submission.csv, p3_second_pass_audit.csv)",
+      "outputs/*.txt",
+      "/api/ml/health",
+    ],
     outputs: ["Interactive visualizations", "HITL decisions (feedback/decisions.jsonl)"],
     tech: ["Next.js 16", "React 19", "shadcn/ui", "Recharts", "React Flow", "FastAPI"],
-    keyInsight: "After train-ml, run python3 scripts/sync_frontend_data.py so static fallback JSON (including ml_health) matches your latest run — or use the API on localhost:8000.",
+    keyInsight:
+      "After pipeline runs, run python3 scripts/sync_frontend_data.py so public/data/*.json (submission, p3_pass2_audit, ml_health, …) matches outputs/ — or use the API on localhost:8000.",
   },
 };
 
@@ -172,6 +220,7 @@ function PipelineNode({ data }: { data: { label: string; nodeId: string; tier: s
   const tierColors: Record<string, string> = {
     input: "border-blue-400/60 bg-blue-50 dark:bg-blue-950/40",
     detection: "border-amber-400/60 bg-amber-50 dark:bg-amber-950/40",
+    verify: "border-sky-400/60 bg-sky-50 dark:bg-sky-950/40",
     ai: "border-purple-400/60 bg-purple-50 dark:bg-purple-950/40",
     analysis: "border-green-400/60 bg-green-50 dark:bg-green-950/40",
     ml: "border-rose-400/60 bg-rose-50 dark:bg-rose-950/40",
@@ -228,7 +277,11 @@ function PipelineNode({ data }: { data: { label: string; nodeId: string; tier: s
         </>
       )}
       {id === "rules" && (
+        <Handle id="out-pass2" type="source" position={Position.Bottom} className={handleClass} />
+      )}
+      {id === "pass2" && (
         <>
+          <Handle id="in-rules" type="target" position={Position.Top} className={handleClass} />
           <Handle id="out-compare" type="source" position={Position.Bottom} style={{ left: "35%" }} className={handleClass} />
           <Handle id="out-committee" type="source" position={Position.Bottom} style={{ left: "65%" }} className={handleClass} />
         </>
@@ -269,20 +322,26 @@ const initialNodes: Node[] = [
   { id: "input", type: "pipeline", position: { x: 380, y: 0 }, data: { label: "Input Data", nodeId: "input", tier: "input", emoji: "📊" } },
 
   { id: "rules", type: "pipeline", position: { x: 40, y: 160 }, data: { label: "Rule-Based\nDetectors", nodeId: "rules", tier: "detection", emoji: "🔍" } },
+  {
+    id: "pass2",
+    type: "pipeline",
+    position: { x: 40, y: 268 },
+    data: { label: "P3 Pass 2\nConfirm", nodeId: "pass2", tier: "verify", emoji: "✓" },
+  },
   { id: "ai", type: "pipeline", position: { x: 760, y: 160 }, data: { label: "AI Ground\nTruth (LLM)", nodeId: "ai", tier: "ai", emoji: "🧠" } },
 
-  { id: "compare", type: "pipeline", position: { x: 380, y: 320 }, data: { label: "Comparison\nEngine", nodeId: "compare", tier: "analysis", emoji: "⚖️" } },
+  { id: "compare", type: "pipeline", position: { x: 380, y: 380 }, data: { label: "Comparison\nEngine", nodeId: "compare", tier: "analysis", emoji: "⚖️" } },
 
-  { id: "ml1", type: "pipeline", position: { x: 380, y: 500 }, data: { label: "ML Stage 1\n(Binary triage)", nodeId: "ml1", tier: "ml", emoji: "🤖" } },
-  { id: "ml2", type: "pipeline", position: { x: 380, y: 660 }, data: { label: "ML Stage 2\n(Violation type)", nodeId: "ml2", tier: "ml", emoji: "🎯" } },
+  { id: "ml1", type: "pipeline", position: { x: 380, y: 560 }, data: { label: "ML Stage 1\n(Binary triage)", nodeId: "ml1", tier: "ml", emoji: "🤖" } },
+  { id: "ml2", type: "pipeline", position: { x: 380, y: 720 }, data: { label: "ML Stage 2\n(Violation type)", nodeId: "ml2", tier: "ml", emoji: "🎯" } },
 
-  { id: "tuning", type: "pipeline", position: { x: 700, y: 300 }, data: { label: "Parameter\nTuning", nodeId: "tuning", tier: "tuning", emoji: "🎛️" } },
+  { id: "tuning", type: "pipeline", position: { x: 700, y: 360 }, data: { label: "Parameter\nTuning", nodeId: "tuning", tier: "tuning", emoji: "🎛️" } },
 
-  { id: "committee", type: "pipeline", position: { x: 380, y: 820 }, data: { label: "Committee\nFusion", nodeId: "committee", tier: "fusion", emoji: "🗳️" } },
+  { id: "committee", type: "pipeline", position: { x: 380, y: 880 }, data: { label: "Committee\nFusion", nodeId: "committee", tier: "fusion", emoji: "🗳️" } },
 
-  { id: "outputs", type: "pipeline", position: { x: 380, y: 980 }, data: { label: "Output\nArtifacts", nodeId: "outputs", tier: "output", emoji: "📁" } },
+  { id: "outputs", type: "pipeline", position: { x: 380, y: 1040 }, data: { label: "Output\nArtifacts", nodeId: "outputs", tier: "output", emoji: "📁" } },
 
-  { id: "dashboard", type: "pipeline", position: { x: 380, y: 1140 }, data: { label: "Dashboard", nodeId: "dashboard", tier: "ui", emoji: "🖥️" } },
+  { id: "dashboard", type: "pipeline", position: { x: 380, y: 1200 }, data: { label: "Dashboard", nodeId: "dashboard", tier: "ui", emoji: "🖥️" } },
 ];
 
 const markerEnd = { type: MarkerType.ArrowClosed, width: 18, height: 18 };
@@ -321,8 +380,19 @@ const initialEdges: Edge[] = [
     style: { strokeWidth: 2, stroke: strokeSide },
   },
   {
-    id: "e-rules-compare",
+    id: "e-rules-pass2",
     source: "rules",
+    target: "pass2",
+    sourceHandle: "out-pass2",
+    targetHandle: "in-rules",
+    label: "P3 candidates",
+    ...edgeStep,
+    animated: false,
+    style: { strokeWidth: 2, stroke: strokeSide },
+  },
+  {
+    id: "e-pass2-compare",
+    source: "pass2",
     target: "compare",
     sourceHandle: "out-compare",
     targetHandle: "in-merge",
@@ -376,8 +446,8 @@ const initialEdges: Edge[] = [
     style: { strokeWidth: 2.5, stroke: strokeMain },
   },
   {
-    id: "e-rules-committee",
-    source: "rules",
+    id: "e-pass2-committee",
+    source: "pass2",
     target: "committee",
     sourceHandle: "out-committee",
     targetHandle: "in-rules",
@@ -549,12 +619,27 @@ export default function WorkflowPage() {
           </h1>
           <p className="text-sm text-muted-foreground">
             Click a node for details. Drag nodes to rearrange; scroll to zoom. The{" "}
+            <span className="text-sky-600 dark:text-sky-400 font-medium">
+              P3 Pass 2
+            </span>{" "}
+            node sits under Rule-Based Detectors: it confirms crypto rule candidates
+            before{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-[10px]">submission.csv</code>{" "}
+            and{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+              outputs/p3_second_pass_audit.csv
+            </code>{" "}
+            are written. The{" "}
             <span className="text-primary font-medium">green primary path</span> is
             the main spine (compare → ML → committee → outputs). Wing links and dashed
             lines are supporting feeds and feedback.
           </p>
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground border rounded-lg bg-muted/20 px-3 py-2">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-0.5 w-6 rounded-full bg-sky-500" aria-hidden />
+            P3 Pass 2 verify
+          </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="h-0.5 w-6 rounded-full bg-primary" aria-hidden />
             Main spine

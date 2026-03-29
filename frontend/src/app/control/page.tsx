@@ -43,6 +43,38 @@ type UploadResponse = {
   stderr?: string;
 };
 
+const KEY_OUTPUT_PATHS: { label: string; path: string; api?: string }[] = [
+  {
+    label: "P3 rules submission (Pass 2–filtered)",
+    path: "outputs/submission.csv",
+    api: "GET /api/outputs/submission",
+  },
+  {
+    label: "P3 Pass 2 audit",
+    path: "outputs/p3_second_pass_audit.csv",
+    api: "GET /api/outputs/p3_pass2_audit",
+  },
+  {
+    label: "Comparison (rules vs AI)",
+    path: "outputs/comparison_report.csv",
+    api: "GET /api/outputs/comparison_report",
+  },
+  {
+    label: "Committee fusion",
+    path: "outputs/submission_committee.csv",
+    api: "GET /api/outputs/submission_committee",
+  },
+  {
+    label: "Ground truth",
+    path: "outputs/ground_truth.csv",
+    api: "GET /api/outputs/ground_truth",
+  },
+  {
+    label: "Static UI mirror",
+    path: "frontend/public/data/*.json",
+  },
+];
+
 const PIPELINE_STEPS: {
   id: string;
   name: string;
@@ -64,7 +96,8 @@ const PIPELINE_STEPS: {
   {
     id: "p3",
     name: "P3 Crypto Rules",
-    description: "Crypto-specific detection pipeline.",
+    description:
+      "Crypto detectors, merge, then Pass 2 confirmation → outputs/submission.csv and outputs/p3_second_pass_audit.csv (see config p3.pass2).",
     path: "/api/run/p3",
   },
   {
@@ -225,6 +258,36 @@ export default function ControlPage() {
           outputs.
         </p>
       </div>
+
+      <Card className="border-sky-500/30 bg-sky-500/[0.06] dark:bg-sky-950/20">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Key artifact paths</CardTitle>
+          <CardDescription>
+            Relative to the project root. After runs, sync the dashboard with{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">
+              python3 scripts/sync_frontend_data.py
+            </code>{" "}
+            so <code className="rounded bg-muted px-1 py-0.5 text-xs">frontend/public/data</code>{" "}
+            matches <code className="rounded bg-muted px-1 py-0.5 text-xs">outputs/</code>.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            {KEY_OUTPUT_PATHS.map((row) => (
+              <li key={row.path + row.label}>
+                <span className="font-medium text-foreground">{row.label}: </span>
+                <code className="rounded bg-muted px-1 py-0.5 text-xs">{row.path}</code>
+                {row.api ? (
+                  <>
+                    {" · "}
+                    <code className="rounded bg-muted px-1 py-0.5 text-xs">{row.api}</code>
+                  </>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
 
       <section className="space-y-4">
         <h2 className="text-lg font-semibold tracking-tight">

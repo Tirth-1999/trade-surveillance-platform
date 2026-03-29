@@ -42,6 +42,26 @@ export type TradeRow = {
   notional_usdt?: string;
 };
 
+export type Pass2AuditRow = {
+  trade_id: string;
+  violation_type: string;
+  decision: string;
+  reason: string;
+};
+
+function normalizePass2Audit(raw: unknown): Pass2AuditRow[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((r) => {
+    const o = r as Record<string, unknown>;
+    return {
+      trade_id: String(o.trade_id ?? ""),
+      violation_type: String(o.violation_type ?? ""),
+      decision: String(o.decision ?? ""),
+      reason: String(o.reason ?? ""),
+    };
+  });
+}
+
 const BAR_COLORS = [
   "#3b82f6",
   "#ef4444",
@@ -202,6 +222,9 @@ async function fetchSubmissionForTab(
 export default function P3Page() {
   const [tab, setTab] = React.useState<"rules" | "committee">("rules");
   const [rows, setRows] = React.useState<TradeRow[]>([]);
+  const [pass2Audit, setPass2Audit] = React.useState<Pass2AuditRow[] | null>(
+    null
+  );
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [symbolFilter, setSymbolFilter] = React.useState("");
@@ -222,9 +245,18 @@ export default function P3Page() {
     (async () => {
       setLoading(true);
       setError(null);
+      setPass2Audit(null);
       try {
         const raw = await fetchSubmissionForTab(tab);
         if (!cancelled) setRows(normalizeRows(raw));
+        if (tab === "rules") {
+          try {
+            const aud = await fetchJSON<unknown>("/api/outputs/p3_pass2_audit");
+            if (!cancelled) setPass2Audit(normalizePass2Audit(aud));
+          } catch {
+            if (!cancelled) setPass2Audit(null);
+          }
+        }
       } catch (e) {
         if (!cancelled)
           setError(e instanceof Error ? e.message : "Failed to load data");
@@ -237,6 +269,22 @@ export default function P3Page() {
       cancelled = true;
     };
   }, [tab]);
+
+  const pass2Stats = React.useMemo(() => {
+    if (pass2Audit === null) return null;
+    let kept = 0;
+    let dropped = 0;
+    for (const r of pass2Audit) {
+      const d = (r.decision ?? "").toLowerCase();
+      if (d === "dropped") dropped += 1;
+      else if (d === "kept") kept += 1;
+    }
+    return {
+      kept,
+      dropped,
+      droppedRows: pass2Audit.filter((r) => r.decision === "dropped"),
+    };
+  }, [pass2Audit]);
 
   const uniqueSymbols = React.useMemo(() => {
     const s = new Set(rows.map((r) => r.symbol).filter(Boolean));
@@ -299,9 +347,14 @@ export default function P3Page() {
             P3 — Crypto Trade Surveillance
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Rule-based and committee outputs from the FastAPI backend. When trade
-            tape is available, wallet, side, order type, and timestamps are shown
-            for analysis only — exports default to the competition CSV schema.
+            Rule-based and committee outputs from the FastAPI backend. The Rules tab
+            reflects <span className="font-medium text-foreground">Pass 2</span>{" "}
+            confirmation when you run <code className="rounded bg-muted px-1 py-0.5 text-xs">run.py p3</code>{" "}
+            (<code className="rounded bg-muted px-1 py-0.5 text-xs">p3.pass2</code> in{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">config.yaml</code>
+            ). When trade tape is available, wallet, side, order type, and timestamps
+            are shown for analysis only — exports default to the competition CSV
+            schema.
           </p>
         </div>
         <Tabs
@@ -370,6 +423,92 @@ export default function P3Page() {
               </CardHeader>
             </Card>
           </div>
+
+          {tab === "rules" && pass2Stats && (
+            <Card className="border-primary/20 bg-primary/[0.03]">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Pass 2 — detector confirmation</CardTitle>
+                <CardDescription>
+                  Each candidate row is checked against the same detector family as
+                  the official <code className="text-xs">violation_type</code> (stricter
+                  peg/spoof thresholds optional). Rows below were{" "}
+                  <span className="font-medium text-foreground">dropped</span> from{" "}
+                  <code className="text-xs">submission.csv</code>. Full log:{" "}
+                  <code className="text-xs">outputs/p3_second_pass_audit.csv</code>.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-3">
+                <Badge
+                  variant="outline"
+                  className="border-emerald-500/40 bg-emerald-500/10 text-emerald-900 dark:text-emerald-200"
+                >
+                  kept {pass2Stats.kept}
+                </Badge>
+                <Badge
+                  variant="outline"
+                  className={
+                    pass2Stats.dropped > 0
+                      ? "border-amber-500/50 bg-amber-500/10 text-amber-950 dark:text-amber-200"
+                      : ""
+                  }
+                >
+                  dropped {pass2Stats.dropped}
+                </Badge>
+              </CardContent>
+              {pass2Stats.droppedRows.length > 0 && (
+                <CardContent className="pt-0">
+                  <p className="mb-2 text-sm font-medium text-muted-foreground">
+                    Dropped rows
+                  </p>
+                  <ScrollArea className="h-[min(220px,40vh)] rounded-md border">
+                    <table className="w-full text-left text-sm">
+                      <thead className="sticky top-0 border-b bg-muted/80 backdrop-blur-sm">
+                        <tr>
+                          <th className="p-2 font-medium">trade_id</th>
+                          <th className="p-2 font-medium">violation_type</th>
+                          <th className="p-2 font-medium">reason</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {pass2Stats.droppedRows.map((r, i) => (
+                          <tr
+                            key={`${r.trade_id}-${i}`}
+                            className="border-b border-border/50 last:border-0"
+                          >
+                            <td className="p-2 font-mono text-xs">{r.trade_id}</td>
+                            <td className="p-2">{r.violation_type}</td>
+                            <td className="p-2 text-muted-foreground">{r.reason}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </ScrollArea>
+                </CardContent>
+              )}
+            </Card>
+          )}
+
+          {tab === "rules" && !loading && !error && pass2Audit === null && (
+            <p className="text-sm text-muted-foreground">
+              No Pass 2 audit file found. Generate it by running the P3 pipeline with{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">
+                p3.pass2.write_audit: true
+              </code>{" "}
+              and sync static data if needed:{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">
+                python3 scripts/sync_frontend_data.py
+              </code>
+              .
+            </p>
+          )}
+
+          {tab === "committee" && !loading && !error && (
+            <p className="text-sm text-muted-foreground">
+              Committee fusion builds on the rules submission (Pass 2–filtered when{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-xs">p3.pass2.enabled</code>{" "}
+              is on), plus AI and ML. Switch to Rules to view the Pass 2 audit table.
+            </p>
+          )}
 
           <Card>
             <CardHeader>

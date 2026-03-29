@@ -49,6 +49,7 @@ def main() -> None:
         "comparison_report": "comparison_report.csv",
         "p1_alerts": "p1_alerts.csv",
         "p2_signals": "p2_signals.csv",
+        "p3_pass2_audit": "p3_second_pass_audit.csv",
     }
     for key, fname in csv_map.items():
         p = out / fname

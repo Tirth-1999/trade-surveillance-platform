@@ -4,7 +4,8 @@
 Usage:
     python run.py p1              # Problem 1: equity order-book alerts
     python run.py p2              # Problem 2: SEC 8-K + drift signals
-    python run.py p3              # Problem 3: crypto trade surveillance
+    python run.py p3              # Problem 3: crypto (Pass 1: detectors+merge+trim+dedupe;
+                                  #           Pass 2: confirm_pass2 if p3.pass2.enabled in config.yaml)
     python run.py ground-truth    # AI ground-truth agent
     python run.py compare         # Compare rules vs ground truth
     python run.py reranker        # ML staged pipeline (train + score + submission_ml)
@@ -48,6 +49,11 @@ def cmd_p2() -> None:
 
 
 def cmd_p3() -> None:
+    """P3 crypto: Pass 1 inside build_submission = run_all_detectors (merge, trim, priority dedupe).
+
+    Pass 2 = confirm_pass2 when config p3.pass2.enabled (writes optional outputs/p3_second_pass_audit.csv).
+    """
+    from bits_hackathon.core.config import get as cfg
     from bits_hackathon.core.crypto_load import load_all_markets, load_all_trades
     from bits_hackathon.core.paths import OUTPUTS_DIR
     from bits_hackathon.detectors.p3_crypto import build_submission
@@ -60,6 +66,16 @@ def cmd_p3() -> None:
     sub.to_csv(out, index=False)
     elapsed = time.perf_counter() - t0
     print(f"Wrote {len(sub)} rows to {out} in {elapsed:.2f}s")
+    pass2_on = bool(cfg("p3.pass2.enabled"))
+    if pass2_on:
+        audit = OUTPUTS_DIR / "p3_second_pass_audit.csv"
+        audit_note = "written" if bool(cfg("p3.pass2.write_audit")) else "skipped (p3.pass2.write_audit false)"
+        print(
+            f"P3: Pass 1 (detectors + merge/trim/dedupe) → Pass 2 confirmation on; "
+            f"audit {audit_note} → {audit}"
+        )
+    else:
+        print("P3: Pass 2 disabled (set p3.pass2.enabled true in config.yaml to confirm rows vs detectors).")
 
 
 def cmd_ground_truth(args: argparse.Namespace | None = None) -> None:
@@ -307,7 +323,13 @@ def main() -> None:
 
     sub.add_parser("p1", help="Problem 1: equity order-book alerts")
     sub.add_parser("p2", help="Problem 2: SEC 8-K + drift signals")
-    sub.add_parser("p3", help="Problem 3: crypto trade surveillance")
+    sub.add_parser(
+        "p3",
+        help=(
+            "Problem 3: crypto trade surveillance — Pass 1: run_all_detectors (merge, trim, dedupe); "
+            "Pass 2: confirm_pass2 if p3.pass2.enabled (optional outputs/p3_second_pass_audit.csv)"
+        ),
+    )
     gt_p = sub.add_parser("ground-truth", help="AI ground-truth agent (LLM if OPENROUTER_API_KEY set)")
     gt_p.add_argument(
         "--stub-only",

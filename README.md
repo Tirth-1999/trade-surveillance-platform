@@ -72,7 +72,8 @@ flowchart TD
   LOAD[crypto_load.py]
   DATA --> LOAD
   LOAD --> R["Rule detectors p3_crypto.py"]
-  R --> SUB[outputs/submission.csv]
+  R --> P2["Pass 2 confirm vs detectors + stricter peg/spoof"]
+  P2 --> SUB[outputs/submission.csv]
 
   SUB --> GT[ground_truth agent]
   GT --> GTC[outputs/ground_truth.csv]
@@ -90,6 +91,7 @@ flowchart TD
 ```
 
 - **Rules** implement behavioural patterns (wash, ramping, peg break, structuring bands, etc.), merge with priority, optional **trim** caps in `config.yaml`.
+- **Pass 2** (`p3.pass2` in `config.yaml`): each candidate row is checked against the **official `violation_type`** taxonomy: the `trade_id` must appear in that type’s detector output; **peg_break** and **spoofing** use **stricter** thresholds (`peg_deviation_multiplier`, `spoofing_bps_multiplier`). Rows that fail are dropped so the CSV stays aligned with detector logic. Optional audit: `outputs/p3_second_pass_audit.csv` (`write_audit: true`).
 - **Ground truth** can run as **vectorized stub** (fast) or **LLM** if `OPENROUTER_API_KEY` is set (`ground-truth --stub-only` forces stub).
 - **ML** uses shared features (`ml_features.py`), **stage-1** calibrated suspicion, **stage-2** multiclass type when data allows.
 - **Committee** fuses rules + AI suspicious + ML flags; **`include_ai_only: false`** by default in `config.yaml` so **AI-only** rows are not promoted unless you turn that on (reduces false positives).

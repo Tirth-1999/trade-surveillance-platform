@@ -11,6 +11,7 @@ const STATIC_MAP: Record<string, string> = {
   "/api/outputs/comparison_report": "/data/comparison_report.json",
   "/api/outputs/p1_alerts": "/data/p1_alerts.json",
   "/api/outputs/p2_signals": "/data/p2_signals.json",
+  "/api/outputs/p3_pass2_audit": "/data/p3_pass2_audit.json",
   "/api/reports/committee_report": "/data/committee_report.json",
   "/api/reports/reranker_report": "/data/reranker_report.json",
   "/api/reports/tuning_report": "/data/tuning_report.json",

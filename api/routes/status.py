@@ -14,6 +14,7 @@ OUTPUTS_DIR = Path(__file__).resolve().parents[2] / "outputs"
 
 EXPECTED_FILES = [
     "submission.csv",
+    "p3_second_pass_audit.csv",
     "submission_committee.csv",
     "submission_ml.csv",
     "submission_with_trades.json",

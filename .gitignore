@@ -43,3 +43,6 @@ node_modules/
 frontend/.next/
 frontend/out/
 frontend/.npm-cache/
+
+# Local scratch / voice notes (do not commit)
+*.mp3
