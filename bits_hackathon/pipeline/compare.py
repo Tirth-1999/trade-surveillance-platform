@@ -47,14 +47,20 @@ def load_and_compare(
         rules_vtype = sub_row.get("violation_type", "")
         gt_vtype = gt_row.get("violation_type", "")
         type_match = bool(rules_vtype and gt_vtype and rules_vtype == gt_vtype)
+        gt_verdict = gt_row.get("verdict", "")
 
         rows.append({
             "trade_id": tid,
             "symbol": sub_row.get("symbol", gt_row.get("symbol", "")),
             "date": sub_row.get("date", gt_row.get("date", "")),
             "agreement": agreement,
+            "rule_flag": int(in_sub),
+            "gt_flag": int(in_gt_sus),
+            "gt_verdict": gt_verdict,
             "rules_violation_type": rules_vtype,
             "gt_violation_type": gt_vtype,
+            "violation_type_rules": rules_vtype,
+            "violation_type_gt": gt_vtype,
             "gt_confidence": gt_row.get("confidence", ""),
             "gt_rationale": gt_row.get("rationale", ""),
             "type_match": type_match,

@@ -36,7 +36,57 @@ type ComparisonRow = {
   gt_confidence: number | string | null;
   violation_type_rules: string;
   violation_type_gt: string;
+  type_match?: boolean | number | string | null;
 };
+
+/** Backend CSV uses agreement ∈ both_flag | rules_only | gt_only (not "agree"). Normalize legacy rows. */
+function normalizeComparisonRows(raw: unknown[]): ComparisonRow[] {
+  return raw.map((item) => {
+    const r = item as Record<string, unknown>;
+    const agreement = String(r.agreement ?? "");
+    let ruleFlag = r.rule_flag;
+    let gtFlag = r.gt_flag;
+    if (ruleFlag === undefined || gtFlag === undefined) {
+      if (agreement === "both_flag") {
+        ruleFlag = 1;
+        gtFlag = 1;
+      } else if (agreement === "rules_only") {
+        ruleFlag = 1;
+        gtFlag = 0;
+      } else if (agreement === "gt_only") {
+        ruleFlag = 0;
+        gtFlag = 1;
+      } else {
+        ruleFlag = 0;
+        gtFlag = 0;
+      }
+    }
+    const vRules = r.violation_type_rules ?? r.rules_violation_type;
+    const vGt = r.violation_type_gt ?? r.gt_violation_type;
+    return {
+      symbol: String(r.symbol ?? ""),
+      date: String(r.date ?? ""),
+      trade_id: String(r.trade_id ?? ""),
+      rule_flag: ruleFlag as number | string,
+      gt_flag: gtFlag as number | string,
+      agreement,
+      gt_verdict: String(r.gt_verdict ?? ""),
+      gt_confidence: (r.gt_confidence as number | string | null) ?? null,
+      violation_type_rules: vRules === null || vRules === undefined ? "" : String(vRules),
+      violation_type_gt: vGt === null || vGt === undefined ? "" : String(vGt),
+      type_match: r.type_match as boolean | number | string | null | undefined,
+    };
+  });
+}
+
+function truthyTypeMatch(v: boolean | number | string | null | undefined): boolean {
+  if (v === true || v === 1) return true;
+  if (typeof v === "string") {
+    const s = v.toLowerCase();
+    return s === "true" || s === "1" || s === "yes";
+  }
+  return false;
+}
 
 function flagOn(v: number | string | null | undefined): boolean {
   if (v === null || v === undefined) return false;
@@ -114,9 +164,9 @@ export default function ComparisonPage() {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchJSON<ComparisonRow[]>("/api/outputs/comparison_report");
+        const data = await fetchJSON<unknown[]>("/api/outputs/comparison_report");
         if (cancelled) return;
-        setRows(Array.isArray(data) ? data : []);
+        setRows(Array.isArray(data) ? normalizeComparisonRows(data) : []);
       } catch (e) {
         if (cancelled) return;
         setRows([]);
@@ -132,22 +182,37 @@ export default function ComparisonPage() {
 
   const stats = useMemo(() => {
     const total = rows.length;
-    let agree = 0;
-    let disagree = 0;
+    let bothFlag = 0;
+    let rulesOnly = 0;
+    let gtOnly = 0;
+    let typeMatchAmongBoth = 0;
     for (const r of rows) {
-      if (r.agreement === "agree") agree += 1;
-      else disagree += 1;
+      const a = r.agreement;
+      if (a === "both_flag") {
+        bothFlag += 1;
+        if (truthyTypeMatch(r.type_match)) typeMatchAmongBoth += 1;
+      } else if (a === "rules_only") rulesOnly += 1;
+      else if (a === "gt_only") gtOnly += 1;
     }
-    const rate = total > 0 ? Math.round((agree / total) * 1000) / 10 : null;
-    return { total, agree, disagree, rate };
+    const typeRate =
+      bothFlag > 0 ? Math.round((typeMatchAmongBoth / bothFlag) * 1000) / 10 : null;
+    return {
+      total,
+      bothFlag,
+      rulesOnly,
+      gtOnly,
+      typeMatchAmongBoth,
+      typeRate,
+    };
   }, [rows]);
 
   const pieData = useMemo(
     () => [
-      { name: "Agree", value: stats.agree, fill: "hsl(142 71% 45%)" },
-      { name: "Disagree", value: stats.disagree, fill: "hsl(0 84% 60%)" },
+      { name: "Both flagged", value: stats.bothFlag, fill: "hsl(262 83% 58%)" },
+      { name: "Rules only", value: stats.rulesOnly, fill: "hsl(38 92% 50%)" },
+      { name: "GT only", value: stats.gtOnly, fill: "hsl(199 89% 48%)" },
     ],
-    [stats.agree, stats.disagree]
+    [stats.bothFlag, stats.gtOnly, stats.rulesOnly]
   );
 
   const verdictBarData = useMemo(() => {
@@ -197,9 +262,12 @@ export default function ComparisonPage() {
           Rule-based vs AI Ground Truth Comparison
         </h1>
         <p className="text-sm text-muted-foreground">
-          Agreement metrics between rule flags and ground-truth labels from{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-xs">/api/outputs/comparison_report</code>
-          .
+          Each row is a trade where at least one side (rules or ground truth) marked it suspicious;
+          benign-vs-benign pairs are omitted. Metrics use backend categories{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">both_flag</code>,{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">rules_only</code>,{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">gt_only</code>. Data from{" "}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">/api/outputs/comparison_report</code>.
         </p>
       </div>
 
@@ -219,7 +287,7 @@ export default function ComparisonPage() {
         <>
           <section className="space-y-4">
             <h2 className="text-lg font-medium">Agreement overview</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -233,36 +301,58 @@ export default function ComparisonPage() {
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Agreement
+                    Both flagged
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                    {stats.agree}
+                  <p className="text-3xl font-bold tabular-nums text-violet-600 dark:text-violet-400">
+                    {stats.bothFlag}
                   </p>
+                  <p className="mt-1 text-xs text-muted-foreground">Rules + GT suspicious</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Disagreement
+                    Rules only
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold tabular-nums text-red-600 dark:text-red-400">
-                    {stats.disagree}
+                  <p className="text-3xl font-bold tabular-nums text-amber-600 dark:text-amber-400">
+                    {stats.rulesOnly}
                   </p>
+                  <p className="mt-1 text-xs text-muted-foreground">Not in GT suspicious set</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Agreement rate
+                    GT only
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-3xl font-bold tabular-nums text-sky-600 dark:text-sky-400">
+                    {stats.gtOnly}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">Rules did not flag</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Same violation type
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold tabular-nums">
-                    {stats.rate !== null ? `${stats.rate}%` : "—"}
+                    {stats.bothFlag > 0
+                      ? `${stats.typeMatchAmongBoth} / ${stats.bothFlag}`
+                      : "—"}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {stats.typeRate !== null
+                      ? `${stats.typeRate}% when both flagged`
+                      : "No both-flagged rows"}
                   </p>
                 </CardContent>
               </Card>
@@ -271,8 +361,10 @@ export default function ComparisonPage() {
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Agree vs disagree</CardTitle>
-                  <CardDescription>Share of rows where agreement is &quot;agree&quot;</CardDescription>
+                  <CardTitle className="text-base">Overlap breakdown</CardTitle>
+                  <CardDescription>
+                    How rule-based alerts line up with ground-truth suspicious trades
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="h-[280px] w-full pt-2">
                   <ResponsiveContainer width="100%" height="100%">
@@ -419,7 +511,8 @@ export default function ComparisonPage() {
                     { key: "gt_verdict", label: "GT verdict" },
                     { key: "violation_type_rules", label: "Violation (rules)" },
                     { key: "violation_type_gt", label: "Violation (GT)" },
-                    { key: "agreement", label: "Agreement" },
+                    { key: "type_match", label: "Type match" },
+                    { key: "agreement", label: "Category" },
                   ]}
                 />
               </TabsContent>
