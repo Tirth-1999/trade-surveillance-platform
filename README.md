@@ -118,6 +118,55 @@ flowchart TD
 | API | `uvicorn api.main:app --reload --port 8000` |
 | UI | `cd frontend && npm install && npm run dev` → [http://localhost:3000](http://localhost:3000) |
 
+Use **`python3`** or **`python`** depending on your environment. From the **repository root**:
+
+```bash
+python3 run.py              # print help (lists all subcommands)
+```
+
+---
+
+## CLI reference — all `run.py` commands
+
+| Command | What it does | Main output(s) under `outputs/` (unless noted) |
+|--------|----------------|--------------------------------------------------|
+| `p3` | P3 rule-based detectors on `student-pack` crypto data | `submission.csv` |
+| `p1` | P1 equity order-book + cancel-pattern alerts | `p1_alerts.csv` |
+| `p2` | P2 SEC 8-K + pre-event drift (needs network) | `p2_signals.csv` |
+| `all` | Runs **`p3` → `p1` → `p2`** in sequence | same as above |
+| `ground-truth` | AI / stub labels for every trade (LLM if `OPENROUTER_API_KEY` set) | `ground_truth.csv` |
+| `ground-truth --stub-only` | Fast vectorized stub only; no LLM | `ground_truth.csv` |
+| `compare` | Rules submission vs `ground_truth.csv` | `comparison_report.csv` |
+| `train-ml` | Train stage-1 + stage-2 ML, evaluate, write models | `submission_ml.csv`, `training_snapshot.csv`, `ml_evaluation_report.txt`, `reranker_report.txt`; **`artifacts/*.json`** (`.joblib` gitignored) |
+| `infer-ml` | Score with **saved** artifacts only (no training) | `submission_ml.csv` |
+| `reranker` | Alternate ML path (legacy single pipeline) | `submission_ml.csv`, `reranker_report.txt` |
+| `ml-baseline` | Summary of rules vs GT vs ML vs committee | `ml_baseline_report.txt` |
+| `tune` | Heuristic threshold suggestions from comparison / tuning inputs | `tuning_report.txt` |
+| `committee` | Fuse rules + `ground_truth` (suspicious) + `submission_ml` | `submission_committee.csv`, `committee_report.txt` |
+| `full-pipeline` | **`p3` → `p1` → `p2` → ground-truth → `compare` → `train-ml` → `ml-baseline` → `tune` → `committee` → score-proxy×2** | refreshes all of the above |
+| `full-pipeline --with-llm` | Same, but ground-truth uses LLM if API key present (slow) | same |
+| `full-pipeline --stub-only` | Force stub ground truth inside full-pipeline | same |
+| `score-proxy` | Dev metric: **5·TP − 2·FP** (+ optional type bonus) vs `ground_truth` suspicious | prints to stdout |
+| `score-proxy --submission PATH` | Custom submission CSV | |
+| `score-proxy --ground-truth PATH` | Custom GT CSV | |
+| `score-proxy --no-type-bonus` | Base score only | |
+| `score-proxy --json` | Machine-readable summary | |
+| `export-submission` | Copy pipeline output to **repo root** `submission.csv` **and** `submissions.csv` | root CSVs |
+| `export-submission --source rules` | Source: `outputs/submission.csv` (default) | |
+| `export-submission --source committee` | Source: `outputs/submission_committee.csv` | |
+| `export-submission --source ml` | Source: `outputs/submission_ml.csv` | |
+| `export-submission --also-p1` | Also copy `p1_alerts.csv` to repo root | |
+| `export-submission --also-p2` | Also copy `p2_signals.csv` to repo root | |
+
+**Typical dependency order for P3 extras:** `p3` → `ground-truth` → `compare` → `train-ml` → `committee` → `export-submission`.
+
+**Other scripts (not `run.py`):**
+
+| Command | Purpose |
+|--------|---------|
+| `python3 scripts/sync_frontend_data.py` | Refresh `frontend/public/data/*.json` from `outputs/` for the Next.js UI offline fallback |
+| `uvicorn api.main:app --reload --port 8000` | FastAPI backend (serves outputs, can trigger `run.py` routes) |
+
 ---
 
 ## Configuration
