@@ -55,15 +55,22 @@ flowchart TB
 
 ```mermaid
 flowchart TD
-  R[Rules P3] --> SUB[submission.csv]
-  SUB --> GT[AI ground truth]
+  DATA["student-pack/<br/>crypto-trades + crypto-market<br/>(8 symbols)"]
+  LOAD[crypto_load.py<br/>normalize → trades + bars]
+  DATA --> LOAD
+  LOAD --> R
+
+  R["Rule detectors (p3_crypto.py)<br/>wash · spoof · layer · pump<br/>ramp · AML · peg · bar · smurfing"]
+  R --> SUB[submission.csv]
+
+  SUB --> GT[AI ground truth agent]
   GT --> GTCSV[ground_truth.csv]
   SUB --> CMP[Compare]
   GTCSV --> CMP
   CMP --> CR[comparison_report.csv]
   CR --> ML[ML re-ranker]
   ML --> MLS[submission_ml.csv]
-  SUB --> COM[Committee]
+  SUB --> COM[Committee vote]
   GTCSV --> COM
   MLS --> COM
   COM --> FIN[submission_committee.csv]
@@ -86,7 +93,7 @@ flowchart TD
 | API | `uvicorn api.main:app --reload --port 8000` |
 | UI | `cd frontend && npm install && npm run dev` → [http://localhost:3000](http://localhost:3000) |
 
-**P2 empty UI?** Run `python3 run.py p2` with internet (SEC). **Outputs** are gitignored — regenerate after clone.
+**P2 empty UI?** Run `python3 run.py p2` with internet (SEC). Pre-built **outputs/** are committed; re-run pipelines to refresh.
 
 ---
 
