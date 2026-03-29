@@ -5,44 +5,44 @@ THREE-WAY COMMITTEE REPORT
 Input counts:
   Rules flags:  153
   AI suspicious: 312
-  ML flags:      170
+  ML flags:      14
 
 Zone breakdown:
-  All 3 agree:     29
-  Rules + AI:      9
-  Rules + ML:      38
-  AI + ML:         99
-  Rules only:      77  (kept 4, dropped 73)
-  AI only:         175  (kept 47, dropped 128)
-  ML only:         4  (kept 0, dropped 4)
+  All 3 agree:     0
+  Rules + AI:      38
+  Rules + ML:      0
+  AI + ML:         14
+  Rules only:      115  (kept 42, dropped 73)
+  AI only:         260  (kept 76, dropped 184)
+  ML only:         0  (kept 0, dropped 0)
 
 Tier summary:
-  Tier 1 (2+ agree):        175
-  Tier 2 rules-only kept:   4
-  Tier 2 AI-only kept:      47
+  Tier 1 (2+ agree):        52
+  Tier 2 rules-only kept:   42
+  Tier 2 AI-only kept:      76
   Tier 2 ML-only kept:      0
   ---
-  FINAL SUBMISSION TOTAL:   226
+  FINAL SUBMISSION TOTAL:   170
 
 Violation type distribution:
-  structuring                   : 70
-  spoofing                      : 46
-  ramping                       : 40
-  aml_structuring               : 32
-  wash_trading                  : 25
-  layering                      : 9
+  structuring                   : 42
+  spoofing                      : 42
+  ramping                       : 29
+  wash_trading                  : 26
+  aml_structuring               : 23
+  layering                      : 4
   peg_break                     : 2
   anomaly                       : 1
   peg_manipulation              : 1
 
 Per-symbol breakdown:
-  BATUSDT     : 11
-  BTCUSDT     : 83
+  BATUSDT     : 10
+  BTCUSDT     : 49
   DOGEUSDT    : 17
-  ETHUSDT     : 50
-  LTCUSDT     : 18
-  SOLUSDT     : 24
+  ETHUSDT     : 44
+  LTCUSDT     : 11
+  SOLUSDT     : 19
   USDCUSDT    : 3
-  XRPUSDT     : 20
+  XRPUSDT     : 17
 
 ======================================================================

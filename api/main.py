@@ -5,7 +5,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import outputs, reports, run, upload, status, decisions
+from api.routes import outputs, reports, run, upload, status, decisions, ml_health
 
 app = FastAPI(title="Trade Surveillance API", version="1.0.0")
 
@@ -23,6 +23,7 @@ app.include_router(run.router, prefix="/api")
 app.include_router(upload.router, prefix="/api")
 app.include_router(status.router, prefix="/api")
 app.include_router(decisions.router, prefix="/api")
+app.include_router(ml_health.router, prefix="/api")
 
 
 @app.get("/api/health")

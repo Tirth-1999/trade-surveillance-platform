@@ -66,7 +66,7 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     description:
       "Hand-crafted heuristics scan every trade for known manipulation patterns. Three problem tracks: P3 (crypto trade surveillance), P1 (equity order book anomalies), P2 (SEC 8-K pre-announcement drift). Rules are fast and fully interpretable.",
     inputs: ["Raw trade/market DataFrames", "config.yaml thresholds"],
-    outputs: ["submission.csv (153 flags)", "p1_alerts.csv", "p2_signals.csv"],
+    outputs: ["submission.csv (P3 flags)", "p1_alerts.csv", "p2_signals.csv"],
     tech: ["numpy", "pandas", "rolling z-scores", "merge_asof"],
     keyInsight: "Detects 8 violation types: wash trading, spoofing, layering, pump-and-dump, ramping, AML structuring, peg manipulation, bar-range anomalies.",
   },
@@ -79,7 +79,7 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     inputs: ["Raw trade data", "OpenRouter API key", "Bar context per trade"],
     outputs: ["ground_truth.csv (312 suspicious out of 19,256)"],
     tech: ["OpenRouter API", "nvidia/nemotron", "ThreadPoolExecutor", "retry logic"],
-    keyInsight: "The AI catches structuring (78) and ramping (32) that rules miss entirely — these are genuine detections from a different analytical perspective.",
+    keyInsight: "The AI often catches structuring and ramping patterns that rules miss — complementary perspective vs fixed thresholds.",
   },
   compare: {
     title: "Comparison Engine",
@@ -92,16 +92,27 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     tech: ["pandas merge", "set operations"],
     keyInsight: "Agreement rate reveals which rule detectors are accurate (wash trade rules agree ~80% with AI) vs noisy (pump-and-dump rules disagree ~90%).",
   },
-  ml: {
-    title: "ML Re-Ranker",
+  ml1: {
+    title: "ML Stage 1 — Binary triage",
     icon: <Cpu className="h-5 w-5" />,
     color: "bg-rose-500/15 text-rose-700 dark:text-rose-300",
     description:
-      "A Gradient Boosting classifier trained on comparison data. Features include rule confidence signals, AI confidence, trade characteristics (volume deviation, price swings, time patterns). Outputs calibrated probability scores for each flagged trade.",
-    inputs: ["comparison_report.csv", "Trade features"],
-    outputs: ["submission_ml.csv (170 flags)", "reranker_report.txt (metrics)"],
-    tech: ["scikit-learn", "GradientBoostingClassifier", "precision/recall/F1/AUC"],
-    keyInsight: "The ML model learns *which patterns of rule+AI disagreement* predict true positives — it's a meta-learner over the other two approaches.",
+      "HistGradientBoosting + probability calibration (isotonic/sigmoid). Trained on weak labels from rules vs AI agreement (labels.py) with sample weights. Produces p_suspicious for every trade and a tuned threshold; artifacts saved under artifacts/stage1_*.joblib + stage1_meta.json.",
+    inputs: ["comparison_report.csv", "ground_truth.csv", "Engineered trade+bar features (ml_features.py)"],
+    outputs: ["artifacts/stage1_*.joblib", "stage1_meta.json", "training_snapshot.csv"],
+    tech: ["scikit-learn", "HistGradientBoostingClassifier", "CalibratedClassifierCV", "StandardScaler"],
+    keyInsight: "CLI: python run.py train-ml or infer-ml. Threshold is chosen on a time-based holdout to balance precision vs recall.",
+  },
+  ml2: {
+    title: "ML Stage 2 — Violation type",
+    icon: <Cpu className="h-5 w-5" />,
+    color: "bg-pink-500/15 text-pink-700 dark:text-pink-300",
+    description:
+      "Second classifier on high-confidence positive rows predicts violation_type (multiclass). Low confidence falls back to anomaly / GT lookup. Writes stage2 artifacts when enough class support exists; otherwise skipped with meta only.",
+    inputs: ["Stage-1 scored frame", "label_violation_type from weak labels"],
+    outputs: ["artifacts/stage2_*.joblib", "submission_ml.csv (with ml_p_suspicious, ml_stage2_confidence)"],
+    tech: ["HistGradientBoostingClassifier", "LabelEncoder", "Per-class min count → other bucket"],
+    keyInsight: "Committee can prefer ML type when ml_stage2_confidence ≥ config threshold (committee.use_staged_ml_types).",
   },
   committee: {
     title: "Committee Fusion",
@@ -110,9 +121,9 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     description:
       "Three-way voting system combining Rules, AI, and ML. Tier 1 (2+ sources agree) is auto-included. Tier 2 (single source) is selectively triaged: AI-only flags kept if confidence ≥ threshold, most rule-only flags dropped (noisy heuristics), ML-only flags dropped (insufficient corroboration).",
     inputs: ["submission.csv", "ground_truth.csv", "submission_ml.csv"],
-    outputs: ["submission_committee.csv (~226 flags)", "committee_report.txt"],
+    outputs: ["submission_committee.csv", "committee_report.txt"],
     tech: ["set intersection/difference", "confidence thresholds per violation type"],
-    keyInsight: "7 zones: All-3 (29), Rules+AI (9), Rules+ML (38), AI+ML (99), Rules-only (4 kept/73 dropped), AI-only (47 kept/128 dropped), ML-only (0 kept/4 dropped).",
+    keyInsight: "Tier 1 = two or more of {rules, AI, ML} agree; Tier 2 triages single-source rows using confidence and violation-type rules. Zone counts vary per run.",
   },
   tuning: {
     title: "Parameter Tuning",
@@ -132,7 +143,7 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     description:
       "All pipeline stages write their results to the outputs/ directory. CSV files contain the flagged trades with violation types and remarks. Text reports contain human-readable summaries of metrics and recommendations.",
     inputs: ["All pipeline stages"],
-    outputs: ["submission.csv", "submission_committee.csv", "submission_ml.csv", "ground_truth.csv", "comparison_report.csv", "*.txt reports"],
+    outputs: ["submission*.csv", "ground_truth.csv", "comparison_report.csv", "training_snapshot.csv", "ml_baseline_report.txt", "ml_evaluation_report.txt", "*.txt reports"],
     tech: ["CSV format", "JSONL for audit log"],
     keyInsight: "The committee submission is the final, highest-confidence output — it represents the combined intelligence of rules, AI, and ML.",
   },
@@ -142,10 +153,10 @@ const STEP_DETAILS: Record<string, StepDetail> = {
     color: "bg-orange-500/15 text-orange-700 dark:text-orange-300",
     description:
       "Next.js + shadcn/ui frontend with FastAPI backend. Seven analytical pages plus this workflow view. Analysts can browse flagged trades, drill into committee zones, compare approaches, trigger pipeline runs, upload new data, and record HITL decisions.",
-    inputs: ["FastAPI endpoints", "outputs/*.csv", "outputs/*.txt"],
+    inputs: ["FastAPI endpoints", "outputs/*.csv", "outputs/*.txt", "/api/ml/health"],
     outputs: ["Interactive visualizations", "HITL decisions (feedback/decisions.jsonl)"],
     tech: ["Next.js 16", "React 19", "shadcn/ui", "Recharts", "React Flow", "FastAPI"],
-    keyInsight: "The Pipeline Control page lets you re-run any step from the browser and see fresh results immediately.",
+    keyInsight: "After train-ml, run python3 scripts/sync_frontend_data.py so static fallback JSON (including ml_health) matches your latest run — or use the API on localhost:8000.",
   },
 };
 
@@ -194,19 +205,20 @@ const nodeTypes: NodeTypes = {
 const initialNodes: Node[] = [
   { id: "input", type: "pipeline", position: { x: 400, y: 0 }, data: { label: "Input Data", nodeId: "input", tier: "input", emoji: "📊" } },
 
-  { id: "rules", type: "pipeline", position: { x: 150, y: 140 }, data: { label: "Rule-Based\nDetectors", nodeId: "rules", tier: "detection", emoji: "🔍" } },
-  { id: "ai", type: "pipeline", position: { x: 650, y: 140 }, data: { label: "AI Ground\nTruth (LLM)", nodeId: "ai", tier: "ai", emoji: "🧠" } },
+  { id: "rules", type: "pipeline", position: { x: 120, y: 130 }, data: { label: "Rule-Based\nDetectors", nodeId: "rules", tier: "detection", emoji: "🔍" } },
+  { id: "ai", type: "pipeline", position: { x: 680, y: 130 }, data: { label: "AI Ground\nTruth (LLM)", nodeId: "ai", tier: "ai", emoji: "🧠" } },
 
-  { id: "compare", type: "pipeline", position: { x: 400, y: 290 }, data: { label: "Comparison\nEngine", nodeId: "compare", tier: "analysis", emoji: "⚖️" } },
+  { id: "compare", type: "pipeline", position: { x: 400, y: 270 }, data: { label: "Comparison\nEngine", nodeId: "compare", tier: "analysis", emoji: "⚖️" } },
 
-  { id: "ml", type: "pipeline", position: { x: 150, y: 440 }, data: { label: "ML Re-Ranker", nodeId: "ml", tier: "ml", emoji: "🤖" } },
-  { id: "tuning", type: "pipeline", position: { x: 650, y: 440 }, data: { label: "Parameter\nTuning", nodeId: "tuning", tier: "tuning", emoji: "🎛️" } },
+  { id: "ml1", type: "pipeline", position: { x: 220, y: 400 }, data: { label: "ML Stage 1\n(Binary triage)", nodeId: "ml1", tier: "ml", emoji: "🤖" } },
+  { id: "ml2", type: "pipeline", position: { x: 400, y: 400 }, data: { label: "ML Stage 2\n(Violation type)", nodeId: "ml2", tier: "ml", emoji: "🎯" } },
+  { id: "tuning", type: "pipeline", position: { x: 680, y: 400 }, data: { label: "Parameter\nTuning", nodeId: "tuning", tier: "tuning", emoji: "🎛️" } },
 
-  { id: "committee", type: "pipeline", position: { x: 400, y: 580 }, data: { label: "Committee\nFusion", nodeId: "committee", tier: "fusion", emoji: "🗳️" } },
+  { id: "committee", type: "pipeline", position: { x: 400, y: 560 }, data: { label: "Committee\nFusion", nodeId: "committee", tier: "fusion", emoji: "🗳️" } },
 
-  { id: "outputs", type: "pipeline", position: { x: 400, y: 720 }, data: { label: "Output\nArtifacts", nodeId: "outputs", tier: "output", emoji: "📁" } },
+  { id: "outputs", type: "pipeline", position: { x: 400, y: 700 }, data: { label: "Output\nArtifacts", nodeId: "outputs", tier: "output", emoji: "📁" } },
 
-  { id: "dashboard", type: "pipeline", position: { x: 400, y: 860 }, data: { label: "Dashboard", nodeId: "dashboard", tier: "ui", emoji: "🖥️" } },
+  { id: "dashboard", type: "pipeline", position: { x: 400, y: 840 }, data: { label: "Dashboard", nodeId: "dashboard", tier: "ui", emoji: "🖥️" } },
 ];
 
 const edgeDefaults = {
@@ -218,15 +230,17 @@ const edgeDefaults = {
 const initialEdges: Edge[] = [
   { id: "e-input-rules", source: "input", target: "rules", label: "trades + bars", ...edgeDefaults },
   { id: "e-input-ai", source: "input", target: "ai", label: "trades + context", ...edgeDefaults },
+  { id: "e-input-ml1", source: "input", target: "ml1", label: "features", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "5 3" } },
   { id: "e-rules-compare", source: "rules", target: "compare", label: "rule flags", ...edgeDefaults },
   { id: "e-ai-compare", source: "ai", target: "compare", label: "AI verdicts", ...edgeDefaults },
-  { id: "e-compare-ml", source: "compare", target: "ml", label: "labeled data", ...edgeDefaults },
+  { id: "e-compare-ml1", source: "compare", target: "ml1", label: "weak labels", ...edgeDefaults },
+  { id: "e-ml1-ml2", source: "ml1", target: "ml2", label: "p_suspicious", ...edgeDefaults },
   { id: "e-compare-tuning", source: "compare", target: "tuning", label: "agreement stats", ...edgeDefaults },
   { id: "e-rules-committee", source: "rules", target: "committee", label: "rule flags", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "6 3" } },
   { id: "e-ai-committee", source: "ai", target: "committee", label: "AI flags", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "6 3" } },
-  { id: "e-ml-committee", source: "ml", target: "committee", label: "ML scores", ...edgeDefaults },
+  { id: "e-ml2-committee", source: "ml2", target: "committee", label: "submission_ml", ...edgeDefaults },
   { id: "e-committee-outputs", source: "committee", target: "outputs", label: "final flags", ...edgeDefaults },
-  { id: "e-outputs-dashboard", source: "outputs", target: "dashboard", label: "CSV / JSON", ...edgeDefaults },
+  { id: "e-outputs-dashboard", source: "outputs", target: "dashboard", label: "CSV / JSON / ml/health", ...edgeDefaults },
   { id: "e-tuning-rules", source: "tuning", target: "rules", label: "threshold updates", ...edgeDefaults, style: { strokeWidth: 1.5, strokeDasharray: "4 4" }, animated: true },
 ];
 

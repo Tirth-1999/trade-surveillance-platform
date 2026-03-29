@@ -68,3 +68,25 @@ committee:
   ai_only_conf_layering: 0.90
   rules_only_keep_uncertain: true
   ml_only_include: false
+  use_staged_ml_types: true
+
+# Staged ML (see bits_hackathon/pipeline/ml_stage1.py, ml_stage2.py)
+ml:
+  labels:
+    high_conf_positive: 0.7
+    high_conf_negative: 0.3
+    drop_uncertain_training: false
+  stage1:
+    train_fraction_by_date: 0.8
+    calibration_method: isotonic
+    max_depth: 6
+    learning_rate: 0.08
+    max_iter: 400
+    min_samples_leaf: 40
+  stage2:
+    min_class_count: 8
+    min_confidence: 0.35
+    min_label_weight: 0.4
+  eval:
+    min_precision_improvement: 0.0
+    max_recall_regression: 0.05

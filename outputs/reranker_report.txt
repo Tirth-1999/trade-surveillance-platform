@@ -1,32 +1,22 @@
 ============================================================
-ML RE-RANKER REPORT
+STAGE-1 ML REPORT (binary triage)
 ============================================================
+Calibration: isotonic
+Train / test rows: 15865 / 3389
+Best threshold: 0.690
+Test Brier: 0.0097  PR-AUC: 0.5667
+Test precision / recall / F1: 1.0000 / 0.0400 / 0.0769
+Precision: 1.0000
+Recall:    0.0400
+F1:        0.0769
+AUC:       0.9888
+ML-flagged (all data): 14 / 19254
+Artifacts: /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage1_model.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage1_scaler.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage1_meta.json
 
-Model: GradientBoostingClassifier (200 trees, depth=4)
-Train size: 16146, Test size: 3108
-Positive labels: 338 / 19254
-Best threshold: 0.88
-
-Test metrics:
-  Precision: 0.5000
-  Recall:    0.0698
-  F1:        0.1224
-  AUC:       0.9802
-
-Feature importances:
-  notional_zscore               : 0.2770
-  price_vs_mid_bps              : 0.1351
-  notional_vs_threshold         : 0.1120
-  bar_volume_ratio              : 0.0858
-  time_gap_same_wallet          : 0.0822
-  bar_tradecount                : 0.0784
-  price_vs_peg_bps              : 0.0691
-  wallet_total_notional         : 0.0603
-  minute_peer_notional          : 0.0412
-  wallet_trade_count            : 0.0309
-  hour_of_day                   : 0.0258
-  minute_peer_count             : 0.0021
-  is_stablecoin                 : 0.0000
-
-ML-flagged trades: 170
-Total trades:      19254
+============================================================
+STAGE-2 ML REPORT (violation type)
+============================================================
+Classes (7): ['aml_structuring', 'layering', 'other', 'ramping', 'spoofing', 'structuring', 'wash_trading']...
+Train / test: 288 / 50
+Test macro-F1: 0.2973  log-loss: 4.8839
+Artifacts: /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage2_model.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage2_encoder.joblib, /Users/tirthcshah/Desktop/Tirth Shah/Projects/BITS Hackathon/artifacts/stage2_scaler.joblib

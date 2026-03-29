@@ -7,7 +7,10 @@ Usage:
     python run.py p3              # Problem 3: crypto trade surveillance
     python run.py ground-truth    # AI ground-truth agent
     python run.py compare         # Compare rules vs ground truth
-    python run.py reranker        # ML re-ranker pipeline
+    python run.py reranker        # ML staged pipeline (train + score + submission_ml)
+    python run.py ml-baseline     # Write baseline metrics report
+    python run.py train-ml        # Train stage-1/2, evaluate, write artifacts + submission_ml
+    python run.py infer-ml        # Score with saved artifacts only
     python run.py tune            # Parameter tuning recommendations
     python run.py committee       # Three-way committee fusion
     python run.py all             # Run p3 → p1 → p2 sequentially
@@ -84,6 +87,68 @@ def cmd_compare() -> None:
     print_summary(comp)
 
 
+def cmd_ml_baseline() -> None:
+    from bits_hackathon.core.paths import OUTPUTS_DIR
+    from bits_hackathon.pipeline.baseline_audit import write_baseline_report
+
+    path = write_baseline_report()
+    print(path.read_text())
+    print(f"\nWrote {path}")
+
+
+def cmd_train_ml() -> None:
+    from bits_hackathon.core.crypto_load import load_all_markets, load_all_trades
+    from bits_hackathon.core.paths import ARTIFACTS_DIR, OUTPUTS_DIR
+    from bits_hackathon.pipeline.baseline_audit import write_baseline_report
+    from bits_hackathon.pipeline.evaluate_ml import run_full_evaluation, write_evaluation_report
+    from bits_hackathon.pipeline.ml_stage1 import _artifact_paths
+    from bits_hackathon.pipeline.ml_stage1 import train_stage1
+    from bits_hackathon.pipeline.ml_stage2 import build_ml_submission_staged, infer_stage2, train_stage2
+    from bits_hackathon.pipeline.ml_stage1 import infer_stage1
+
+    write_baseline_report()
+    _, _, jpath = _artifact_paths()
+    prev = ARTIFACTS_DIR / "stage1_meta_previous.json"
+    if jpath.exists():
+        prev.write_text(jpath.read_text())
+
+    t0 = time.perf_counter()
+    trades = load_all_trades()
+    markets = load_all_markets()
+    print(f"Loaded {len(trades)} trades, {len(markets)} bars")
+
+    merged, meta1, r1 = train_stage1(trades, markets)
+    _meta2, r2 = train_stage2(merged)
+    eval_text, promote = run_full_evaluation(meta1)
+    write_evaluation_report(eval_text)
+    print(eval_text)
+
+    merged_scored, _ = infer_stage1(trades, markets)
+    merged_scored = infer_stage2(merged_scored)
+    ml_sub = build_ml_submission_staged(merged_scored)
+    ml_sub.to_csv(OUTPUTS_DIR / "submission_ml.csv", index=False)
+    (OUTPUTS_DIR / "reranker_report.txt").write_text(r1 + "\n\n" + r2 + "\n\n" + eval_text)
+    print(f"\nWrote {OUTPUTS_DIR / 'submission_ml.csv'} ({len(ml_sub)} rows)")
+    print(f"Promotion: {promote}")
+    print(f"Done in {time.perf_counter() - t0:.1f}s")
+
+
+def cmd_infer_ml() -> None:
+    from bits_hackathon.core.crypto_load import load_all_markets, load_all_trades
+    from bits_hackathon.core.paths import OUTPUTS_DIR
+    from bits_hackathon.pipeline.ml_stage1 import infer_stage1
+    from bits_hackathon.pipeline.ml_stage2 import build_ml_submission_staged, infer_stage2
+
+    t0 = time.perf_counter()
+    trades = load_all_trades()
+    markets = load_all_markets()
+    merged, _ = infer_stage1(trades, markets)
+    merged = infer_stage2(merged)
+    ml_sub = build_ml_submission_staged(merged)
+    ml_sub.to_csv(OUTPUTS_DIR / "submission_ml.csv", index=False)
+    print(f"Wrote {len(ml_sub)} rows to submission_ml.csv in {time.perf_counter() - t0:.1f}s")
+
+
 def cmd_reranker() -> None:
     from bits_hackathon.core.crypto_load import load_all_markets, load_all_trades
     from bits_hackathon.core.paths import OUTPUTS_DIR
@@ -156,6 +221,9 @@ def main() -> None:
     sub.add_parser("ground-truth", help="AI ground-truth agent")
     sub.add_parser("compare", help="Compare rules vs ground truth")
     sub.add_parser("reranker", help="ML re-ranker pipeline")
+    sub.add_parser("ml-baseline", help="Write ml_baseline_report.txt from current outputs")
+    sub.add_parser("train-ml", help="Train stage-1/2 ML and write artifacts + submission_ml")
+    sub.add_parser("infer-ml", help="Infer submission_ml using saved artifacts")
     sub.add_parser("tune", help="Parameter tuning recommendations")
     sub.add_parser("committee", help="Three-way committee fusion submission")
     sub.add_parser("all", help="Run p3 → p1 → p2 sequentially")
@@ -169,6 +237,9 @@ def main() -> None:
         "ground-truth": cmd_ground_truth,
         "compare": cmd_compare,
         "reranker": cmd_reranker,
+        "ml-baseline": cmd_ml_baseline,
+        "train-ml": cmd_train_ml,
+        "infer-ml": cmd_infer_ml,
         "tune": cmd_tune,
         "committee": cmd_committee,
         "all": cmd_all,

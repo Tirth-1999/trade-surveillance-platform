@@ -39,6 +39,15 @@ type ZoneCard = {
   detail?: string;
 };
 
+type MlHealth = {
+  artifacts_dir?: string;
+  stage1?: Record<string, unknown> | null;
+  stage2?: Record<string, unknown> | null;
+  stage1_previous?: Record<string, unknown> | null;
+  evaluation_report_preview?: string | null;
+  artifacts_present?: { stage1?: boolean; stage2?: boolean };
+};
+
 const TIER1_NAMES = new Set([
   "All 3 agree",
   "Rules + AI",
@@ -158,22 +167,25 @@ export default function CommitteePage() {
   const [submission, setSubmission] = useState<CommitteeRow[] | null>(null);
   const [reranker, setReranker] = useState<CommitteeReport | null>(null);
   const [tuning, setTuning] = useState<CommitteeReport | null>(null);
+  const [mlHealth, setMlHealth] = useState<MlHealth | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const [c, s, r, t] = await Promise.all([
+      const [c, s, r, t, h] = await Promise.all([
         tryFetchJSON<CommitteeReport>("/api/reports/committee_report"),
         tryFetchJSON<CommitteeRow[]>("/api/outputs/submission_committee"),
         tryFetchJSON<CommitteeReport>("/api/reports/reranker_report"),
         tryFetchJSON<CommitteeReport>("/api/reports/tuning_report"),
+        tryFetchJSON<MlHealth>("/api/ml/health"),
       ]);
       if (cancelled) return;
       setCommittee(c);
       setSubmission(s);
       setReranker(r);
       setTuning(t);
+      setMlHealth(h);
       setLoading(false);
     })();
     return () => {
@@ -387,9 +399,68 @@ export default function CommitteePage() {
         </TabsContent>
 
         <TabsContent value="ml" className="space-y-4 pt-4">
+          {mlHealth?.stage1 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Model health (staged ML)</CardTitle>
+                <CardDescription>
+                  From saved artifacts — run{" "}
+                  <code className="rounded bg-muted px-1 text-xs">
+                    python run.py train-ml
+                  </code>{" "}
+                  locally to refresh.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm">
+                <p className="text-muted-foreground">
+                  <span className="font-medium text-foreground">Stage-1</span>{" "}
+                  threshold{" "}
+                  <span className="font-mono tabular-nums">
+                    {String(mlHealth.stage1.threshold ?? "—")}
+                  </span>
+                  , PR-AUC (test){" "}
+                  <span className="font-mono tabular-nums">
+                    {Number(mlHealth.stage1.pr_auc_test ?? 0).toFixed(4)}
+                  </span>
+                  , trained{" "}
+                  <span className="font-mono text-xs">
+                    {String(mlHealth.stage1.trained_at ?? "—")}
+                  </span>
+                </p>
+                {mlHealth.stage2 && !mlHealth.stage2.skipped ? (
+                  <p className="text-muted-foreground">
+                    <span className="font-medium text-foreground">Stage-2</span>{" "}
+                    macro-F1 (test){" "}
+                    <span className="font-mono tabular-nums">
+                      {Number(mlHealth.stage2.test_macro_f1 ?? 0).toFixed(4)}
+                    </span>
+                    , classes:{" "}
+                    <span className="text-xs">
+                      {Array.isArray(mlHealth.stage2.classes)
+                        ? (mlHealth.stage2.classes as string[]).slice(0, 6).join(", ")
+                        : "—"}
+                      …
+                    </span>
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Stage-2 not trained or skipped (insufficient class data).
+                  </p>
+                )}
+                {mlHealth.artifacts_present && (
+                  <p className="text-xs text-muted-foreground">
+                    Artifacts: stage1={String(mlHealth.artifacts_present.stage1)}, stage2=
+                    {String(mlHealth.artifacts_present.stage2)}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          )}
           {!reranker?.text ? (
             <p className="rounded-md border border-dashed bg-muted/30 px-4 py-6 text-center text-sm text-muted-foreground">
-              Re-ranker report not found. Run pipeline first.
+              Re-ranker report not found. Run{" "}
+              <code className="rounded bg-muted px-1 text-xs">python run.py reranker</code>{" "}
+              or <code className="rounded bg-muted px-1 text-xs">train-ml</code>.
             </p>
           ) : (
             <>

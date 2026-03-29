@@ -90,6 +90,10 @@ flowchart TD
 | Secrets | Create `.env` with `OPENROUTER_API_KEY=...` (optional for rules-only) |
 | Data | `student-pack/` with `crypto-*`, `equity/*` (see repo) |
 | Run all | `python3 run.py all` |
+| ML baseline | `python3 run.py ml-baseline` → `outputs/ml_baseline_report.txt` |
+| Train staged ML | `python3 run.py train-ml` → `artifacts/*.joblib`, `outputs/submission_ml.csv` |
+| Infer ML only | `python3 run.py infer-ml` (requires trained artifacts) |
+| Refresh dashboard static JSON | `python3 scripts/sync_frontend_data.py` (after train-ml / committee; updates `frontend/public/data/` including `ml_health.json`) |
 | API | `uvicorn api.main:app --reload --port 8000` |
 | UI | `cd frontend && npm install && npm run dev` → [http://localhost:3000](http://localhost:3000) |
 
@@ -115,7 +119,8 @@ Theme: **Light / Dark / System** (sidebar footer). Optional: `NEXT_PUBLIC_API_UR
 ## Repo layout (short)
 
 ```
-bits_hackathon/   # core, detectors (p1, p2, p3), pipeline (gt, compare, reranker, committee, tune)
+bits_hackathon/   # core, detectors (p1, p2, p3), pipeline (ml_stage1/2, labels, evaluate, committee, …)
+artifacts/        # trained .joblib models (gitignored); keep `.gitkeep`
 api/              # FastAPI routes
 frontend/         # Next.js 16 App Router
 run.py            # CLI: p1 p2 p3 ground-truth compare reranker committee tune all

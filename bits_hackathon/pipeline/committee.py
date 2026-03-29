@@ -31,9 +31,24 @@ _RULES_ONLY_DROP = {"pump_and_dump", "round_trip_wash", "chain_layering"}
 
 
 def _pick_violation_type(
-    rule_vtype: str, ai_vtype: str, ml_vtype: str,
+    rule_vtype: str,
+    ai_vtype: str,
+    ml_vtype: str,
+    *,
+    ml_stage2_conf: float | None = None,
 ) -> str:
-    """Pick the best violation_type — prefer AI, then Rules, then ML."""
+    """Pick violation_type; optionally prefer staged ML type when type confidence is high."""
+    use_ml_first = bool(cfg("committee.use_staged_ml_types"))
+    min_t = float(cfg("ml.stage2.min_confidence"))
+    if (
+        use_ml_first
+        and ml_stage2_conf is not None
+        and not pd.isna(ml_stage2_conf)
+        and float(ml_stage2_conf) >= min_t
+    ):
+        for v in (ml_vtype, ai_vtype, rule_vtype):
+            if pd.notna(v) and v and v != "anomaly":
+                return v
     for v in (ai_vtype, rule_vtype, ml_vtype):
         if pd.notna(v) and v and v != "anomaly":
             return v
@@ -52,7 +67,19 @@ def _build_remark(zone: str, sources: dict[str, dict]) -> str:
         conf = sources["ai"].get("confidence", "?")
         parts.append(f"AI: {sources['ai'].get('violation_type', '?')} (conf={conf})")
     if "ml" in sources:
-        parts.append(f"ML: {sources['ml'].get('violation_type', '?')}")
+        ml = sources["ml"]
+        suf = ""
+        try:
+            if pd.notna(ml.get("ml_p_suspicious")):
+                suf += f" p={float(ml['ml_p_suspicious']):.3f}"
+        except (TypeError, ValueError):
+            pass
+        try:
+            if pd.notna(ml.get("ml_stage2_confidence")):
+                suf += f" type_conf={float(ml['ml_stage2_confidence']):.2f}"
+        except (TypeError, ValueError):
+            pass
+        parts.append(f"ML: {ml.get('violation_type', '?')}{suf}")
     remark = sources.get("ai", {}).get("remark_draft", "")
     if not remark:
         remark = sources.get("rules", {}).get("remarks", "")
@@ -74,6 +101,9 @@ def build_committee_submission(
     rules = pd.read_csv(rules_path or str(OUTPUTS_DIR / "submission.csv"))
     gt = pd.read_csv(gt_path or str(OUTPUTS_DIR / "ground_truth.csv"))
     ml = pd.read_csv(ml_path or str(OUTPUTS_DIR / "submission_ml.csv"))
+
+    for _df in (rules, gt, ml):
+        _df["trade_id"] = _df["trade_id"].astype(str)
 
     gt["confidence"] = pd.to_numeric(gt["confidence"], errors="coerce").fillna(0.0)
 
@@ -178,8 +208,14 @@ def build_committee_submission(
 
         r_vtype = sources.get("rules", {}).get("violation_type", "")
         a_vtype = sources.get("ai", {}).get("violation_type", "")
-        m_vtype = sources.get("ml", {}).get("violation_type", "")
-        vtype = _pick_violation_type(r_vtype, a_vtype, m_vtype)
+        ml_row = sources.get("ml", {})
+        m_vtype = ml_row.get("violation_type", "")
+        s2c = ml_row.get("ml_stage2_confidence")
+        try:
+            s2c_f = float(s2c) if pd.notna(s2c) else None
+        except (TypeError, ValueError):
+            s2c_f = None
+        vtype = _pick_violation_type(r_vtype, a_vtype, m_vtype, ml_stage2_conf=s2c_f)
 
         symbol = (
             sources.get("rules", {}).get("symbol")

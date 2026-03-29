@@ -33,6 +33,7 @@ feedback/*.jsonl
 
 # Model artifacts
 *.pkl
+artifacts/*.joblib
 
 # Outputs — tracked so Vercel static fallback has data
 # outputs/

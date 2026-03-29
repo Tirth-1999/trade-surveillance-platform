@@ -1,0 +1,17 @@
+============================================================
+ML EVALUATION / PROMOTION GATE
+============================================================
+
+New stage-1 test metrics:
+  test_precision: 1.0000
+  test_recall: 0.0400
+  test_f1: 0.0769
+  pr_auc_test: 0.5667
+  brier_test: 0.0097
+
+vs prior snapshot:
+  precision 1.0000 -> 1.0000
+  recall    0.0400 -> 0.0400
+
+Promotion decision: YES
+============================================================

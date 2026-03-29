@@ -13,6 +13,7 @@ const STATIC_MAP: Record<string, string> = {
   "/api/reports/tuning_report": "/data/tuning_report.json",
   "/api/status": "/data/status.json",
   "/api/decisions": "/data/decisions.json",
+  "/api/ml/health": "/data/ml_health.json",
 };
 
 function staticPath(apiPath: string): string | null {
