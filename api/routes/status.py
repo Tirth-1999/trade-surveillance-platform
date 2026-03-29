@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import os
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -16,6 +16,8 @@ EXPECTED_FILES = [
     "submission.csv",
     "submission_committee.csv",
     "submission_ml.csv",
+    "submission_with_trades.json",
+    "submission_committee_with_trades.json",
     "ground_truth.csv",
     "comparison_report.csv",
     "p1_alerts.csv",
@@ -37,6 +39,12 @@ def get_status():
             if name.endswith(".csv"):
                 with open(path) as f:
                     row_count = sum(1 for _ in f) - 1
+            elif name.endswith(".json"):
+                try:
+                    data = json.loads(path.read_text(encoding="utf-8"))
+                    row_count = len(data) if isinstance(data, list) else None
+                except (json.JSONDecodeError, OSError):
+                    row_count = None
             files.append({
                 "name": name,
                 "exists": True,

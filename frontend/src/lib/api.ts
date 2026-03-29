@@ -3,6 +3,9 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 const STATIC_MAP: Record<string, string> = {
   "/api/outputs/submission": "/data/submission.json",
   "/api/outputs/submission_committee": "/data/submission_committee.json",
+  "/api/outputs/submission_with_trades": "/data/submission_with_trades.json",
+  "/api/outputs/submission_committee_with_trades":
+    "/data/submission_committee_with_trades.json",
   "/api/outputs/submission_ml": "/data/submission_ml.json",
   "/api/outputs/ground_truth": "/data/ground_truth.json",
   "/api/outputs/comparison_report": "/data/comparison_report.json",

@@ -18,14 +18,28 @@ if str(ROOT) not in sys.path:
 import pandas as pd
 
 from bits_hackathon.core.paths import ARTIFACTS_DIR, OUTPUTS_DIR
+from bits_hackathon.pipeline.ui_submission_enrichment import write_submission_with_trades_json
 
 PUB = ROOT / "frontend" / "public" / "data"
 PUB.mkdir(parents=True, exist_ok=True)
+
+UI_JSON = [
+    "submission_with_trades.json",
+    "submission_committee_with_trades.json",
+]
 
 
 def main() -> None:
     out = OUTPUTS_DIR
     pub = PUB
+
+    print("  (enriching submissions with trade tape for UI)")
+    try:
+        counts = write_submission_with_trades_json(out)
+        for jname, n in counts.items():
+            print(f"  {jname} ({n} rows)")
+    except Exception as e:
+        print(f"  warning: submission UI enrichment skipped: {e}", file=sys.stderr)
 
     csv_map = {
         "submission": "submission.csv",
@@ -54,10 +68,16 @@ def main() -> None:
             (pub / f"{key}.json").write_text(json.dumps({"text": p.read_text()}))
             print(f"  {key}.json")
 
+    for jname in UI_JSON:
+        p = out / jname
+        if p.exists():
+            (pub / jname).write_text(p.read_text(encoding="utf-8"))
+            print(f"  {jname} (copied)")
+
     # status.json
     import datetime
 
-    expected = list(csv_map.values()) + list(txt_map.values())
+    expected = list(csv_map.values()) + list(txt_map.values()) + UI_JSON
     status = []
     for name in expected:
         p = out / name

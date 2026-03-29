@@ -32,6 +32,14 @@ export type TradeRow = {
   trade_id: string;
   violation_type: string;
   remarks: string;
+  wallet_id?: string;
+  trader_id?: string;
+  timestamp?: string;
+  side?: string;
+  order_type?: string;
+  price?: string;
+  quantity?: string;
+  notional_usdt?: string;
 };
 
 const BAR_COLORS = [
@@ -45,6 +53,13 @@ const BAR_COLORS = [
   "#f97316",
 ];
 
+function str(o: Record<string, unknown>, k: string): string | undefined {
+  if (!(k in o)) return undefined;
+  const v = o[k];
+  if (v === null || v === undefined || v === "") return undefined;
+  return String(v);
+}
+
 function normalizeRows(raw: unknown): TradeRow[] {
   if (!Array.isArray(raw)) return [];
   return raw.map((r) => {
@@ -55,6 +70,14 @@ function normalizeRows(raw: unknown): TradeRow[] {
       trade_id: String(o.trade_id ?? ""),
       violation_type: String(o.violation_type ?? ""),
       remarks: String(o.remarks ?? ""),
+      wallet_id: str(o, "wallet_id"),
+      trader_id: str(o, "trader_id"),
+      timestamp: str(o, "timestamp"),
+      side: str(o, "side"),
+      order_type: str(o, "order_type"),
+      price: str(o, "price"),
+      quantity: str(o, "quantity"),
+      notional_usdt: str(o, "notional_usdt"),
     };
   });
 }
@@ -104,6 +127,78 @@ function downloadCsv(rows: TradeRow[], filenameSuffix: string) {
   URL.revokeObjectURL(url);
 }
 
+const DETAIL_HEADERS = [
+  "symbol",
+  "date",
+  "trade_id",
+  "violation_type",
+  "remarks",
+  "wallet_id",
+  "trader_id",
+  "timestamp",
+  "side",
+  "order_type",
+  "price",
+  "quantity",
+  "notional_usdt",
+] as const;
+
+type DetailHeader = (typeof DETAIL_HEADERS)[number];
+
+function detailValues(r: TradeRow): Record<DetailHeader, string> {
+  return {
+    symbol: r.symbol,
+    date: r.date,
+    trade_id: r.trade_id,
+    violation_type: r.violation_type,
+    remarks: r.remarks,
+    wallet_id: r.wallet_id ?? "",
+    trader_id: r.trader_id ?? "",
+    timestamp: r.timestamp ?? "",
+    side: r.side ?? "",
+    order_type: r.order_type ?? "",
+    price: r.price ?? "",
+    quantity: r.quantity ?? "",
+    notional_usdt: r.notional_usdt ?? "",
+  };
+}
+
+function downloadCsvWithTradeDetails(rows: TradeRow[], filenameSuffix: string) {
+  const lines = [
+    DETAIL_HEADERS.join(","),
+    ...rows.map((r) =>
+      DETAIL_HEADERS.map((h) => escapeCsvField(detailValues(r)[h])).join(",")
+    ),
+  ];
+  const blob = new Blob([lines.join("\n")], {
+    type: "text/csv;charset=utf-8;",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `p3-surveillance-${filenameSuffix}-with-tape-${Date.now()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function fetchSubmissionForTab(
+  tab: "rules" | "committee"
+): Promise<unknown> {
+  const enriched =
+    tab === "rules"
+      ? "/api/outputs/submission_with_trades"
+      : "/api/outputs/submission_committee_with_trades";
+  const base =
+    tab === "rules"
+      ? "/api/outputs/submission"
+      : "/api/outputs/submission_committee";
+  try {
+    return await fetchJSON<unknown>(enriched);
+  } catch {
+    return fetchJSON<unknown>(base);
+  }
+}
+
 export default function P3Page() {
   const [tab, setTab] = React.useState<"rules" | "committee">("rules");
   const [rows, setRows] = React.useState<TradeRow[]>([]);
@@ -111,26 +206,24 @@ export default function P3Page() {
   const [error, setError] = React.useState<string | null>(null);
   const [symbolFilter, setSymbolFilter] = React.useState("");
   const [tradeIdQuery, setTradeIdQuery] = React.useState("");
+  const [walletQuery, setWalletQuery] = React.useState("");
   const [expanded, setExpanded] = React.useState<Set<number>>(() => new Set());
 
   React.useEffect(() => {
     setSymbolFilter("");
     setTradeIdQuery("");
+    setWalletQuery("");
     setExpanded(new Set());
   }, [tab]);
 
   React.useEffect(() => {
     let cancelled = false;
-    const path =
-      tab === "rules"
-        ? "/api/outputs/submission"
-        : "/api/outputs/submission_committee";
 
     (async () => {
       setLoading(true);
       setError(null);
       try {
-        const raw = await fetchJSON<unknown>(path);
+        const raw = await fetchSubmissionForTab(tab);
         if (!cancelled) setRows(normalizeRows(raw));
       } catch (e) {
         if (!cancelled)
@@ -152,12 +245,17 @@ export default function P3Page() {
 
   const filtered = React.useMemo(() => {
     const q = tradeIdQuery.trim().toLowerCase();
+    const wq = walletQuery.trim().toLowerCase();
     return rows.filter((r) => {
       if (symbolFilter && r.symbol !== symbolFilter) return false;
       if (q && !r.trade_id.toLowerCase().includes(q)) return false;
+      if (wq) {
+        const w = `${r.trader_id ?? ""} ${r.wallet_id ?? ""}`.toLowerCase();
+        if (!w.includes(wq)) return false;
+      }
       return true;
     });
-  }, [rows, symbolFilter, tradeIdQuery]);
+  }, [rows, symbolFilter, tradeIdQuery, walletQuery]);
 
   const violationChart = React.useMemo(() => {
     const counts = new Map<string, number>();
@@ -201,7 +299,9 @@ export default function P3Page() {
             P3 — Crypto Trade Surveillance
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Rule-based and committee outputs from the FastAPI backend.
+            Rule-based and committee outputs from the FastAPI backend. When trade
+            tape is available, wallet, side, order type, and timestamps are shown
+            for analysis only — exports default to the competition CSV schema.
           </p>
         </div>
         <Tabs
@@ -358,19 +458,51 @@ export default function P3Page() {
                   onChange={(e) => setTradeIdQuery(e.target.value)}
                 />
               </div>
+              <div className="space-y-2 sm:min-w-[200px]">
+                <label
+                  htmlFor="p3-wallet"
+                  className="text-sm font-medium text-foreground"
+                >
+                  Wallet
+                </label>
+                <Input
+                  id="p3-wallet"
+                  placeholder="Contains wallet / trader_id…"
+                  value={walletQuery}
+                  onChange={(e) => setWalletQuery(e.target.value)}
+                />
+              </div>
             </div>
-            <Button
-              type="button"
-              variant="outline"
-              className="shrink-0 gap-2"
-              onClick={() =>
-                downloadCsv(filtered, tab === "rules" ? "rules" : "committee")
-              }
-              disabled={filtered.length === 0}
-            >
-              <Download className="h-4 w-4" aria-hidden />
-              Export CSV
-            </Button>
+            <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-2"
+                onClick={() =>
+                  downloadCsv(filtered, tab === "rules" ? "rules" : "committee")
+                }
+                disabled={filtered.length === 0}
+                title="symbol, date, trade_id, violation_type, remarks only"
+              >
+                <Download className="h-4 w-4" aria-hidden />
+                Export CSV (submission)
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                className="gap-2"
+                onClick={() =>
+                  downloadCsvWithTradeDetails(
+                    filtered,
+                    tab === "rules" ? "rules" : "committee"
+                  )
+                }
+                disabled={filtered.length === 0}
+              >
+                <Download className="h-4 w-4" aria-hidden />
+                Export with tape
+              </Button>
+            </div>
           </div>
 
           <Card>
@@ -393,7 +525,7 @@ export default function P3Page() {
                 </p>
               ) : (
                 <ScrollArea className="max-h-[min(520px,60vh)] rounded-md border">
-                  <table className="w-full caption-bottom text-sm">
+                  <table className="w-full min-w-[880px] caption-bottom text-sm">
                     <thead className="sticky top-0 z-10 border-b bg-muted/80 backdrop-blur">
                       <tr className="text-left">
                         <th className="w-8 p-3" aria-hidden />
@@ -402,6 +534,10 @@ export default function P3Page() {
                         <th className="p-3 font-medium">Trade ID</th>
                         <th className="p-3 font-medium">Violation type</th>
                         <th className="p-3 font-medium">Remarks</th>
+                        <th className="p-3 font-medium">Wallet</th>
+                        <th className="p-3 font-medium">Side</th>
+                        <th className="p-3 font-medium">Order type</th>
+                        <th className="p-3 font-medium">Tape time</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -411,6 +547,8 @@ export default function P3Page() {
                           row.remarks.length > 80
                             ? `${row.remarks.slice(0, 80)}…`
                             : row.remarks;
+                        const wallet =
+                          row.trader_id || row.wallet_id || "—";
                         return (
                           <React.Fragment key={`${row.trade_id}-${i}`}>
                             <tr
@@ -453,18 +591,76 @@ export default function P3Page() {
                                   {preview || "—"}
                                 </span>
                               </td>
+                              <td
+                                className="max-w-[140px] p-3 font-mono text-xs text-muted-foreground"
+                                title={wallet}
+                              >
+                                <span className="line-clamp-2">{wallet}</span>
+                              </td>
+                              <td className="p-3 text-muted-foreground">
+                                {row.side || "—"}
+                              </td>
+                              <td className="p-3 text-muted-foreground">
+                                {row.order_type || "—"}
+                              </td>
+                              <td className="whitespace-nowrap p-3 text-muted-foreground">
+                                {row.timestamp || "—"}
+                              </td>
                             </tr>
                             {open && (
                               <tr className="border-b bg-muted/20">
                                 <td />
-                                <td colSpan={5} className="px-3 pb-4 pt-0">
-                                  <div className="rounded-md border bg-background p-4 text-sm leading-relaxed">
-                                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                                      Full remarks
-                                    </p>
-                                    <p className="mt-2 whitespace-pre-wrap">
-                                      {row.remarks || "—"}
-                                    </p>
+                                <td colSpan={9} className="px-3 pb-4 pt-0">
+                                  <div className="space-y-4">
+                                    <div className="rounded-md border bg-background p-4 text-sm leading-relaxed">
+                                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                        Full remarks
+                                      </p>
+                                      <p className="mt-2 whitespace-pre-wrap">
+                                        {row.remarks || "—"}
+                                      </p>
+                                    </div>
+                                    {(row.price ||
+                                      row.quantity ||
+                                      row.notional_usdt) && (
+                                      <div className="rounded-md border bg-background p-4 text-sm">
+                                        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                                          Trade tape
+                                        </p>
+                                        <dl className="mt-2 grid gap-2 sm:grid-cols-2">
+                                          {row.price ? (
+                                            <>
+                                              <dt className="text-muted-foreground">
+                                                Price
+                                              </dt>
+                                              <dd className="font-mono">
+                                                {row.price}
+                                              </dd>
+                                            </>
+                                          ) : null}
+                                          {row.quantity ? (
+                                            <>
+                                              <dt className="text-muted-foreground">
+                                                Quantity
+                                              </dt>
+                                              <dd className="font-mono">
+                                                {row.quantity}
+                                              </dd>
+                                            </>
+                                          ) : null}
+                                          {row.notional_usdt ? (
+                                            <>
+                                              <dt className="text-muted-foreground">
+                                                Notional (USDT)
+                                              </dt>
+                                              <dd className="font-mono">
+                                                {row.notional_usdt}
+                                              </dd>
+                                            </>
+                                          ) : null}
+                                        </dl>
+                                      </div>
+                                    )}
                                   </div>
                                 </td>
                               </tr>
