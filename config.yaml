@@ -40,8 +40,8 @@ p3:
     min_hour_tradecount: 8
 
   price_bar_violation:
-    min_mid_bps: 35.0
-    min_mid_bps_low_liquidity: 55.0
+    min_mid_bps: 40.0
+    min_mid_bps_low_liquidity: 65.0
     low_liquidity_tradecount: 6
 
   round_trip:
@@ -58,7 +58,7 @@ p3:
 
   trim:
     pump_and_dump: 35
-    spoofing: 80
+    spoofing: 55
     round_trip_wash: 25
 
   # Gated detectors (set true to enable)
@@ -84,6 +84,8 @@ p2:
     cum_ret_threshold: 0.025
 
 committee:
+  # When false, AI-only flags are never promoted (cuts FP; rules+ML tiers unchanged).
+  include_ai_only: false
   ai_only_conf_default: 0.85
   ai_only_conf_wash: 0.80
   ai_only_conf_layering: 0.90

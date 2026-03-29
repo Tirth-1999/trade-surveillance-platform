@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from bits_hackathon.core.config import get as cfg
+from bits_hackathon.core.violation_taxonomy import normalize_violation_type
 
 
 def _liquid_min_notional(symbol: str, base_min: float) -> float:
@@ -736,4 +737,8 @@ def build_submission(trades: pd.DataFrame, markets: pd.DataFrame) -> pd.DataFram
     hits = run_all_detectors(trades, markets)
     if hits.empty:
         return pd.DataFrame(columns=["symbol", "date", "trade_id", "violation_type", "remarks"])
-    return hits[["symbol", "date", "trade_id", "violation_type", "remarks"]]
+    out = hits[["symbol", "date", "trade_id", "violation_type", "remarks"]].copy()
+    out["violation_type"] = out["violation_type"].map(
+        lambda x: normalize_violation_type(str(x)) if pd.notna(x) else ""
+    )
+    return out

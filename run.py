@@ -14,8 +14,9 @@ Usage:
     python run.py tune            # Parameter tuning recommendations
     python run.py committee       # Three-way committee fusion
     python run.py all             # Run p3 → p1 → p2 sequentially
+    python run.py full-pipeline   # All steps + ML + committee (stub GT by default; add --with-llm for LLM)
     python run.py score-proxy     # P3 score proxy vs ground_truth (5·TP − 2·FP)
-    python run.py export-submission  # Copy final CSV to repo root submission.csv
+    python run.py export-submission  # Copy to repo-root submission.csv + submissions.csv
 """
 
 from __future__ import annotations
@@ -61,22 +62,55 @@ def cmd_p3() -> None:
     print(f"Wrote {len(sub)} rows to {out} in {elapsed:.2f}s")
 
 
-def cmd_ground_truth() -> None:
+def cmd_ground_truth(args: argparse.Namespace | None = None) -> None:
     from dotenv import load_dotenv
 
     from bits_hackathon.core.paths import ROOT, OUTPUTS_DIR
     from bits_hackathon.pipeline.ground_truth_agent import load_all, run_ground_truth
 
     load_dotenv(ROOT / ".env")
+    stub_only = bool(getattr(args, "stub_only", False)) if args is not None else False
     t0 = time.perf_counter()
     trades, markets = load_all()
     print(f"Loaded {len(trades)} trades, {len(markets)} market bars")
-    gt = run_ground_truth(trades, markets)
+    if stub_only:
+        print("Stub-only mode: skipping LLM (fast; use for full-pipeline smoke runs).")
+    gt = run_ground_truth(trades, markets, use_llm=not stub_only)
     out = OUTPUTS_DIR / "ground_truth.csv"
     gt.to_csv(out, index=False)
     elapsed = time.perf_counter() - t0
     sus = gt[gt["verdict"] == "suspicious"]
     print(f"\nWrote {len(gt)} rows ({len(sus)} suspicious) to {out} in {elapsed:.1f}s")
+
+
+def cmd_full_pipeline(args: argparse.Namespace) -> None:
+    """Run P3 → P1 → P2 → ground-truth → compare → train-ml → ml-baseline → tune → committee → score-proxy."""
+    print("=" * 60)
+    print("  FULL PIPELINE")
+    print("=" * 60)
+    cmd_p3()
+    cmd_p1()
+    cmd_p2()
+    cmd_ground_truth(args)
+    cmd_compare()
+    cmd_train_ml()
+    cmd_ml_baseline()
+    cmd_tune()
+    cmd_committee()
+    from bits_hackathon.core.paths import OUTPUTS_DIR
+    from bits_hackathon.pipeline.score_proxy import evaluate_submission_vs_gt, format_report
+
+    for name, path in [
+        ("rules", OUTPUTS_DIR / "submission.csv"),
+        ("committee", OUTPUTS_DIR / "submission_committee.csv"),
+    ]:
+        if not path.exists():
+            print(f"[score-proxy] skip {name}: missing {path}")
+            continue
+        ev = evaluate_submission_vs_gt(str(path), str(OUTPUTS_DIR / "ground_truth.csv"))
+        print(f"\n=== Score proxy: {name} ({path.name}) ===")
+        print(format_report(ev))
+    print("\nDone. Copy judge CSV: python3 run.py export-submission [--source rules|committee]")
 
 
 def cmd_compare() -> None:
@@ -244,9 +278,12 @@ def cmd_export_submission(args: argparse.Namespace) -> None:
     if not src.exists():
         print(f"Error: missing {src}", file=sys.stderr)
         sys.exit(1)
-    dst = ROOT / "submission.csv"
-    shutil.copyfile(src, dst)
-    print(f"Copied {src} -> {dst}")
+    dst_primary = ROOT / "submission.csv"
+    dst_mirror = ROOT / "submissions.csv"
+    shutil.copyfile(src, dst_primary)
+    shutil.copyfile(src, dst_mirror)
+    print(f"Copied {src} -> {dst_primary}")
+    print(f"Copied {src} -> {dst_mirror} (duplicate for version control)")
 
     if getattr(args, "also_p1", False):
         p1s = OUTPUTS_DIR / "p1_alerts.csv"
@@ -274,7 +311,28 @@ def main() -> None:
     sub.add_parser("p1", help="Problem 1: equity order-book alerts")
     sub.add_parser("p2", help="Problem 2: SEC 8-K + drift signals")
     sub.add_parser("p3", help="Problem 3: crypto trade surveillance")
-    sub.add_parser("ground-truth", help="AI ground-truth agent")
+    gt_p = sub.add_parser("ground-truth", help="AI ground-truth agent (LLM if OPENROUTER_API_KEY set)")
+    gt_p.add_argument(
+        "--stub-only",
+        action="store_true",
+        help="Vectorized stub only; no LLM. Recommended for full-pipeline smoke runs.",
+    )
+
+    fp = sub.add_parser(
+        "full-pipeline",
+        help="Run p3,p1,p2, ground-truth, compare, train-ml, baseline, tune, committee, score-proxy",
+    )
+    fp.add_argument(
+        "--stub-only",
+        action="store_true",
+        dest="stub_only",
+        help="Pass to ground-truth: no LLM calls (default on full-pipeline).",
+    )
+    fp.add_argument(
+        "--with-llm",
+        action="store_true",
+        help="Run ground-truth with LLM if API key present (slow on full data).",
+    )
     sub.add_parser("compare", help="Compare rules vs ground truth")
     sub.add_parser("reranker", help="ML re-ranker pipeline")
     sub.add_parser("ml-baseline", help="Write ml_baseline_report.txt from current outputs")
@@ -292,13 +350,13 @@ def main() -> None:
 
     ex = sub.add_parser(
         "export-submission",
-        help="Copy outputs/*.csv to repo-root submission.csv for judges",
+        help="Copy outputs/*.csv to repo-root submission.csv and submissions.csv",
     )
     ex.add_argument(
         "--source",
         choices=["committee", "rules", "ml"],
-        default="committee",
-        help="Which pipeline output to publish as root submission.csv",
+        default="rules",
+        help="Which pipeline output to publish (default: rules = outputs/submission.csv from p3)",
     )
     ex.add_argument(
         "--also-p1",
@@ -317,7 +375,6 @@ def main() -> None:
         "p1": cmd_p1,
         "p2": cmd_p2,
         "p3": cmd_p3,
-        "ground-truth": cmd_ground_truth,
         "compare": cmd_compare,
         "reranker": cmd_reranker,
         "ml-baseline": cmd_ml_baseline,
@@ -336,6 +393,14 @@ def main() -> None:
         cmd_score_proxy(args)
     elif args.command == "export-submission":
         cmd_export_submission(args)
+    elif args.command == "ground-truth":
+        cmd_ground_truth(args)
+    elif args.command == "full-pipeline":
+        if getattr(args, "with_llm", False):
+            args.stub_only = False
+        elif not getattr(args, "stub_only", False):
+            args.stub_only = True
+        cmd_full_pipeline(args)
     else:
         commands[args.command]()
 

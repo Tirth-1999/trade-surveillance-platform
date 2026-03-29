@@ -15,6 +15,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 from bits_hackathon.core.config import get as cfg
 from bits_hackathon.core.paths import ARTIFACTS_DIR
+from bits_hackathon.core.violation_taxonomy import normalize_violation_type
 from bits_hackathon.pipeline.ml_features import FEATURE_COLS
 
 STAGE2_MODEL = "stage2_model.joblib"
@@ -209,9 +210,10 @@ def build_ml_submission_staged(
         tid = str(r["trade_id"])
         gt_info = gt_lookup.get(tid, {})
         s2 = str(r.get("stage2_violation_type", "") or "")
-        vtype = s2 if s2 and s2 != "anomaly" else gt_info.get("violation_type", "anomaly")
+        vtype = s2 if s2 and s2 != "anomaly" else str(gt_info.get("violation_type", "") or "")
         if not vtype or vtype == "anomaly":
-            vtype = gt_info.get("violation_type", "anomaly") or "anomaly"
+            vtype = str(gt_info.get("violation_type", "") or "")
+        vtype = normalize_violation_type(vtype)
         remark = gt_info.get("remark_draft", f"ML staged (p={r.get('p_suspicious', 0):.3f})")
         rows.append(
             {

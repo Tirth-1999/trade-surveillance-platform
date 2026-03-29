@@ -3,45 +3,48 @@ THREE-WAY COMMITTEE REPORT
 ======================================================================
 
 Input counts:
-  Rules flags:  136
-  AI suspicious: 312
-  ML flags:      384
+  Rules flags:  111
+  AI suspicious: 341
+  ML flags:      315
 
 Zone breakdown:
-  All 3 agree:     35
+  All 3 agree:     28
   Rules + AI:      0
-  Rules + ML:      47
-  AI + ML:         179
-  Rules only:      54  (kept 0, dropped 54)
-  AI only:         98  (kept 38, dropped 60)
-  ML only:         123  (kept 0, dropped 123)
+  Rules + ML:      26
+  AI + ML:         210
+  Rules only:      57  (kept 2, dropped 55)
+  AI only:         103  (kept 0, dropped 103)
+  ML only:         51  (kept 0, dropped 51)
 
 Tier summary:
-  Tier 1 (2+ agree, raw):   261
-  Tier 1 (after ML/AI gates): 249
-  Tier 2 rules-only kept:   0
-  Tier 2 AI-only kept:      38
+  Tier 1 (2+ agree, raw):   264
+  Tier 1 (after ML/AI gates): 264
+  Tier 2 rules-only kept:   2
+  Tier 2 AI-only kept:      0
   Tier 2 ML-only kept:      0
   ---
-  FINAL SUBMISSION TOTAL:   287
+  FINAL SUBMISSION TOTAL:   266
 
 Violation type distribution:
-  structuring                   : 93
-  ramping                       : 62
-  spoofing                      : 55
-  aml_structuring               : 35
-  wash_trading                  : 23
-  layering                      : 15
-  other                         : 4
+  ramping                       : 60
+  layering_echo                 : 55
+  coordinated_structuring       : 53
+  aml_structuring               : 38
+  spoofing                      : 29
+  wash_trading                  : 17
+  placement_smurfing            : 7
+  peg_break                     : 3
+  round_trip_wash               : 2
+  pump_and_dump                 : 2
 
 Per-symbol breakdown:
   BATUSDT     : 26
-  BTCUSDT     : 121
-  DOGEUSDT    : 22
-  ETHUSDT     : 50
-  LTCUSDT     : 18
-  SOLUSDT     : 20
-  USDCUSDT    : 3
-  XRPUSDT     : 27
+  BTCUSDT     : 114
+  DOGEUSDT    : 18
+  ETHUSDT     : 28
+  LTCUSDT     : 23
+  SOLUSDT     : 23
+  USDCUSDT    : 11
+  XRPUSDT     : 23
 
 ======================================================================

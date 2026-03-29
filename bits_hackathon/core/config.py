@@ -117,6 +117,7 @@ DEFAULTS: dict[str, Any] = {
     "committee.rules_only_keep_uncertain": True,
     "committee.rules_only_min_gt_confidence": 0.45,
     "committee.ml_only_include": False,
+    "committee.include_ai_only": False,
     "committee.use_staged_ml_types": True,
     # Keep at/below typical stage-1 operating threshold (~0.29–0.45); higher values drop all tier-1 ML rows.
     "committee.tier1_min_ml_probability": 0.30,

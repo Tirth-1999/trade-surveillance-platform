@@ -22,31 +22,35 @@ except ImportError:
     requests = None  # type: ignore[assignment]
 
 from bits_hackathon.core.paths import ROOT, OUTPUTS_DIR, CRYPTO_TRADES, CRYPTO_MARKET, CRYPTO_SYMBOLS as SYMBOLS
+from bits_hackathon.core.violation_taxonomy import OFFICIAL_VIOLATION_TYPES, normalize_violation_type
 
-SYSTEM_PROMPT = """\
+_SYSTEM_TYPE_LIST = "\n".join(f"- {t}" for t in sorted(OFFICIAL_VIOLATION_TYPES))
+
+SYSTEM_PROMPT = f"""\
 You are a senior trade surveillance analyst at a financial regulator.
 You review crypto trades for suspicious activity.
 
-VIOLATION TAXONOMY (use exact strings):
-- wash_trading: Trades with no economic risk transfer (same wallet buy+sell, circular)
-- spoofing: Orders/trades to mislead about supply/demand
-- layering: Multiple orders at different prices to create false depth
-- pump_and_dump: Coordinated price inflation followed by selling
-- ramping: Sustained directional pressure to move price
-- peg_manipulation: Stablecoin trades deviating from expected peg
-- structuring: Splitting transactions to avoid reporting thresholds
-- aml_structuring: AML-specific structuring patterns
+VIOLATION TAXONOMY — use one of these EXACT strings (case-sensitive), or "" if benign/uncertain:
+{_SYSTEM_TYPE_LIST}
+
+Guidance (map behaviour to the string above):
+- Same-wallet or circular round-trip with no net risk → wash_trading or round_trip_wash
+- False depth / layered buy then sell bursts → layering_echo
+- Monotonic same-wallet buys walking price → ramping
+- Many similar sizes just below a threshold → aml_structuring or coordinated_structuring
+- USDC far from $1.00 → peg_break; wash at peg → wash_volume_at_peg
+- Bar/print inconsistency → spoofing (only if evidence supports manipulation, not mere tick noise)
 
 For each trade, you receive a facts bundle. Respond with ONLY a valid JSON array.
 Each element must be:
-{
+{{
   "trade_id": "<string>",
   "verdict": "suspicious" | "benign" | "uncertain",
-  "violation_type": "<exact string from taxonomy above, or empty string>",
+  "violation_type": "<exact string from list above, or empty>",
   "confidence": <float 0.0-1.0>,
   "rationale": "<2-3 sentences explaining why>",
   "remark_draft": "<1-2 sentence remark suitable for a compliance report>"
-}
+}}
 Return ONLY the JSON array, no markdown fences or commentary."""
 
 
@@ -321,25 +325,25 @@ def _stub_analyse_vectorized(
         t.loc[r2, "rationale"] = "Same wallet BUY/SELL within 120s with similar notional."
         t.loc[r2, "remark_draft"] = "Possible wash trade — same wallet round-trip."
 
-    # Rule 3: Notional just below round thresholds (structuring)
+    # Rule 3: Notional just below round thresholds (AML-style structuring)
     benign_mask = t["verdict"] == "benign"
     for threshold in [3000, 5000, 10000]:
         r3 = benign_mask & (t["notional_usdt"] >= threshold * 0.98) & (t["notional_usdt"] < threshold)
         t.loc[r3, "verdict"] = "suspicious"
-        t.loc[r3, "violation_type"] = "structuring"
+        t.loc[r3, "violation_type"] = "aml_structuring"
         t.loc[r3, "confidence"] = 0.55
         t.loc[r3, "rationale"] = f"Notional just below ${threshold} threshold."
-        t.loc[r3, "remark_draft"] = f"Trade sized just below ${threshold} — possible structuring."
+        t.loc[r3, "remark_draft"] = f"Trade sized just below ${threshold} — possible AML structuring."
         benign_mask = t["verdict"] == "benign"
 
     # Rule 4: USDC peg deviation > 0.5%
     r4 = benign_mask & (t["symbol"] == "USDCUSDT") & ((t["price"] - 1.0).abs() * 100 > 0.5)
     dev_pct = (t["price"] - 1.0).abs() * 100
     t.loc[r4, "verdict"] = "suspicious"
-    t.loc[r4, "violation_type"] = "peg_manipulation"
+    t.loc[r4, "violation_type"] = "peg_break"
     t.loc[r4, "confidence"] = (0.5 + dev_pct[r4] / 5).clip(upper=0.95)
     t.loc[r4, "rationale"] = "USDCUSDT price deviating from $1 peg."
-    t.loc[r4, "remark_draft"] = "Stablecoin trade off peg — possible peg manipulation."
+    t.loc[r4, "remark_draft"] = "Stablecoin trade off peg — peg_break context."
 
     # Rule 5: Notional z-score > 3
     benign_mask = t["verdict"] == "benign"
@@ -484,6 +488,10 @@ def run_ground_truth(
             llm_df = pd.DataFrame(llm_results)
             if "trade_id" in llm_df.columns:
                 llm_df = llm_df.drop_duplicates(subset=["trade_id"], keep="first")
+                if "violation_type" in llm_df.columns:
+                    llm_df["violation_type"] = llm_df["violation_type"].map(
+                        lambda x: normalize_violation_type(x) if pd.notna(x) else ""
+                    )
                 llm_ids = set(llm_df["trade_id"])
                 results_df = pd.concat([
                     results_df[~results_df["trade_id"].isin(llm_ids)],
@@ -501,6 +509,10 @@ def run_ground_truth(
         print(f"  Done: {len(results_df)} results")
 
     results_df = results_df.drop_duplicates(subset=["trade_id"], keep="first")
+    if "violation_type" in results_df.columns:
+        results_df["violation_type"] = results_df["violation_type"].map(
+            lambda x: normalize_violation_type(x) if pd.notna(x) else ""
+        )
 
     trade_info = trades[["trade_id", "symbol", "trade_date"]].drop_duplicates(subset=["trade_id"])
     results_df = results_df.merge(trade_info, on="trade_id", how="left")

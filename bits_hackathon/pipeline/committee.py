@@ -13,16 +13,19 @@ import pandas as pd
 
 from bits_hackathon.core.config import get as cfg
 from bits_hackathon.core.paths import OUTPUTS_DIR
+from bits_hackathon.core.violation_taxonomy import normalize_violation_type
 
 
-# Per-violation-type AI confidence thresholds for the AI-only zone
+# Per-violation-type AI confidence thresholds for the AI-only zone (official types + legacy keys)
 _AI_ONLY_THRESHOLDS: dict[str, str] = {
+    "aml_structuring": "committee.ai_only_conf_default",
     "structuring": "committee.ai_only_conf_default",
     "ramping": "committee.ai_only_conf_default",
-    "aml_structuring": "committee.ai_only_conf_default",
     "wash_trading": "committee.ai_only_conf_wash",
     "spoofing": "committee.ai_only_conf_default",
+    "layering_echo": "committee.ai_only_conf_layering",
     "layering": "committee.ai_only_conf_layering",
+    "peg_break": "committee.ai_only_conf_layering",
     "peg_manipulation": "committee.ai_only_conf_layering",
 }
 
@@ -48,14 +51,20 @@ def _pick_violation_type(
     ):
         for v in (ml_vtype, ai_vtype, rule_vtype):
             if pd.notna(v) and v and v != "anomaly":
-                return v
+                nv = normalize_violation_type(str(v))
+                if nv:
+                    return nv
     for v in (ai_vtype, rule_vtype, ml_vtype):
         if pd.notna(v) and v and v != "anomaly":
-            return v
+            nv = normalize_violation_type(str(v))
+            if nv:
+                return nv
     for v in (rule_vtype, ai_vtype, ml_vtype):
         if pd.notna(v) and v:
-            return v
-    return "anomaly"
+            nv = normalize_violation_type(str(v))
+            if nv:
+                return nv
+    return ""
 
 
 def _build_remark(zone: str, sources: dict[str, dict]) -> str:
@@ -191,13 +200,17 @@ def build_committee_submission(
     ai_only_keep: set[str] = set()
     ai_only_drop: set[str] = set()
     ai_drop_types = {"pump_and_dump"}
+    include_ai_only = bool(cfg("committee.include_ai_only"))
 
     for tid in ai_only:
+        if not include_ai_only:
+            ai_only_drop.add(tid)
+            continue
         ai_row = ai_lookup.get(tid, {})
-        vtype = ai_row.get("violation_type", "")
+        vtype = str(ai_row.get("violation_type", "") or "")
         conf = ai_row.get("confidence", 0.0)
 
-        if vtype in ai_drop_types:
+        if normalize_violation_type(vtype) in ai_drop_types or vtype in ai_drop_types:
             ai_only_drop.add(tid)
             continue
 
@@ -253,6 +266,9 @@ def build_committee_submission(
         except (TypeError, ValueError):
             s2c_f = None
         vtype = _pick_violation_type(r_vtype, a_vtype, m_vtype, ml_stage2_conf=s2c_f)
+        vtype = normalize_violation_type(vtype) or normalize_violation_type(
+            str(r_vtype or a_vtype or m_vtype or "")
+        )
 
         symbol = (
             sources.get("rules", {}).get("symbol")

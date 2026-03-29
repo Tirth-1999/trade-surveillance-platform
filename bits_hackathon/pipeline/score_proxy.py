@@ -15,6 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 from bits_hackathon.core.paths import OUTPUTS_DIR
+from bits_hackathon.core.violation_taxonomy import normalize_violation_type
 
 
 def evaluate_submission_vs_gt(
@@ -46,8 +47,8 @@ def evaluate_submission_vs_gt(
         gt_type = gt_sus.set_index("trade_id")["violation_type"].to_dict()
         for tid in tp_ids:
             row = sub[sub["trade_id"] == tid].iloc[0]
-            st = str(row.get("violation_type", "") or "").strip()
-            gt_t = str(gt_type.get(tid, "") or "").strip()
+            st = normalize_violation_type(str(row.get("violation_type", "") or ""))
+            gt_t = normalize_violation_type(str(gt_type.get(tid, "") or ""))
             if st and gt_t and st == gt_t:
                 type_bonus_pts += 2
                 matched_types += 1

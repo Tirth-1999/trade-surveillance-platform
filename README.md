@@ -1,6 +1,20 @@
 # Trade Surveillance Platform
 
-**BITS Hackathon 2026** — Rule-based + AI + ML **committee** fusion for crypto trade surveillance (P3), with bonus **equity order-book** (P1) and **SEC 8-K / pre-announcement drift** (P2). **Next.js** UI + **FastAPI** API; optional **Streamlit** `app.py`.
+**BITS Hackathon 2026** — Crypto trade surveillance (**Problem 3**, required) with **rule-based detectors**, optional **AI ground-truth** labelling, **staged ML** (suspicion + violation type), and **committee fusion**. Bonus: **equity order-book alerts** (P1) and **SEC 8-K / pre-announcement drift** (P2). **Next.js** dashboard + **FastAPI** backend; optional Streamlit `app.py`.
+
+---
+
+## What we submit (judges)
+
+| Deliverable | Where it comes from |
+|-------------|---------------------|
+| **`submission.csv`** (repo root) | Run `python3 run.py export-submission` after generating outputs (see below). |
+| **Mirror copy** | Same content is written to **`submissions.csv`** at repo root (duplicate for convenience). |
+| **Default export** | **`--source rules`** → `outputs/submission.csv` from **`python3 run.py p3`** (precision-first). Use **`--source committee`** or **`--source ml`** only if you validate net score on your side. |
+| **Bonus** | `p1_alerts.csv`, `p2_signals.csv` — use `export-submission --also-p1 --also-p2` to copy them to repo root. |
+
+**Problem 3 columns:** `symbol`, `date`, `trade_id`, `violation_type`, `remarks`.  
+**Violation types** use the organiser’s **exact strings** (case-sensitive). Aliases from LLM/legacy code are normalised via `bits_hackathon/core/violation_taxonomy.py` before export.
 
 ---
 
@@ -32,52 +46,54 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  subgraph p3 [P3 — Crypto — main submission]
-    T[8 symbols: trades + OHLCV]
-    D3[Wash spoof layer pump ramp AML peg …]
-    T --> D3 --> S[submission.csv + committee]
+  subgraph p3 [P3 — Crypto — main score]
+    T[8 pairs: trades + 1m OHLCV]
+    D3[Rules: wash, peg, ramp, AML-style, layering echo, BAT spike, …]
+    T --> D3 --> S[outputs/submission.csv]
   end
-  subgraph p1 [P1 — Equity]
+  subgraph p1 [P1 — Equity bonus]
     M[market_data + trade_data]
-    D1[OBI z-score cancel bursts]
+    D1[OBI / spread z-scores + cancel bursts]
     M --> D1 --> A[p1_alerts.csv]
   end
-  subgraph p2 [P2 — SEC]
-    E[ohlcv + EDGAR 8-K]
-    D2[Classify filings + pre-event drift]
+  subgraph p2 [P2 — SEC bonus]
+    E[ohlcv + SEC submissions API]
+    D2[8-K classification + pre-event drift + trade evidence]
     E --> D2 --> G[p2_signals.csv]
   end
 ```
 
 ---
 
-## Crypto pipeline (rules → AI → ML → committee)
+## P3 pipeline (rules → optional AI → ML → committee)
 
 ```mermaid
 flowchart TD
-  DATA["student-pack/<br/>crypto-trades + crypto-market<br/>(8 symbols)"]
-  LOAD[crypto_load.py<br/>normalize → trades + bars]
+  DATA["student-pack/crypto-* (8 symbols)"]
+  LOAD[crypto_load.py]
   DATA --> LOAD
-  LOAD --> R
+  LOAD --> R["Rule detectors p3_crypto.py"]
+  R --> SUB[outputs/submission.csv]
 
-  R["Rule detectors (p3_crypto.py)<br/>wash · spoof · layer · pump<br/>ramp · AML · peg · bar · smurfing"]
-  R --> SUB[submission.csv]
-
-  SUB --> GT[AI ground truth agent]
-  GT --> GTCSV[ground_truth.csv]
-  SUB --> CMP[Compare]
-  GTCSV --> CMP
+  SUB --> GT[ground_truth agent]
+  GT --> GTC[outputs/ground_truth.csv]
+  SUB --> CMP[compare]
+  GTC --> CMP
   CMP --> CR[comparison_report.csv]
-  CR --> ML[ML re-ranker]
-  ML --> MLS[submission_ml.csv]
-  SUB --> COM[Committee vote]
-  GTCSV --> COM
+
+  CR --> ML[train-ml: stage-1 + stage-2]
+  ML --> MLS[outputs/submission_ml.csv + artifacts/]
+
+  SUB --> COM[committee]
+  GTC --> COM
   MLS --> COM
-  COM --> FIN[submission_committee.csv]
-  CR --> TUNE[Parameter tuning report]
+  COM --> FIN[outputs/submission_committee.csv]
 ```
 
-**Committee idea:** rows where **2+** of {rules, AI, ML} agree enter **Tier 1**, then optional **ML probability** and **AI confidence gates** trim weak coincidences (`config.yaml` → `committee.tier1_*`). Rules-only rows need **higher GT confidence** than before. Tune in `committee` and `p3` sections.
+- **Rules** implement behavioural patterns (wash, ramping, peg break, structuring bands, etc.), merge with priority, optional **trim** caps in `config.yaml`.
+- **Ground truth** can run as **vectorized stub** (fast) or **LLM** if `OPENROUTER_API_KEY` is set (`ground-truth --stub-only` forces stub).
+- **ML** uses shared features (`ml_features.py`), **stage-1** calibrated suspicion, **stage-2** multiclass type when data allows.
+- **Committee** fuses rules + AI suspicious + ML flags; **`include_ai_only: false`** by default in `config.yaml` so **AI-only** rows are not promoted unless you turn that on (reduces false positives).
 
 ---
 
@@ -87,85 +103,68 @@ flowchart TD
 |------|---------|
 | Python venv | `python3 -m venv .venv && source .venv/bin/activate` |
 | Deps | `pip install -r requirements.txt` |
-| Secrets | Create `.env` with `OPENROUTER_API_KEY=...` (optional for rules-only) |
-| Data | `student-pack/` with `crypto-*`, `equity/*` (see repo) |
-| Run all | `python3 run.py all` |
+| Secrets | `.env` with `OPENROUTER_API_KEY=...` (optional; stub GT works without it) |
+| Data | `student-pack/` with `crypto-*`, `equity/*` |
+| **One-shot full pipeline** | `python3 run.py full-pipeline` — P3, P1, P2, stub GT, compare, **train-ml**, baseline, tune, committee, score-proxy (use `--with-llm` for slow LLM ground truth) |
 | P3 rules only | `python3 run.py p3` → `outputs/submission.csv` |
-| Ground truth + compare | `python3 run.py ground-truth` then `python3 run.py compare` |
-| Score proxy (tuning) | `python3 run.py score-proxy` — **5·TP − 2·FP** vs `outputs/ground_truth.csv` (proxy only) |
-| ML baseline | `python3 run.py ml-baseline` → `outputs/ml_baseline_report.txt` |
-| Train staged ML | `python3 run.py train-ml` → refreshes `comparison_report.csv`, then `artifacts/*.joblib`, `outputs/submission_ml.csv` |
-| Infer ML only | `python3 run.py infer-ml` (requires trained artifacts) |
-| Committee final | `python3 run.py committee` → `outputs/submission_committee.csv` |
-| **Judge: root CSV** | `python3 run.py export-submission --source committee` → copies chosen file to **`submission.csv` at repo root** (add `--also-p1` / `--also-p2` for bonus artifacts) |
-| Refresh dashboard static JSON | `python3 scripts/sync_frontend_data.py` (after train-ml / committee; updates `frontend/public/data/` including `ml_health.json` and **committee_report** — required for correct zone counts when the UI falls back to static files) |
+| P1 / P2 | `python3 run.py p1` · `python3 run.py p2` |
+| Ground truth | `python3 run.py ground-truth` or `python3 run.py ground-truth --stub-only` |
+| Compare | `python3 run.py compare` |
+| Score proxy (dev) | `python3 run.py score-proxy` — compares submission to `ground_truth.csv` **suspicious** rows (not official grader) |
+| Train ML | `python3 run.py train-ml` |
+| Committee | `python3 run.py committee` |
+| **Publish judge CSV** | `python3 run.py export-submission` (defaults **rules**; optional `--source committee` / `ml`; `--also-p1` `--also-p2`) |
+| Frontend data sync | `python3 scripts/sync_frontend_data.py` after pipeline runs |
 | API | `uvicorn api.main:app --reload --port 8000` |
 | UI | `cd frontend && npm install && npm run dev` → [http://localhost:3000](http://localhost:3000) |
 
-**P2 empty UI?** Run `python3 run.py p2` with internet (SEC). Pre-built **outputs/** are committed; re-run pipelines to refresh.
-
 ---
 
-## Judges & submission checklist (P3 + bonus)
+## Configuration
 
-1. **Reproduce** (from repo root, with `student-pack/` present):
-   - `python3 run.py p3`
-   - Optional full stack: `python3 run.py ground-truth` → `python3 run.py compare` → `python3 run.py train-ml` → `python3 run.py committee`
-2. **Scored file:** organisers expect **`submission.csv` at the repository root**. This repo’s pipeline writes primary CSVs under **`outputs/`**; run:
-   - `python3 run.py export-submission --source committee` (recommended final artefact), or `--source rules` / `--source ml`.
-   - Bonus: `python3 run.py export-submission --source committee --also-p1 --also-p2` to also place `p1_alerts.csv` and `p2_signals.csv` at the root.
-3. **README / approach:** keep this file accurate; borderline grading may reference your stated method and thresholds (`config.yaml`).
-4. **Runtime:** note wall-clock for `run.py p3` on a clean machine if you document performance.
-5. **Score proxy (internal):** `python3 run.py score-proxy` compares `outputs/submission.csv` to **`verdict == suspicious`** in `ground_truth.csv` — useful for tuning, **not** the official hackathon grader.
-
-**P3 rule hardening (high level):** wash uses **ordered** same-wallet pairing (forward/backward `merge_asof`), **min notional** floors (higher on BTC/ETH), **ramping** requires tight **median inter-trade gap**, **layering_echo** requires **balanced** buy/sell notional, **coordinated_structuring** requires **similar wallet-level sizes**, **spoofing** uses **stricter bps** on **low-tradecount** bars, **USDC peg** requires **min trade size + bar volume**, **BAT** spike hours need **material tradecount**.
-
----
-
-## Dashboard (sidebar)
-
-| Page | What you get |
-|------|----------------|
-| P3 / P1 / P2 | Tables, charts, filters; P3: Rules vs **Committee** |
-| Committee / Comparison | Zones, ML text, agree vs disagree |
-| Pipeline | **Run** each step, CSV upload, file status |
-| Workflow | **React Flow** mind map (click nodes) |
-| Knowledge | Short lessons + regs (like a mini glossary) |
-| Audit | HITL JSONL via API |
-
-Theme: **Light / Dark / System** (sidebar footer). Optional: `NEXT_PUBLIC_API_URL` in `frontend/.env.local`.
-
----
-
-## Repo layout (short)
-
-```
-bits_hackathon/   # core, detectors (p1, p2, p3), pipeline (ml_stage1/2, labels, evaluate, committee, …)
-artifacts/        # trained .joblib models (gitignored); keep `.gitkeep`
-api/              # FastAPI routes
-frontend/         # Next.js 16 App Router
-run.py            # CLI: p1 p2 p3 ground-truth compare train-ml committee score-proxy export-submission …
-config.yaml       # Thresholds + committee
-docs/finance-glossary.md   # Long glossary & regulatory notes
-```
-
----
-
-## Config & env
-
-- **`config.yaml`** — `p3.*` detectors, `committee.*` AI-only thresholds.
+- **`config.yaml`** — P3 detector thresholds (`p3.*`), P1/P2, **committee** gates, **ML** training knobs. Env overrides: `CFG_*` (see `bits_hackathon/core/config.py`).
 - **`.env`** — `OPENROUTER_API_KEY` (not committed).
 - **`frontend/.env.local`** — optional `NEXT_PUBLIC_API_URL`.
 
 ---
 
-## Learn more (long text moved out of README)
+## Repo layout
 
-- **Definitions & regulations (full prose):** [`docs/finance-glossary.md`](docs/finance-glossary.md)
-- **Same topics, interactive:** run the app and open **Knowledge Base** (`/knowledge`).
+```
+bits_hackathon/     # core, detectors (p1, p2, p3), pipeline (ML, committee, labels, …)
+bits_hackathon/core/violation_taxonomy.py   # official P3 violation_type strings + normalisation
+artifacts/          # trained .joblib (often gitignored)
+api/                # FastAPI
+frontend/           # Next.js App Router
+run.py              # CLI: p3, p1, p2, full-pipeline, ground-truth, compare, train-ml, committee, score-proxy, export-submission, …
+config.yaml
+student-pack/       # Distributed data (paths expected by loaders)
+docs/finance-glossary.md
+```
 
 ---
 
-## License
+## Dashboard (sidebar)
 
-BITS Hackathon 2026 — Academic project.
+| Page | Purpose |
+|------|---------|
+| P3 / P1 / P2 | Tables and charts; P3: rules vs committee views |
+| Committee / Comparison | Agreement zones and diffs |
+| Pipeline | Trigger runs, upload CSV, status |
+| Workflow | React Flow overview |
+| Knowledge | Short notes + glossary links |
+| Audit | HITL decisions via API |
+
+Theme: Light / Dark / System.
+
+---
+
+## Further reading
+
+- Long-form definitions: [`docs/finance-glossary.md`](docs/finance-glossary.md)
+
+---
+
+## Licence
+
+BITS Hackathon 2026 — academic / competition use.

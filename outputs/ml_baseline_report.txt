@@ -3,38 +3,34 @@ ML BASELINE AUDIT (rules / AI / committee)
 ======================================================================
 
 Comparison report (rules vs AI suspicious):
-  both_flag:   35
-  rules_only:  101
-  gt_only:     277
+  both_flag:   28
+  rules_only:  83
+  gt_only:     313
 
-Estimated rule precision vs AI-flagged suspicious: 0.2574
+Estimated rule precision vs AI-flagged suspicious: 0.2523
 
-Rules submission: 136 rows
+Rules submission: 111 rows
   Top violation_type:
-    spoofing: 77
+    spoofing: 52
     pump_and_dump: 35
     chain_layering: 11
     round_trip_wash: 10
     peg_break: 3
 
-ML submission: 14 rows
+ML submission: 315 rows
   Top violation_type:
-    ramping: 10
-    wash_trading: 2
-    layering: 1
-    structuring: 1
+    ramping: 67
+    coordinated_structuring: 65
+    layering_echo: 62
+    aml_structuring: 47
+    spoofing: 26
+    wash_trading: 24
 
-Committee submission: 170 rows
+Committee submission: 387 rows
   Top violation_type:
-    structuring: 42
-    spoofing: 42
-    ramping: 29
-    wash_trading: 26
-    aml_structuring: 23
-    layering: 4
-    peg_break: 2
-    anomaly: 1
+    pump_and_dump: 239
+    spoofing: 148
 
-Ground truth: 312 suspicious / 19256 labeled trades
+Ground truth: 341 suspicious / 19255 labeled trades
 
 ======================================================================

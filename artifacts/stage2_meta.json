@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "trained_at": "2026-03-29T07:58:57.631561+00:00",
+  "trained_at": "2026-03-29T11:49:06.163428+00:00",
   "skipped": false,
   "classes": [
     "aml_structuring",
-    "layering",
+    "coordinated_structuring",
+    "layering_echo",
     "other",
     "ramping",
     "spoofing",
-    "structuring",
     "wash_trading"
   ],
   "feature_cols": [
@@ -26,8 +26,8 @@
     "hour_of_day",
     "notional_vs_threshold"
   ],
-  "train_rows": 289,
-  "test_rows": 50,
-  "test_macro_f1": 0.2243097238895558,
-  "test_log_loss": 5.034302461843257
+  "train_rows": 257,
+  "test_rows": 71,
+  "test_macro_f1": 0.21159554730983302,
+  "test_log_loss": 5.310189942186706
 }

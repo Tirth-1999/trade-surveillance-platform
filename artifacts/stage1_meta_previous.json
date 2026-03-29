@@ -1,7 +1,7 @@
 {
   "version": 1,
   "data_validation_issues": [],
-  "trained_at": "2026-03-29T07:21:25.162508+00:00",
+  "trained_at": "2026-03-29T11:42:20.704347+00:00",
   "model": "HistGradientBoostingClassifier + CalibratedClassifierCV",
   "calibration_method": "isotonic",
   "feature_cols": [
@@ -19,16 +19,18 @@
     "hour_of_day",
     "notional_vs_threshold"
   ],
-  "threshold": 0.6900000000000002,
+  "threshold": 0.3500000000000001,
+  "threshold_metric": "f05",
+  "threshold_precision_floor": 0.35,
   "train_rows": 15865,
   "test_rows": 3389,
-  "positive_rate_train": 0.019161676646706587,
-  "positive_rate_test": 0.014753614635585718,
-  "brier_test": 0.009717359063586083,
-  "pr_auc_test": 0.5666577960314384,
+  "positive_rate_train": 0.021872045382918374,
+  "positive_rate_test": 0.020655060489820007,
+  "brier_test": 0.015258981345289937,
+  "pr_auc_test": 0.6221805326239495,
   "data_fingerprint": "ea168616fe1636c4",
-  "test_precision": 1.0,
-  "test_recall": 0.04,
-  "test_f1": 0.07692307692307693,
-  "test_roc_auc": 0.9887990416292303
+  "test_precision": 0.5866666666666667,
+  "test_recall": 0.6285714285714286,
+  "test_f1": 0.6068965517241379,
+  "test_roc_auc": 0.9825033357723927
 }
